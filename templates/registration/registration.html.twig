@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('registration') }}
+{% endblock %}
+
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+    <div class="col-lg-3 offset-lg-4">
+        <div class="container">
+            <div class="card" style="margin-top: 30%">
+                <div class="card-header" style="padding-top: 20px; padding-bottom: 20px; background-color: #4c2170">
+                    Registration Form
+                </div>
+                <div class="card-body">
+                    <form name="user" id="register_form" method="post">
+                        {{ form_row(form.first_name, {'attr': {'placeholder': 'First Name', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.last_name, {'attr': {'placeholder': 'Last Name', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.email, {'attr': {'placeholder': 'Email', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.plainPassword.first, {'attr': {'placeholder': 'Pasword', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.plainPassword.second, {'attr': {'placeholder': 'Repeat Password', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.date_of_birth, {'attr': {'placeholder': 'Date of Birth', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.company, {'attr': {'placeholder': 'Company', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.city, {'attr': {'placeholder': 'City', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.country, {'attr': {'placeholder': 'Country', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form._token) }}
+                        <p align="center"><button class="btn btn-lg" type="submit" id="button_register">Register</button></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('login') }}
+{% endblock %}
+
+{% block body %}
+    <div class="col-lg-3 offset-lg-4">
+        <div class="container">
+            <div class="card" style="margin-top: 30%">
+                <div class="card-header">
+                    Login Form
+                </div>
+                <div class="card-body">
+                    <form name="user" id="login_form" method="post">
+                        <label for="inputEmail" class="sr-only">Email</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+                        <br>
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <br>
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+                        <br>
+                        <p align="center"><button class="btn btn-lg" type="submit" id="login_register">Login</button></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

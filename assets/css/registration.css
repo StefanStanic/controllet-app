@@ -1,0 +1,14 @@
+#register_form  input
+{
+    font-size: 12pt;
+}
+
+#button_register{
+    background-color: #4c2170;
+    color:white;
+}
+
+.card-header{
+    color: white;
+    font-weight: bold;
+}

@@ -1,0 +1,18 @@
+#login_form input
+{
+    font-size: 12pt;
+}
+
+#login_register{
+    background-color: #4c2170;
+    color:white;
+}
+
+.card-header{
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #4c2170;
+}
