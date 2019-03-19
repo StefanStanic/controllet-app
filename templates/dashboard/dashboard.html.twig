@@ -1,1 +1,33 @@
 {% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container w-75">
+        <h2 align="center">Accounts</h2><br>
+        <div class="row" >
+            {% for account in accounts %}
+                {% if(account.active == 1) %}
+                <div class="col-lg-3">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            <i class="fas fa-money-bill-alt" style="margin-right: 10px"></i>{{ account.accountType | upper }}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ account.accountName }}</h5>
+                            <button class="btn btn-warning" id="update_account">update</button>
+                            <button class="btn btn-danger delete_account"  data-user_id="{{ app.user.id }}" value="{{ account.id }}">delete</button>
+                        </div>
+                        <div class="card-footer text-muted">
+                            {{ account.lastUsedDate | date }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('dashboard') }}
+{% endblock %}

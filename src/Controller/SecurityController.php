@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Service\SecurityService;
@@ -47,6 +48,7 @@ class SecurityController extends AbstractController
     public function register(Request $request)
     {
         $user = new User();
+        $account = new Account();
 
         $form = $this->createForm(UserType::class, $user);
 
@@ -74,6 +76,18 @@ class SecurityController extends AbstractController
             $this->em->persist($user);
             $this->em->flush();
 
+            //setup default account
+            $account
+                ->setUser($user)
+                ->setAccountName('Cash Account')
+                ->setAccountType('cash')
+                ->setAccountBalance(0)
+                ->setActive(1)
+                ->setLastUsedDate(\DateTime::createFromFormat('Y-m-d H:i:s', $date))
+                ;
+
+            $this->em->persist($account);
+            $this->em->flush();
 
             return $this->redirectToRoute('app_register');
         }
