@@ -6,6 +6,7 @@ Encore
     .addEntry('app', './assets/js/app.js')
     .addEntry('registration', './assets/js/registration.js')
     .addEntry('login', './assets/js/login.js')
+    .addEntry('navbar', './assets/js/navbar.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

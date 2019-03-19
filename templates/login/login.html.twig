@@ -27,7 +27,15 @@
                             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                         {% endif %}
                         <br>
-                        <p align="center"><button class="btn btn-lg" type="submit" id="login_register">Login</button></p>
+
+                        <p align="center">
+                            <button class="btn btn-lg" type="submit" id="login_register">Login</button>
+                            <div class="checkbox mb-3">
+                                <label>
+                                    <input type="checkbox" name="_remember_me"> Remember me
+                                </label>
+                            </div>
+                        </p>
                     </form>
                 </div>
             </div>

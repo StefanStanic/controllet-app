@@ -4,11 +4,15 @@
 }
 
 #button_register{
-    background-color: #4c2170;
+    background-color: #2F243A;
     color:white;
 }
 
 .card-header{
+    text-align: center;
     color: white;
     font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #2F243A;
 }

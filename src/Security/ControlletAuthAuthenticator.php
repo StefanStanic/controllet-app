@@ -92,7 +92,7 @@ class ControlletAuthAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        return new RedirectResponse($this->router->generate('dashboard'));
+        return new RedirectResponse($this->router->generate('app_dashboard'));
     }
 
     protected function getLoginUrl()
