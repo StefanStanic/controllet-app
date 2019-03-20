@@ -1,0 +1,18 @@
+#addAccount_form input
+{
+    font-size: 12pt;
+}
+
+#button_addAccount{
+    background-color: #2F243A;
+    color:white;
+}
+
+.card-header{
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #2F243A;
+}

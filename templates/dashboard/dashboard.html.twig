@@ -13,6 +13,7 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">{{ account.accountName }}</h5>
+                            <h4>{{ account.accountBalance }}  $</h4>
                             <button class="btn btn-warning" id="update_account">update</button>
                             <button class="btn btn-danger delete_account"  data-user_id="{{ app.user.id }}" value="{{ account.id }}">delete</button>
                         </div>
@@ -23,6 +24,7 @@
                 </div>
                 {% endif %}
             {% endfor %}
+
         </div>
     </div>
 {% endblock %}

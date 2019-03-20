@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('addAccount') }}
+{% endblock %}
+
+{% block body %}
+    <div class="col-lg-3 offset-lg-4">
+        <div class="container">
+            <div class="card" style="margin-top: 25%">
+                <div class="card-header">
+                    Add New Account
+                </div>
+                <div class="card-body">
+                    <form name="user" id="addAccount_form" method="post">
+                        {{ form_row(form.account_name, {'attr': {'placeholder': 'Account Name', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.account_type, {'attr': {'placeholder': 'Account Type', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.account_balance, {'attr': {'placeholder': 'Account Balance', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form._token) }}
+                        <p align="center"><button class="btn btn-lg" type="submit" id="button_addAccount">Add</button></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('addAccount') }}
+{% endblock %}
