@@ -22,6 +22,21 @@ class DashboardService
         return $user->getAccount();
     }
 
+    public function update_account($account_name, $account_balance, $account_id, $user_id)
+    {
+        $account = $this->em->getRepository(Account::class)->find($account_id);
+        $date = date('Y-m-d H:i:s');
+
+        if($account){
+            $account
+                ->setAccountName($account_name)
+                ->setAccountBalance($account_balance)
+                ->setLastUsedDate(\DateTime::createFromFormat('Y-m-d H:i:s', $date));
+            $this->em->flush();
+
+            return $account_id;
+        }
+    }
     public function delete_account($account_id)
     {
         $account = $this->em->getRepository(Account::class)->find($account_id);

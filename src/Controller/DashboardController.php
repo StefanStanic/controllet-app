@@ -90,6 +90,43 @@ class DashboardController extends AbstractController
         );
     }
 
+    /**
+     * @Route("/updateAccount", name="app_updateAccount", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function updateAccount(Request $request)
+    {
+        $account_name    = $request->get('accountName');
+        $account_balance = $request->get('accountBalance');
+        $user_id         = $request->get('user_id');
+        $account_id      = $request->get('account_id');
+
+        if(empty($account_name) || empty($account_balance) || empty($user_id) || empty($account_id)){
+            $response = new Response();
+            $response->setStatusCode(400);
+
+            return $response;
+        }
+
+        $result = $this->dashboard_service->update_account($account_name, $account_balance, $account_id, $user_id);
+
+        if($result)
+        {
+            $response = new Response();
+            $response->setStatusCode(200);
+
+            return $response;
+        }
+        else
+        {
+            $response = new Response();
+            $response->setStatusCode(400);
+
+            return $response;
+        }
+
+    }
 
     /**
      * @Route("/deleteAccount", name="delete_account", methods={"POST"})
