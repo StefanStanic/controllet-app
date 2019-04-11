@@ -1,30 +1,54 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('dashboard') }}
+{% endblock %}
+
 {% block body %}
     <div class="container w-75">
-        <h2 align="center">Accounts</h2><br>
-        <div class="row" >
+        <div class="row">
+            <div class="col-sm-9">
+                <h2 align="left">Accounts</h2>
+            </div>
+            <div class="col-sm-2 text-left">
+                <button type="button" class="btn btn-default align-right button_color">
+                    <a href="{{ path('app_dashboard_addaccount', {'user_id' : app.user.id }) }}" style="text-decoration: none; color: white;" >Add new account</a>
+                </button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
             {% for account in accounts %}
                 {% if(account.active == 1) %}
-                <div class="col-lg-3">
-                    <div class="card text-center">
+                <div class="col-lg-4">
+                    <div class="card text-center" style="padding: 0; margin: 0;">
                         <div class="card-header">
-                            <i class="fas fa-money-bill-alt" style="margin-right: 10px"></i><span id="accountType_{{ account.id }}">{{ account.accountType | upper }}</span>
+                            <span class="card-title" style="font-size: 14pt;" id="accountName_{{ account.id }}">{{ account.accountName}}</span><br>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title" id="accountName_{{ account.id }}">{{ account.accountName }}</h5>
-                            <h4 id="accountBalance_{{ account.id }}">{{ account.accountBalance }}  $</h4>
-                            <button class="btn btn-warning update_account" data-target="#updateAccount" data-user_id_update="{{ app.user.id }}" value="{{ account.id }}" data-toggle="modal">update</button>
-                            <button class="btn btn-danger delete_account"  data-user_id_delete="{{ app.user.id }}" value="{{ account.id }}">delete</button>
-                        </div>
-                        <div class="card-footer text-muted">
-                            {{ account.lastUsedDate | date }}
+                            <div class="row">
+                                <div class="col-sm-2 show_wallet_history">
+                                    <i class="fas fa-wallet" style="margin-top: 5px; font-size: 20pt;"></i>
+                                </div>
+                                <div class="col-sm-6 show_wallet_history" style="text-align: center;">
+                                    <span id="accountBalance_{{ account.id }}" style="color:green; font-size: 20pt;">+{{ account.accountBalance }}  $</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-default update_account button_color" data-target="#updateAccount" data-user_id_update="{{ app.user.id }}" value="{{ account.id }}" data-toggle="modal">
+                                        <i class="fas fa-pencil-alt fa-xs"></i>
+                                    </button>
+
+                                    <button class="btn btn-default delete_account button_color"  data-user_id_delete="{{ app.user.id }}" value="{{ account.id }}">
+                                        <i class="fas fa-trash-alt fa-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 {% endif %}
             {% endfor %}
-
             <!-- Modal -->
             <div class="modal fade" id="updateAccount" tabindex="-1" role="dialog" aria-labelledby="updateAccount" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -52,8 +76,10 @@
                                 <input type="hidden" id="account_id" name="account_id" value="">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary" id="updateAccountModal">Update wallet</button>
-                                <p align="center" id="sucessUpdate" style="display: none;">Successfully updated your account</p>
-                                <p align="center" id="failUpdate" style="display: none;">There's been an issue, try again later</p>
+                                <br>
+                                <br>
+                                <p align="center" id="sucessUpdate" style="display: none; color:green;">Successfully updated your account</p>
+                                <p align="center" id="failUpdate" style="display: none;color:red;">There's been an issue, try again later</p>
                             </form>
                         </div>
                     </div>

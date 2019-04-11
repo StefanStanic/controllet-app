@@ -154,7 +154,13 @@ class DashboardController extends AbstractController
         }
     }
 
-
-
-
+    /**
+     * @Route("/transactions/{account_id}", name="app_transactions")
+     */
+    public function transactions($account_id = false)
+    {
+        return $this->render(
+            'dashboard/transactions.html.twig'
+        );
+    }
 }

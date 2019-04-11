@@ -9,6 +9,7 @@ Encore
     .addEntry('navbar', './assets/js/navbar.js')
     .addEntry('dashboard', './assets/js/dashboard.js')
     .addEntry('addAccount', './assets/js/addAccount.js')
+    .addEntry('transactions', './assets/js/transactions.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

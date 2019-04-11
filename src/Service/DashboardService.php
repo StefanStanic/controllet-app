@@ -22,6 +22,7 @@ class DashboardService
         return $user->getAccount();
     }
 
+
     public function update_account($account_name, $account_balance, $account_id, $user_id)
     {
         $account = $this->em->getRepository(Account::class)->find($account_id);

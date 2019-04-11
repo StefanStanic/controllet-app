@@ -1,0 +1,14 @@
+.card-header{
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    background-color: #2F243A;
+}
+
+.button_color {
+    background-color: #2F243A;
+    color:white;
+}
+.button_color:hover{
+    color:white;
+}
