@@ -73,11 +73,29 @@ $(".update_account").on('click', function (e) {
                         $("#sucessUpdate").hide();
                         $("#failUpdate").show();
                     }
-
                 }
-
             });
         }
 
     })
+});
+
+$("#account_type_filter").on('change', function (e) {
+    var user_id = $("#user_id").val();
+    var account_id = $(this).val();
+
+    // console.log(user_id ,account_id);
+    $.post('/filterTransactionByAccountId', {'user_id': user_id, 'account_id': account_id}, function (data) {
+        $('.transaction_list').html(data.html);
+    }, 'json');
+});
+
+$("#category_filter").on('change', function (e) {
+    var user_id = $("#user_id").val();
+    var category_id = $(this).val();
+
+    // console.log(user_id ,account_id);
+    $.post('/filterTransactionByCategoryId', {'user_id': user_id, 'category_id': category_id}, function (data) {
+        $('.transaction_list').html(data.html);
+    }, 'json');
 });

@@ -5,7 +5,9 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\Category;
+use App\Entity\Transaction;
 use App\Entity\User;
+use App\Repository\TransactionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DashboardService
@@ -32,10 +34,22 @@ class DashboardService
         return $categories;
     }
 
-    public function get_transactions_by_user_id($user_id)
+    public function get_transactions_by_user_id_sorted($user_id, $sort = "DESC")
     {
-        $user = $this->em->getRepository(User::class)->find($user_id);
-        return $user->getTransaction();
+        $transaction = $this->em->getRepository(Transaction::class)->get_transaction_by_user_id_sorted($user_id, $sort);
+        return $transaction;
+    }
+
+    public function get_transactions_by_account_id_sorted($user_id, $account_id, $sort = "DESC")
+    {
+        $transaction = $this->em->getRepository(Transaction::class)->get_transaction_by_account_id_sorted($user_id, $account_id, $sort);
+        return $transaction;
+    }
+
+    public function get_transactions_by_category_id_sorted($user_id, $category_id, $sort = "DESC")
+    {
+        $transaction = $this->em->getRepository(Transaction::class)->get_transaction_by_category_id_sorted($user_id, $category_id, $sort);
+        return $transaction;
     }
 
 

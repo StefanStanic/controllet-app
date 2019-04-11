@@ -48,6 +48,12 @@ class Transaction
      */
     private $category;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Account", inversedBy="transactions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $account;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +127,18 @@ class Transaction
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): self
+    {
+        $this->account = $account;
 
         return $this;
     }

@@ -19,6 +19,59 @@ class TransactionRepository extends ServiceEntityRepository
         parent::__construct($registry, Transaction::class);
     }
 
+    public function get_transaction_by_user_id_sorted($user_id, $sort = 'DESC')
+    {
+        return $this->createQueryBuilder('transaction')
+            ->where('transaction.user = :user_id')
+            ->setParameter('user_id', $user_id)
+            ->addOrderBy('transaction.transaction_time', $sort)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function get_transaction_by_account_id_sorted($user_id, $account_id, $sort = 'DESC')
+    {
+        if($account_id == 0){
+            return $this->createQueryBuilder('transaction')
+                ->innerJoin('transaction.account', 'ta')
+                ->where('transaction.user = :user_id')
+                ->setParameter('user_id', $user_id)
+                ->addOrderBy('transaction.transaction_time', $sort)
+                ->getQuery()
+                ->execute();
+        }
+        return $this->createQueryBuilder('transaction')
+            ->innerJoin('transaction.account', 'ta')
+            ->where('transaction.user = :user_id')
+            ->setParameter('user_id', $user_id)
+            ->andWhere('ta.id = :account_id')
+            ->setParameter('account_id', $account_id)
+            ->addOrderBy('transaction.transaction_time', $sort)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function get_transaction_by_category_id_sorted($user_id, $category_id, $sort = 'DESC')
+    {
+        if($category_id == 0){
+            return $this->createQueryBuilder('transaction')
+                ->innerJoin('transaction.category', 'ta')
+                ->where('transaction.user = :user_id')
+                ->setParameter('user_id', $user_id)
+                ->addOrderBy('transaction.transaction_time', $sort)
+                ->getQuery()
+                ->execute();
+        }
+        return $this->createQueryBuilder('transaction')
+            ->innerJoin('transaction.category', 'tc')
+            ->where('transaction.user = :user_id')
+            ->setParameter('user_id', $user_id)
+            ->andWhere('tc.id = :category_id')
+            ->setParameter('category_id', $category_id)
+            ->addOrderBy('transaction.transaction_time', $sort)
+            ->getQuery()
+            ->execute();
+    }
     // /**
     //  * @return Transaction[] Returns an array of Transaction objects
     //  */

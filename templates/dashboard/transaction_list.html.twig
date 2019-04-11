@@ -1,0 +1,39 @@
+{% block body %}
+{% for transaction in transactions %}
+    <div class="row">
+        <div class="col-lg-3">
+            <span>Transaction Category</span>
+            <select class="form-control" id="transaction_category">
+                {% for category in categories %}
+                    {% if(category.active == 1) %}
+                        {% if(transaction.category.id == category.id) %}
+                            <option value="{{ category.id }}" selected="selected">{{ category.categoryName }}</option>
+                        {% else %}
+                            <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-lg-3">
+            <span>Note</span><br>
+            <input type="text" value="{{ transaction.note }}">
+        </div>
+        <div class="col-lg-3">
+            <span>Price</span><br>
+            <input type="number" value="{{ transaction.transactionAmount }}">
+        </div>
+        <div class="col-lg-3" style="text-align: right;">
+            <br>
+            <button class="btn btn-warning update_transaction">
+                <i class="fas fa-pencil-alt fa-xs"></i>
+            </button>
+
+            <button class="btn btn-danger delete_transaction">
+                <i class="fas fa-trash-alt fa-xs"></i>
+            </button>
+        </div>
+    </div>
+    <hr style="background-color:white;">
+{% endfor %}
+{% endblock %}
