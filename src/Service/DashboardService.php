@@ -4,6 +4,7 @@ namespace App\Service;
 
 
 use App\Entity\Account;
+use App\Entity\Category;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -20,6 +21,21 @@ class DashboardService
     {
         $user = $this->em->getRepository(User::class)->find($user_id);
         return $user->getAccount();
+    }
+
+    public function get_active_categories()
+    {
+        $categories = $this->em->getRepository(Category::class)->findBy(
+            ['active' => 1]
+        );
+
+        return $categories;
+    }
+
+    public function get_transactions_by_user_id($user_id)
+    {
+        $user = $this->em->getRepository(User::class)->find($user_id);
+        return $user->getTransaction();
     }
 
 

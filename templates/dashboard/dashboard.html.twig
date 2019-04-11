@@ -85,9 +85,65 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
+        <br><br>
+
+        <h2 align="center">Recent expences</h2>
+
+        <div class="container rounded primary-site-color dashboard_filters">
+            <ul class="nav">
+                <li class="nav-item">
+                    <select class="form-control" id="account_type_filter">
+                        <option value="0">All Accounts</option>
+                        {% for account in accounts %}
+                            {% if(account.active == 1) %}
+                                <option value="{{ account.id }}">{{ account.accountName }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </li>
+                <li class="nav-item">
+                    <select class="form-control" id="category_filter">
+                        <option value="0">All Categories</option>
+                        {% for category in categories %}
+                            {% if(category.active == 1) %}
+                                <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </li>
+            </ul>
+        </div>
+
+        <br>
+        <div class="container rounded transaction_list">
+            {% for transaction in transactions %}
+                <div class="row">
+                    <div class="col-lg-3">
+                        <span>Transaction Category</span>
+                        <select class="form-control" id="transaction_category">
+                            {% for category in categories %}
+                                {% if(category.active == 1) %}
+                                    {% if(transaction.category.id == category.id) %}
+                                        <option value="{{ category.id }}" selected="selected">{{ category.categoryName }}</option>
+                                    {% else %}
+                                        <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <span>Note</span><br>
+                        <input type="text" value="{{ transaction.note }}">
+                    </div>
+                    <div class="col-lg-3"></div>
+                </div>
+                <hr style="background-color:white;">
+                <br>
+            {% endfor %}
+        </div>
+
     </div>
 {% endblock %}
 

@@ -12,3 +12,27 @@
 .button_color:hover{
     color:white;
 }
+
+.dashboard_filters{
+    color:white;
+    padding: 20px;
+}
+
+.filters_title{
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.dashboard_filters .nav-item{
+    margin-right: 10px;
+}
+
+.transaction_list{
+    background-color: #2F243A;
+    color:white;
+    padding: 20px;
+}
+
+.primary-site-color{
+    background-color: #2F243A;
+}

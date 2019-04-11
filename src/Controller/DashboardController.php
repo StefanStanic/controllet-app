@@ -41,11 +41,15 @@ class DashboardController extends AbstractController
 
         //get all active wallets
         $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
+        $data['transactions'] = $this->dashboard_service->get_transactions_by_user_id($user->getId());
+        $data['categories'] = $this->dashboard_service->get_active_categories();
 
         return $this->render(
             'dashboard/dashboard.html.twig',
             array(
-                'accounts' => $data['accounts']
+                'accounts' => $data['accounts'],
+                'categories' => $data['categories'],
+                'transactions' => $data['transactions']
             )
         );
     }

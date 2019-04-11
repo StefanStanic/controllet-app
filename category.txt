@@ -1,0 +1,47 @@
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Restaurants', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Coffee', '1');
+
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Phone', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Water', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Electricity', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Gas', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Television', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Internet', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Rentals', '1');
+
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Taxi', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Parking Fees', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Petrol', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Car Maintatance', '1');
+
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Clothing', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Footwear', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Accesories', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Electronics', '1');
+
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Movies', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Games', '1');
+
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Investments', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Business', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Insurance', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Fees & Charges', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Withdrawl', '1');
+INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Others', '1');
+
+
+
+
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '4', '21');
+
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '4', '21');
+
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '4', '21');
+
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '4', '21');
+
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '4', '21');
+
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '4', '21');
+
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '4', '21');
