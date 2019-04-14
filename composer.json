@@ -19,7 +19,8 @@
         "symfony/validator": "4.2.*",
         "symfony/var-dumper": "4.2.*",
         "symfony/webpack-encore-bundle": "^1.2",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+      "ext-json": "*"
     },
     "config": {
         "preferred-install": {

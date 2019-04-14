@@ -14,8 +14,6 @@ use App\Form\AccountType;
 use App\Service\DashboardService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -167,6 +165,82 @@ class DashboardController extends AbstractController
         return $this->render(
             'dashboard/transactions.html.twig'
         );
+    }
+
+    /**
+     * @Route("/updateTransaction", name="update_account", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function update_transaction(Request $request)
+    {
+        //get input data
+        $transaction_id = $request->get('transaction_id');
+        $transaction_category = $request->get('transaction_category');
+        $transaction_note = $request->get('transaction_note');
+        $transaction_amount = $request->get('transaction_amount');
+
+        if(empty($transaction_id) || empty($transaction_category) || empty($transaction_note) || empty($transaction_amount)){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Missing parameters'
+                )
+            ), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $response;
+        }
+
+        $result = $this->dashboard_service->update_transaction($transaction_id, $transaction_category, $transaction_note, $transaction_amount);
+
+        if($result){
+            $response = new Response();
+            $response->setStatusCode(200);
+
+            return $response;
+        }
+        else
+        {
+            $response = new Response();
+            $response->setStatusCode(400);
+
+            return $response;
+        }
+    }
+
+    /**
+     * @Route("/deleteTransaction", name="delete_transction", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function delete_transaction(Request $request)
+    {
+        $transaction_id = $request->get('transaction_id');
+
+        if(empty($transaction_id)){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Missing parameters'
+                )
+            ), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $response;
+        }
+
+        $result = $this->dashboard_service->delete_transaction($transaction_id);
+
+        if($result){
+            $response = new Response();
+            $response->setStatusCode(200);
+
+            return $response;
+        }
+        else
+        {
+            $response = new Response();
+            $response->setStatusCode(400);
+
+            return $response;
+        }
     }
 
 

@@ -32,15 +32,8 @@ INSERT INTO `category` (`id`, `category_name`, `active`) VALUES (NULL, 'Others',
 
 
 
-INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1);
-
-
-INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1);
-
-INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1);
-
-INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1);
-
-INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1);
-
-INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1);
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`, `active`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1, 1);
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`, `active`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1, 1);
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`, `active`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1, 1);
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`, `active`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1, 1);
+INSERT INTO `transaction` (`id`, `transaction_name`, `transaction_amount`, `note`, `transaction_time`, `user_id`, `category_id`, `account_id`, `active`) VALUES (NULL, 'Transaction', '1000', 'Test', '2019-04-17 00:00:00', '1', '21', 1, 1);

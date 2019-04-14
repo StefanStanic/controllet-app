@@ -24,6 +24,7 @@ class TransactionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('transaction')
             ->where('transaction.user = :user_id')
             ->setParameter('user_id', $user_id)
+            ->andWhere('transaction.active = 1')
             ->addOrderBy('transaction.transaction_time', $sort)
             ->getQuery()
             ->execute();
@@ -36,6 +37,7 @@ class TransactionRepository extends ServiceEntityRepository
                 ->innerJoin('transaction.account', 'ta')
                 ->where('transaction.user = :user_id')
                 ->setParameter('user_id', $user_id)
+                ->andWhere('transaction.active = 1')
                 ->addOrderBy('transaction.transaction_time', $sort)
                 ->getQuery()
                 ->execute();
@@ -44,6 +46,7 @@ class TransactionRepository extends ServiceEntityRepository
             ->innerJoin('transaction.account', 'ta')
             ->where('transaction.user = :user_id')
             ->setParameter('user_id', $user_id)
+            ->andWhere('transaction.active = 1')
             ->andWhere('ta.id = :account_id')
             ->setParameter('account_id', $account_id)
             ->addOrderBy('transaction.transaction_time', $sort)
@@ -58,6 +61,7 @@ class TransactionRepository extends ServiceEntityRepository
                 ->innerJoin('transaction.category', 'ta')
                 ->where('transaction.user = :user_id')
                 ->setParameter('user_id', $user_id)
+                ->andWhere('transaction.active = 1')
                 ->addOrderBy('transaction.transaction_time', $sort)
                 ->getQuery()
                 ->execute();
@@ -66,6 +70,7 @@ class TransactionRepository extends ServiceEntityRepository
             ->innerJoin('transaction.category', 'tc')
             ->where('transaction.user = :user_id')
             ->setParameter('user_id', $user_id)
+            ->andWhere('transaction.active = 1')
             ->andWhere('tc.id = :category_id')
             ->setParameter('category_id', $category_id)
             ->addOrderBy('transaction.transaction_time', $sort)

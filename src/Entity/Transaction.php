@@ -54,6 +54,11 @@ class Transaction
      */
     private $account;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $active;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -139,6 +144,18 @@ class Transaction
     public function setAccount(?Account $account): self
     {
         $this->account = $account;
+
+        return $this;
+    }
+
+    public function getActive(): ?int
+    {
+        return $this->active;
+    }
+
+    public function setActive(int $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

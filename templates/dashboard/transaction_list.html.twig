@@ -1,9 +1,9 @@
 {% block body %}
 {% for transaction in transactions %}
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-2">
             <span>Transaction Category</span>
-            <select class="form-control" id="transaction_category">
+            <select class="form-control transaction_category_{{ transaction.id }}" id="transaction_category" disabled>
                 {% for category in categories %}
                     {% if(category.active == 1) %}
                         {% if(transaction.category.id == category.id) %}
@@ -17,19 +17,26 @@
         </div>
         <div class="col-lg-3">
             <span>Note</span><br>
-            <input type="text" value="{{ transaction.note }}">
+            <input type="text" class="transaction_note_{{ transaction.id }}" value="{{ transaction.note }}" disabled>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-2">
             <span>Price</span><br>
-            <input type="number" value="{{ transaction.transactionAmount }}">
+            <input type="number" class="transaction_amount_{{ transaction.id }}" value="{{ transaction.transactionAmount }}" disabled>
         </div>
-        <div class="col-lg-3" style="text-align: right;">
+        <div class="col-lg-5" style="text-align: right;">
             <br>
-            <button class="btn btn-warning update_transaction">
+
+            <span id="transaction_response_{{ transaction.id }}"></span>
+
+            <button class="btn btn-primary update_transaction_{{ transaction.id }}" data-id="{{ transaction.id }}" style="display: none">
+                <i class="fas fa-check"></i>
+            </button>
+
+            <button class="btn btn-warning edit_transaction" data-id="{{ transaction.id }}">
                 <i class="fas fa-pencil-alt fa-xs"></i>
             </button>
 
-            <button class="btn btn-danger delete_transaction">
+            <button class="btn btn-danger delete_transaction" data-id="{{ transaction.id }}">
                 <i class="fas fa-trash-alt fa-xs"></i>
             </button>
         </div>

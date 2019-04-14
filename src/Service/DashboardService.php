@@ -68,6 +68,7 @@ class DashboardService
             return $account_id;
         }
     }
+
     public function delete_account($account_id)
     {
         $account = $this->em->getRepository(Account::class)->find($account_id);
@@ -80,6 +81,34 @@ class DashboardService
 
             return $account_id;
         }
+    }
+
+    public function update_transaction($transaction_id, $transaction_category, $transaction_note, $transaction_amount)
+    {
+        $transaction = $this->em->getRepository(Transaction::class)->find($transaction_id);
+        $category = $this->em->getRepository(Category::class)->find($transaction_category);
+
+        if($transaction){
+            $transaction
+                ->setCategory($category)
+                ->setNote($transaction_note)
+                ->setTransactionAmount($transaction_amount);
+
+            $this->em->flush();
+            return $transaction_id;
+        }
+    }
+
+    public function delete_transaction($transaction_id)
+    {
+        $transaction = $this->em->getRepository(Transaction::class)->find($transaction_id);
+
+        if($transaction){
+            $transaction->setActive(0);
+            $this->em->flush();
+        }
+
+        return $transaction_id;
     }
 
 }
