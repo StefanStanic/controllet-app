@@ -40,7 +40,7 @@ class DashboardController extends AbstractController
 
         //get all active wallets
         $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
-        $data['transactions'] = $this->dashboard_service->get_transactions_by_user_id_sorted($user->getId());
+        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0);
         $data['categories'] = $this->dashboard_service->get_active_categories();
 
         return $this->render(
@@ -245,63 +245,15 @@ class DashboardController extends AbstractController
 
 
     /**
-     * @Route("/filterTransactionByAccountId", methods={"POST"})
+     * @Route("/filterTransactions", methods={"POST"})
      */
-    public function get_transaction_by_account_id(Request $request)
+    public function get_transaction_by_filters(Request $request)
     {
         $account_id = $request->get('account_id');
-        $user_id = $request->get('user_id');
-
-        if((empty($account_id) && $account_id !=0 ) || empty($user_id)){
-            $response = new Response(json_encode(
-                array(
-                    'status' => 0,
-                    'text' => 'Missing parameters'
-                )
-            ), Response::HTTP_UNPROCESSABLE_ENTITY);
-            return $response;
-        }
-
-        $data['transactions'] = $this->dashboard_service->get_transactions_by_account_id_sorted($user_id, $account_id);
-        $data['categories'] = $this->dashboard_service->get_active_categories();
-
-        if(empty($data['transactions'])){
-            $response = new Response(json_encode(
-                array(
-                    'status' => 0,
-                    'text' => 'No transactions'
-                )
-            ), Response::HTTP_NOT_FOUND);
-            return $response;
-        }
-
-        $transactions = $this->render(
-            'dashboard/transaction_list.html.twig',
-            [
-                'transactions' => $data['transactions'],
-                'categories' => $data['categories']
-            ]
-        )->getContent();
-
-        $response = new Response(json_encode(
-            array(
-                'status' => 1,
-                'html' => $transactions
-            )
-        ), Response::HTTP_OK);
-
-        return $response;
-    }
-
-    /**
-     * @Route("/filterTransactionByCategoryId", methods={"POST"})
-     */
-    public function get_transaction_by_category_id(Request $request)
-    {
         $category_id = $request->get('category_id');
         $user_id = $request->get('user_id');
 
-        if((empty($category_id) && $category_id !=0 ) || empty($user_id)){
+        if((empty($account_id) && $account_id !=0) || (empty($category_id) && $category_id !=0) || empty($user_id)){
             $response = new Response(json_encode(
                 array(
                     'status' => 0,
@@ -311,18 +263,8 @@ class DashboardController extends AbstractController
             return $response;
         }
 
-        $data['transactions'] = $this->dashboard_service->get_transactions_by_category_id_sorted($user_id, $category_id);
+        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user_id, $account_id, $category_id);
         $data['categories'] = $this->dashboard_service->get_active_categories();
-
-        if(empty($data['transactions'])){
-            $response = new Response(json_encode(
-                array(
-                    'status' => 1,
-                    'html' => ''
-                )
-            ), Response::HTTP_OK);
-            return $response;
-        }
 
         $transactions = $this->render(
             'dashboard/transaction_list.html.twig',
