@@ -96,7 +96,11 @@ $("#category_filter").on('change', function (e) {
     var category_id = $(this).val();
 
     $.post('/filterTransactions', {'user_id': user_id, 'account_id': account_id , 'category_id': category_id}, function (data) {
-        $('.transaction_list').html(data.html);
+        if(data.html === ''){
+            $('.transaction_list').html('No transactions based on current filter.');
+        }else{
+            $('.transaction_list').html(data.html);
+        }
     }, 'json');
 });
 

@@ -40,25 +40,6 @@ class DashboardService
         return $transactions;
     }
 
-//    public function get_transactions_by_user_id_sorted($user_id, $sort = "DESC")
-//    {
-//        $transaction = $this->em->getRepository(Transaction::class)->get_transaction_by_user_id_sorted($user_id, $sort);
-//        return $transaction;
-//    }
-//
-//    public function get_transactions_by_account_id_sorted($user_id, $account_id, $sort = "DESC")
-//    {
-//        $transaction = $this->em->getRepository(Transaction::class)->get_transaction_by_account_id_sorted($user_id, $account_id, $sort);
-//        return $transaction;
-//    }
-//
-//    public function get_transactions_by_category_id_sorted($user_id, $category_id, $sort = "DESC")
-//    {
-//        $transaction = $this->em->getRepository(Transaction::class)->get_transaction_by_category_id_sorted($user_id, $category_id, $sort);
-//        return $transaction;
-//    }
-
-
     public function update_account($account_name, $account_balance, $account_id, $user_id)
     {
         $account = $this->em->getRepository(Account::class)->find($account_id);
