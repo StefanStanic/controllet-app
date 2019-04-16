@@ -2,6 +2,9 @@
 {% for transaction in transactions %}
     <div class="row">
         <div class="col-lg-2">
+            <span class="transaction_time"><b>{{ transaction.transactionTime | date("F jS, Y")}}</b></span>
+            <br>
+            <br>
             <span>Transaction Category</span>
             <select class="form-control transaction_category_{{ transaction.id }}" id="transaction_category" disabled>
                 {% for category in categories %}
@@ -16,10 +19,14 @@
             </select>
         </div>
         <div class="col-lg-3">
+            <br>
+            <br>
             <span>Note</span><br>
             <input type="text" class="transaction_note_{{ transaction.id }}" value="{{ transaction.note }}" disabled>
         </div>
         <div class="col-lg-2">
+            <br>
+            <br>
             <span>Price</span><br>
             <input type="number" class="transaction_amount_{{ transaction.id }}" value="{{ transaction.transactionAmount }}" disabled>
         </div>

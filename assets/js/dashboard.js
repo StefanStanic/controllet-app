@@ -173,3 +173,8 @@ $(".delete_transaction").on('click', function (e) {
         });
     }
 });
+
+
+$('#addTransaction').on('hidden.bs.modal', function () {
+    location.reload();
+});

@@ -89,7 +89,7 @@ class SecurityController extends AbstractController
             $this->em->persist($account);
             $this->em->flush();
 
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render(

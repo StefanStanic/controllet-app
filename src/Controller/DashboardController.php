@@ -42,13 +42,15 @@ class DashboardController extends AbstractController
         $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
         $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0);
         $data['categories'] = $this->dashboard_service->get_active_categories();
+        $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
 
         return $this->render(
             'dashboard/dashboard.html.twig',
             array(
                 'accounts' => $data['accounts'],
                 'categories' => $data['categories'],
-                'transactions' => $data['transactions']
+                'transactions' => $data['transactions'],
+                'transaction_types' => $data['transaction_types']
             )
         );
     }
@@ -165,6 +167,59 @@ class DashboardController extends AbstractController
         return $this->render(
             'dashboard/transactions.html.twig'
         );
+    }
+
+    /**
+     * @Route("/addTransaction", name="app_addTransaction", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function add_transaction(Request $request)
+    {
+        $user_id = $request->get('user_id');
+        $transaction_name = $request->get('transactionName');
+        $transaction_account_type = $request->get('transactionAccountType');
+        $transaction_type = $request->get('transactionType');
+        $transaction_category = $request->get('transactionCategory');
+        $transaction_amount = $request->get('transactionAmount');
+        $transaction_note = $request->get('transactionNote');
+
+
+        if(empty($user_id) || empty($transaction_name) || empty($transaction_account_type) || empty($transaction_type) ||
+           empty($transaction_category) || empty($transaction_amount))
+        {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Please make sure to fill all the required fields.'
+                )
+            ), Response::HTTP_OK);
+            return $response;
+        }
+
+
+        $transaction = $this->dashboard_service->add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_amount, $transaction_note);
+
+        if($transaction){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 1,
+                    'text' => 'Transaction successfully added.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
+        else {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Not enough money on selected account.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
     }
 
     /**

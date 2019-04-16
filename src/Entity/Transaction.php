@@ -59,6 +59,12 @@ class Transaction
      */
     private $active;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\TransactionType", inversedBy="transactions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $transaction_type;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -156,6 +162,18 @@ class Transaction
     public function setActive(int $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getTransactionType(): ?TransactionType
+    {
+        return $this->transaction_type;
+    }
+
+    public function setTransactionType(?TransactionType $transaction_type): self
+    {
+        $this->transaction_type = $transaction_type;
 
         return $this;
     }
