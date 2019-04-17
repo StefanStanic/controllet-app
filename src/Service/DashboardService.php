@@ -49,6 +49,18 @@ class DashboardService
         return $transactions;
     }
 
+    public function get_total_expenses_by_filters($user_id, $account_id, $category_id)
+    {
+        $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_filters($user_id, $account_id, $category_id);
+        return $total_expenses;
+    }
+
+    public function get_total_income_by_filters($user_id, $account_id, $category_id)
+    {
+        $total_income = $this->em->getRepository(Transaction::class)->get_total_income_by_filters($user_id, $account_id, $category_id);
+        return $total_income;
+    }
+
     public function update_account($account_name, $account_balance, $account_id, $user_id)
     {
         $account = $this->em->getRepository(Account::class)->find($account_id);
@@ -144,4 +156,14 @@ class DashboardService
         return $transaction_id;
     }
 
+    public function get_total_balance($user_id)
+    {
+        $balance = $this->em->getRepository(Account::class)->get_total_balance($user_id);
+
+        if($balance){
+            return $balance;
+        }
+
+        return false;
+    }
 }

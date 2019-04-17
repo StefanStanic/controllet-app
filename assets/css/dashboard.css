@@ -1,12 +1,21 @@
+/*
+#88BDBC
+#245E58
+#112D32
+#4F4A41
+#6E6658
+*/
+
+
 .card-header{
     text-align: center;
     color: white;
     font-weight: bold;
-    background-color: #2F243A;
+    background-color: #254E58;
 }
 
 .button_color {
-    background-color: #2F243A;
+    background-color: #112D32;
     color:white;
 }
 .button_color:hover{
@@ -28,11 +37,11 @@
 }
 
 .transaction_list{
-    background-color: #2F243A;
+    background-color: #254E58;
     color:white;
     padding: 20px;
 }
 
 .primary-site-color{
-    background-color: #2F243A;
+    background-color: #254E58;
 }

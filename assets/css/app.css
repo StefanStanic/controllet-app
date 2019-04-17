@@ -1,4 +1,13 @@
 body {
-    font-family: 'Nunito', sans-serif;
-    background-color: #BEBBBB;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f2f7ff;
+}
+
+.button_primary_color {
+    background-color: #112D32;
+    color:white;
+}
+
+.button_primary_color:hover {
+    color:white;
 }

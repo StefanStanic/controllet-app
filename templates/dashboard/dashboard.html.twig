@@ -22,7 +22,7 @@
             {% for account in accounts %}
                 {% if(account.active == 1) %}
                 <div class="col-lg-4">
-                    <div class="card text-center" style="padding: 0; margin: 0;">
+                    <div class="card text-center shadow" style="padding: 0; margin: 0;">
                         <div class="card-header">
                             <span class="card-title" style="font-size: 14pt;" id="accountName_{{ account.id }}">{{ account.accountName}}</span><br>
                         </div>
@@ -89,47 +89,45 @@
         </div>
         <br><br>
 
-        <h2 align="center">Recent expences</h2>
-        <p align="right">
-            <button class="btn btn-primary" data-target="#addTransaction" data-toggle="modal">Add Transaction</button>
-        </p>
         <br>
 
-        <div class="container rounded primary-site-color dashboard_filters">
-            <ul class="nav">
-                <li class="nav-item">
-                    <select class="form-control" id="account_type_filter">
-                        <option value="0">All Accounts</option>
-                        {% for account in accounts %}
-                            {% if(account.active == 1) %}
-                                <option value="{{ account.id }}">{{ account.accountName }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </li>
-                <li class="nav-item">
-                    <select class="form-control" id="category_filter">
-                        <option value="0">All Categories</option>
-                        {% for category in categories %}
-                            {% if(category.active == 1) %}
-                                <option value="{{ category.id }}">{{ category.categoryName }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </li>
+        <h2 align="center"> Quick Stats</h2>
 
-                <li class="nav-item">
-                    <select class="form-control" id="transaction_type_filter">
-                        <option value="0">All Transaction Types</option>
-                        {% for type in transaction_types %}
-                            {% if(type.active == 1) %}
-                                <option value="{{ type.id }}">{{ type.transactionType }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </li>
+        <br>
 
-            </ul>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card text-center shadow" style="padding: 0; margin: 0;">
+                    <div class="card-header">
+                        <span class="card-title" style="font-size: 14pt;">Total Balance</span><br>
+                    </div>
+                    <div class="card-body">
+                        <span style="font-size: 20pt">{{ total_balance }} $</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card text-center shadow" style="padding: 0; margin: 0;">
+                    <div class="card-header">
+                        <span class="card-title" style="font-size: 14pt;">Total Expenses</span><br>
+                    </div>
+                    <div class="card-body">
+                        <span style="font-size: 20pt"> - {{ total_expenses }} $</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card text-center shadow" style="padding: 0; margin: 0;">
+                    <div class="card-header">
+                        <span class="card-title" style="font-size: 14pt;">Total Income</span><br>
+                    </div>
+                    <div class="card-body">
+                        <span style="font-size: 20pt"> + {{ total_income }} $</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- New Transaction Modal -->
@@ -204,9 +202,54 @@
             </div>
         </div>
 
+        <br>
+
+        <h2 align="center">Recent expences</h2>
+
+        <p align="right">
+            <button class="btn button_primary_color" data-target="#addTransaction" data-toggle="modal">Add Transaction</button>
+        </p>
+
+        <h5>Filters</h5>
+        <div class="container rounded primary-site-color dashboard_filters shadow">
+            <ul class="nav">
+                <li class="nav-item">
+                    <select class="form-control" id="account_type_filter">
+                        <option value="0">All Accounts</option>
+                        {% for account in accounts %}
+                            {% if(account.active == 1) %}
+                                <option value="{{ account.id }}">{{ account.accountName }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </li>
+                <li class="nav-item">
+                    <select class="form-control" id="category_filter">
+                        <option value="0">All Categories</option>
+                        {% for category in categories %}
+                            {% if(category.active == 1) %}
+                                <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </li>
+
+                {#<li class="nav-item">#}
+                {#<select class="form-control" id="transaction_type_filter">#}
+                {#<option value="0">All Transaction Types</option>#}
+                {#{% for type in transaction_types %}#}
+                {#{% if(type.active == 1) %}#}
+                {#<option value="{{ type.id }}">{{ type.transactionType }}</option>#}
+                {#{% endif %}#}
+                {#{% endfor %}#}
+                {#</select>#}
+                {#</li>#}
+
+            </ul>
+        </div>
 
         <br>
-        <div class="container rounded transaction_list">
+        <div class="container rounded transaction_list shadow">
             {{ include('dashboard/transaction_list.html.twig', {'transactions': transactions, 'categories': categories}) }}
         </div>
 

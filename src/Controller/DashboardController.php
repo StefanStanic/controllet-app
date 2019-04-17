@@ -38,11 +38,15 @@ class DashboardController extends AbstractController
 
         $user = $this->getUser();
 
-        //get all active wallets
         $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
         $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0);
         $data['categories'] = $this->dashboard_service->get_active_categories();
         $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
+
+        //basic input calculation data
+        $data['total_balance'] = $this->dashboard_service->get_total_balance($user->getId());
+        $data['total_expenses'] = $this->dashboard_service->get_total_expenses_by_filters($user->getId(), 0, 0);
+        $data['total_income'] = $this->dashboard_service->get_total_income_by_filters($user->getId(), 0, 0);
 
         return $this->render(
             'dashboard/dashboard.html.twig',
@@ -50,7 +54,10 @@ class DashboardController extends AbstractController
                 'accounts' => $data['accounts'],
                 'categories' => $data['categories'],
                 'transactions' => $data['transactions'],
-                'transaction_types' => $data['transaction_types']
+                'transaction_types' => $data['transaction_types'],
+                'total_balance' => $data['total_balance'][0]['total_balance'],
+                'total_expenses' => $data['total_expenses'][0]['total_expenses'],
+                'total_income' => $data['total_income'][0]['total_income']
             )
         );
     }
