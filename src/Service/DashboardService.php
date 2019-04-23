@@ -43,10 +43,22 @@ class DashboardService
         return $transaction_types;
     }
 
-    public function get_transaction_by_filters($user_id, $account_id, $category_id, $sort = "DESC")
+    public function get_transaction_by_filters($user_id, $account_id, $category_id, $sort = "DESC", $start_date, $end_date)
     {
-        $transactions = $this->em->getRepository(Transaction::class)->get_transaction_by_filters($user_id, $account_id, $category_id, $sort);
+        $transactions = $this->em->getRepository(Transaction::class)->get_transaction_by_filters($user_id, $account_id, $category_id, $sort, $start_date, $end_date);
         return $transactions;
+    }
+
+
+    public function get_chart_data_by_filters_and_type($data_type, $account_id, $category_id, $user_id, $start_date, $end_date)
+    {
+        $chart_data = $this->em->getRepository(Transaction::class)->get_chart_data_by_filters_and_type($data_type, $account_id, $category_id, $user_id, $start_date, $end_date);
+
+        if($chart_data){
+            return $chart_data;
+        }
+
+        return false;
     }
 
     public function get_total_expenses_by_filters($user_id, $account_id, $category_id)

@@ -39,7 +39,7 @@ class DashboardController extends AbstractController
         $user = $this->getUser();
 
         $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
-        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0);
+        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0, 'DESC', '', '');
         $data['categories'] = $this->dashboard_service->get_active_categories();
         $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
 
@@ -314,6 +314,8 @@ class DashboardController extends AbstractController
         $account_id = $request->get('account_id');
         $category_id = $request->get('category_id');
         $user_id = $request->get('user_id');
+        $start_date = $request->get('date_from');
+        $end_date = $request->get('date_to');
 
         if((empty($account_id) && $account_id !=0) || (empty($category_id) && $category_id !=0) || empty($user_id)){
             $response = new Response(json_encode(
@@ -325,7 +327,7 @@ class DashboardController extends AbstractController
             return $response;
         }
 
-        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user_id, $account_id, $category_id);
+        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user_id, $account_id, $category_id, '', $start_date, $end_date);
         $data['categories'] = $this->dashboard_service->get_active_categories();
 
         $transactions = $this->render(
@@ -344,5 +346,34 @@ class DashboardController extends AbstractController
         ), Response::HTTP_OK);
 
         return $response;
+    }
+
+    /**
+     * @Route("/getChartDataByFiltersAndType", methods={"POST"})
+     */
+    public function get_chart_data_by_filters_and_type(Request $request)
+    {
+        $data_type = $request->get('data_type');
+        $account_id = $request->get('account_id');
+        $category_id = $request->get('category_id');
+        $user_id = $request->get('user_id');
+        $start_date = $request->get('date_from');
+        $end_date = $request->get('date_to');
+
+        if(empty($data_type) || empty($user_id)){
+            return false;
+        }
+
+        $result = $this->dashboard_service->get_chart_data_by_filters_and_type($data_type, $account_id, $category_id, $user_id, $start_date, $end_date);
+
+        $response = new Response(json_encode(
+            array(
+                'status' => 1,
+                'data' => $result
+            )
+        ), Response::HTTP_OK);
+
+        return $response;
+
     }
 }

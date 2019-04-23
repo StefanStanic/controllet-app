@@ -130,6 +130,31 @@
             </div>
         </div>
 
+
+        <br>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card text-center shadow" style="padding: 0; margin: 0;">
+                    <div class="card-header">
+                        <span class="card-title" style="font-size: 14pt;">Income Change</span><br>
+                    </div>
+                    <div class="card-body" id="income_change">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card text-center shadow" style="padding: 0; margin: 0;">
+                    <div class="card-header">
+                        <span class="card-title" style="font-size: 14pt;">Expenses Change</span><br>
+                    </div>
+                    <div class="card-body" id="expense_change">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- New Transaction Modal -->
         <div class="modal fade" id="addTransaction" tabindex="-1" role="dialog" aria-labelledby="addTransaction" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -204,6 +229,10 @@
 
         <br>
 
+        <div id="chart"></div>
+
+        <br>
+
         <h2 align="center">Recent expences</h2>
 
         <p align="right">
@@ -234,6 +263,14 @@
                     </select>
                 </li>
 
+                <li class="nav-item">
+                    <input class="form-control" id="date_from" name="date_from" placeholder="23-03-2019" type="text">
+                </li>
+
+                <li class="nav-item">
+                    <input class="form-control" id="date_to" name="date_to" placeholder="23-03-2019" type="text">
+                </li>
+                
                 {#<li class="nav-item">#}
                 {#<select class="form-control" id="transaction_type_filter">#}
                 {#<option value="0">All Transaction Types</option>#}
