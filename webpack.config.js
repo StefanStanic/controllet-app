@@ -10,8 +10,12 @@ Encore
     .addEntry('dashboard', './assets/js/dashboard.js')
     .addEntry('addAccount', './assets/js/addAccount.js')
     .addEntry('transactions', './assets/js/transactions.js')
+    .addEntry('profile', './assets/js/profile.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
+    .copyFiles({
+        from: './assets/images'
+    })
 
     .splitEntryChunks()
 

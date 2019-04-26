@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Entity\Account;
 use App\Form\AccountType;
 use App\Service\DashboardService;
+use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +24,13 @@ class DashboardController extends AbstractController
 
     private $em;
     private $dashboard_service;
+    private $user_service;
 
-    public function __construct(EntityManagerInterface $em, DashboardService $dashboardService)
+    public function __construct(EntityManagerInterface $em, DashboardService $dashboardService, UserService $userService)
     {
         $this->em = $em;
         $this->dashboard_service = $dashboardService;
+        $this->user_service = $userService;
     }
 
     /**
@@ -60,6 +63,75 @@ class DashboardController extends AbstractController
                 'total_income' => $data['total_income'][0]['total_income']
             )
         );
+    }
+
+    /**
+     * @Route("/profile", name="app_profile")
+     */
+    public function profile()
+    {
+        $user = $this->getUser();
+
+        $data['user_data'] = array(
+        );
+
+        return $this->render(
+            'profile/profile.html.twig'
+        );
+
+    }
+
+    /**
+     * @Route("/updateProfile", name="app_update_profile", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function update_profile(Request $request)
+    {
+        $user_id = $request->get('user_id');
+        $first_name = $request->get('first_name');
+        $last_name = $request->get('last_name');
+        $date_of_birth = $request->get('date_of_birth');
+        $company = $request->get('company');
+        $city = $request->get('city');
+        $country = $request->get('country');
+
+
+        if(empty($user_id) || empty($first_name) || empty($last_name) || empty($date_of_birth) ||
+            empty($company) || empty($city) || empty($country))
+        {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Please make sure to fill all the required fields.'
+                )
+            ), Response::HTTP_OK);
+            return $response;
+        }
+
+
+        $profile = $this->user_service->update_profile_by_user_id($user_id, $first_name, $last_name, $date_of_birth, $company, $city, $country);
+
+        if($profile){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 1,
+                    'text' => 'Profile successfully added.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
+        else {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Something went wrong, try again later.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
     }
 
     /**

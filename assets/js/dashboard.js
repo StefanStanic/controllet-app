@@ -241,7 +241,7 @@ function initialize_charts_by_filters(data_type = ''){
         $.each(data.data, function (key, value) {
             chart_data.push(value.total_daily_expense);
             chart_series.push(value.transaction_day);
-        })
+        });
 
         //options
         var options = {
@@ -255,7 +255,7 @@ function initialize_charts_by_filters(data_type = ''){
             xaxis: {
                 categories: chart_series
             }
-        }
+        };
 
         // var balance_chart = new ApexCharts(document.querySelector("#balance_change"), options);
         var chart = new ApexCharts(document.querySelector((data_type == 1)? "#expense_change" : "#income_change"), options);

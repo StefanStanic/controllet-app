@@ -1,5 +1,14 @@
 require('../css/transactions.css');
 
+$(document).ready(function() {
+    $('#transaction_table').DataTable({
+        sorting: false,
+        searching: false,
+        paging: true
+    });
+} );
+
+
 $("#addTransactionForm").on('submit', function (e) {
     e.preventDefault();
 
