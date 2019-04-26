@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stefke
- * Date: 2019-03-19
- * Time: 19:37
- */
 
 namespace App\Controller;
 
@@ -70,15 +64,9 @@ class DashboardController extends AbstractController
      */
     public function profile()
     {
-        $user = $this->getUser();
-
-        $data['user_data'] = array(
-        );
-
         return $this->render(
             'profile/profile.html.twig'
         );
-
     }
 
     /**
@@ -146,7 +134,7 @@ class DashboardController extends AbstractController
         $account = new Account();
         $form = $this->createForm(AccountType::class, $account);
 
-        //handle form submititon
+        //handle form submit
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid() && $user->getId() == $user_id) {
@@ -422,6 +410,8 @@ class DashboardController extends AbstractController
 
     /**
      * @Route("/getChartDataByFiltersAndType", methods={"POST"})
+     * @param Request $request
+     * @return bool|Response
      */
     public function get_chart_data_by_filters_and_type(Request $request)
     {

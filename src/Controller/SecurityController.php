@@ -34,6 +34,12 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        if(!empty($this->getUser())){
+            if($this->getUser()->getId()){
+                return $this->redirectToRoute('app_dashboard');
+            }
+        }
+
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
@@ -44,9 +50,17 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/registration", name="app_register")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function register(Request $request)
     {
+        if(!empty($this->getUser())){
+            if($this->getUser()->getId()){
+                return $this->redirectToRoute('app_dashboard');
+            }
+        }
+
         $user = new User();
         $account = new Account();
 
