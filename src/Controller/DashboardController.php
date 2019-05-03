@@ -69,6 +69,73 @@ class DashboardController extends AbstractController
         );
     }
 
+
+    /**
+     * @Route("/budget", name="app_budget")
+     */
+    public function budget()
+    {
+        $user = $this->getUser();
+
+        $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
+        $data['categories'] = $this->dashboard_service->get_active_categories();
+        $data['budgets'] = $this->dashboard_service->get_active_budgets_by_user_id($user->getId());
+
+        return $this->render(
+            'dashboard/budget.html.twig',
+            array(
+                'accounts' => $data['accounts'],
+                'categories' => $data['categories'],
+                'budgets' => $data['budgets']
+            )
+        );
+    }
+
+    /**
+     * @Route("/addBudget", name="app_add_budget", methods={"POST"})
+     */
+    public function add_budget(Request $request)
+    {
+        $user_id = $request->get('user_id');
+        $category_id = $request->get('category');
+        $account_id = $request->get('account_type');
+        $budget_amount = $request->get('budget_amount');
+
+        if(empty($user_id) || empty($category_id) || empty($account_id) || empty($budget_amount))
+        {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Please make sure to fill all the required fields.'
+                )
+            ), Response::HTTP_OK);
+            return $response;
+        }
+
+        $budget = $this->dashboard_service->add_budget($user_id, $category_id, $account_id, $budget_amount);
+
+        if($budget){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 1,
+                    'text' => 'Budget successfully added.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }else {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Something went wrong, try again later.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
+
+    }
+
     /**
      * @Route("/updateProfile", name="app_update_profile", methods={"POST"})
      * @param Request $request

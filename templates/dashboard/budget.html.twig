@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('budget') }}
+{% endblock %}
+
+{% block body %}
+    <div class="container w-75">
+        <div class="row">
+            <div class="col-sm-9">
+                <h2 align="left">Budgets</h2>
+            </div>
+            <div class="col-sm-2 text-left">
+                <button type="button" class="btn btn-primary align-right" data-target="#addBudget" data-toggle="modal">Add Budget</button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            {% for budget in budgets %}
+                {% if(budget.active == 1) %}
+                    {{ dump(budget) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- New Budget Modal -->
+        <div class="modal fade" id="addBudget" tabindex="-1" role="dialog" aria-labelledby="addBudget" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Budget</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addBudgetForm" name="budget" method="post" action="">
+                            <div class="form-group">
+
+                                <label for="account_type">Pick Account Type</label>
+                                <select class="form-control" id="account_type" name="account_type" required>
+                                    {% for account in accounts %}
+                                        {% if(account.active == 1) %}
+                                            <option value="{{ account.id }}">{{ account.accountName }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <br>
+
+                                <label for="category">Pick a Category</label>
+                                <select class="form-control" id="category" name="category" required>
+                                    {% for category in categories %}
+                                        {% if(category.active == 1) %}
+                                            <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <br>
+
+                                <label for="budget_amount">Budget Amount</label>
+                                <input class="form-control" id="budget_amount" name="budget_amount" type="number">
+                                <br>
+
+                            </div>
+                            <input type="hidden" id="user_id" name="user_id" value="{{ app.user.id }}">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="addBudgetForm">Add Budget</button>
+                            <br>
+                            <br>
+                            <p align="center" id="successAddBudget" style="display: none; color:green;">Successfully created your budget</p>
+                            <p align="center" id="failAddBudget" style="display: none;color:red;">There's been an issue, try again later</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('budget') }}
+{% endblock %}

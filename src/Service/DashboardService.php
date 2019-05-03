@@ -4,6 +4,7 @@ namespace App\Service;
 
 
 use App\Entity\Account;
+use App\Entity\Budget;
 use App\Entity\Category;
 use App\Entity\Transaction;
 use App\Entity\TransactionType;
@@ -73,6 +74,12 @@ class DashboardService
         return $total_income;
     }
 
+    public function get_active_budgets_by_user_id($user_id)
+    {
+        $budgets = $this->em->getRepository(Budget::class)->get_budgets_by_user_id($user_id);
+        return $budgets;
+    }
+
     public function update_account($account_name, $account_balance, $account_id, $user_id)
     {
         $account = $this->em->getRepository(Account::class)->find($account_id);
@@ -100,6 +107,38 @@ class DashboardService
             $this->em->flush();
 
             return $account_id;
+        }
+    }
+
+
+    public function add_budget($user_id, $category_id, $account_id, $budget_amount)
+    {
+        $date = date('Y-m-d');
+
+        $budget = new Budget();
+        $user = $this->em->getRepository(User::class)->find($user_id);
+        $account = $this->em->getRepository(Account::class)->find($account_id);
+        $category = $this->em->getRepository(Category::class)->find($category_id);
+        $current_budget_amount = $this->em->getRepository(Budget::class)->get_total_budget_for_current_month($date, $user_id, $account_id);
+        $does_budget_with_category_exists = $this->em->getRepository(Budget::class)->get_budget_by_category_and_date($date, $user, $account_id, $category_id);
+
+        //check if budget passes the total account balance
+        if($budget_amount <= ($account->getAccountBalance() - $current_budget_amount[0]['total_budget']) && empty($does_budget_with_category_exists)){
+            $budget
+                ->setCategory($category)
+                ->setAccount($account)
+                ->setBudgetAmount($budget_amount)
+                ->setBudgetDate(\DateTime::createFromFormat('Y-m-d', $date))
+                ->setActive(1);
+            ;
+
+            $this->em->persist($budget);
+            $this->em->flush();
+
+            return $user_id;
+
+        }else{
+            return false;
         }
     }
 
