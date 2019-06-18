@@ -19,7 +19,22 @@
         <div class="row">
             {% for budget in budgets %}
                 {% if(budget.active == 1) %}
-                    {{ dump(budget) }}
+                    <div class="col-3 custom-card">
+                        <a href="" class="custom-card">
+                            <div class="card text-center shadow" style="padding: 0; margin: 0;">
+                                <div class="card-body budget_card">
+                                    <h5 align="left">{{ budget.category.categoryName }}</h5>
+                                    <p class="budget_card_span">{{ budget.account.accountName }}</p>
+                                    <p class="budget_card_span"><b>{{ budget.budgetAmount | number_format(2, '.', ',')}}</b> $ left out of {{ budget.originalBudgetAmount }} $</p>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-valuenow="{{ budget.originalBudgetAmount - budget.budgetAmount }}" aria-valuemin="0" aria-valuemax="{{ budget.originalBudgetAmount }}" style="width: {{ (budget.budgetAmount/budget.originalBudgetAmount)*100 }}%"></div>
+                                    </div>
+                                    <br>
+                                    <p class="budget_card_span">{{ budget.budgetDate | date("F Y") }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>

@@ -128,6 +128,7 @@ class DashboardService
                 ->setCategory($category)
                 ->setAccount($account)
                 ->setBudgetAmount($budget_amount)
+                ->setOriginalBudgetAmount($budget_amount)
                 ->setBudgetDate(\DateTime::createFromFormat('Y-m-d', $date))
                 ->setActive(1);
             ;

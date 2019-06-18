@@ -42,6 +42,11 @@ class Budget
      */
     private $active;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $original_budget_amount;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class Budget
     public function setActive(int $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getOriginalBudgetAmount(): ?int
+    {
+        return $this->original_budget_amount;
+    }
+
+    public function setOriginalBudgetAmount(int $original_budget_amount): self
+    {
+        $this->original_budget_amount = $original_budget_amount;
 
         return $this;
     }

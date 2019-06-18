@@ -1,0 +1,13 @@
+.budget_card_span{
+    text-align:left;
+}
+
+.custom-card{
+    margin-bottom: 10px;
+}
+
+a.custom-card,
+a.custom-card:hover {
+    color: inherit;
+    text-decoration: inherit;
+}
