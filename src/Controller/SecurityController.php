@@ -95,17 +95,7 @@ class SecurityController extends AbstractController
             $activationKeys->setHash(sha1(uniqid()));
             $activationKeys->setUser($user);
 
-            //setup default account
-            $account
-                ->setUser($user)
-                ->setAccountName('Cash Account')
-                ->setAccountType('cash')
-                ->setAccountBalance(0)
-                ->setActive(1)
-                ->setLastUsedDate(\DateTime::createFromFormat('Y-m-d H:i:s', $date))
-                ;
-
-            $this->em->persist($account);
+            $this->em->persist($activationKeys);
             $this->em->flush();
 
             return $this->redirectToRoute('app_login');

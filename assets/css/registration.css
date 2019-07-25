@@ -1,10 +1,16 @@
+body{
+    background-image: url("../images/registration.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
 #register_form  input
 {
     font-size: 12pt;
 }
 
 #button_register{
-    background-color: #2F243A;
+    background-color: #00aa70;
     color:white;
 }
 
@@ -14,5 +20,5 @@
     font-weight: bold;
     padding-top: 20px;
     padding-bottom: 20px;
-    background-color: #2F243A;
+    background-color: #00aa70;
 }

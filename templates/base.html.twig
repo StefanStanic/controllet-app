@@ -12,7 +12,9 @@
         {% endblock %}
     </head>
     <body>
-        {{ include('components/navbar.html.twig') }}
+        {% if (app.request.pathInfo != '/registration' and app.request.pathInfo != '/login') %}
+            {{ include('components/navbar.html.twig') }}
+        {% endif %}
         {% block body %}
         {% endblock %}
         {% block javascripts %}
