@@ -77,11 +77,6 @@ class User implements UserInterface
     private $country;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $act_key;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $active;
@@ -110,6 +105,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="user", orphanRemoval=true)
      */
     private $transaction;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\ActivationKeys", inversedBy="user", cascade={"persist", "remove"})
+     */
+    private $activationKey;
 
     public function __construct()
     {
@@ -388,6 +388,18 @@ class User implements UserInterface
                 $transaction->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getActivationKey(): ?ActivationKeys
+    {
+        return $this->activationKey;
+    }
+
+    public function setActivationKey(?ActivationKeys $activationKey): self
+    {
+        $this->activationKey = $activationKey;
 
         return $this;
     }

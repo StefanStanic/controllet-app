@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TransactionTypeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\SubCategoryRepository")
  */
-class TransactionType
+class SubCategory
 {
     /**
      * @ORM\Id()
@@ -21,10 +21,15 @@ class TransactionType
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $transaction_type;
+    private $subCategoryName;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="transaction_type", orphanRemoval=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="subCategory")
+     */
+    private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="subCategory")
      */
     private $transactions;
 
@@ -38,14 +43,26 @@ class TransactionType
         return $this->id;
     }
 
-    public function getTransactionType(): ?string
+    public function getSubCategoryName(): ?string
     {
-        return $this->transaction_type;
+        return $this->subCategoryName;
     }
 
-    public function setTransactionType(string $transaction_type): self
+    public function setSubCategoryName(string $subCategoryName): self
     {
-        $this->transaction_type = $transaction_type;
+        $this->subCategoryName = $subCategoryName;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
@@ -62,7 +79,7 @@ class TransactionType
     {
         if (!$this->transactions->contains($transaction)) {
             $this->transactions[] = $transaction;
-            $transaction->setTransactionType($this);
+            $transaction->setSubCategory($this);
         }
 
         return $this;
@@ -73,8 +90,8 @@ class TransactionType
         if ($this->transactions->contains($transaction)) {
             $this->transactions->removeElement($transaction);
             // set the owning side to null (unless already changed)
-            if ($transaction->getTransactionType() === $this) {
-                $transaction->setTransactionType(null);
+            if ($transaction->getSubCategory() === $this) {
+                $transaction->setSubCategory(null);
             }
         }
 

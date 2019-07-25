@@ -44,6 +44,11 @@ class Account
     private $active;
 
     /**
+     * @ORM\Column(type="string", length=3)
+     */
+    private $currency;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="account")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -54,10 +59,6 @@ class Account
      */
     private $transactions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Budget", mappedBy="account")
-     */
-    private $budget;
 
     public function __construct()
     {
@@ -173,33 +174,14 @@ class Account
         return $this;
     }
 
-    /**
-     * @return Collection|Budget[]
-     */
-    public function getBudget(): Collection
+    public function getCurrency(): ?string
     {
-        return $this->budget;
+        return $this->currency;
     }
 
-    public function addBudget(Budget $budget): self
+    public function setCurrency(string $currency): self
     {
-        if (!$this->budget->contains($budget)) {
-            $this->budget[] = $budget;
-            $budget->setAccount($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBudget(Budget $budget): self
-    {
-        if ($this->budget->contains($budget)) {
-            $this->budget->removeElement($budget);
-            // set the owning side to null (unless already changed)
-            if ($budget->getAccount() === $this) {
-                $budget->setAccount(null);
-            }
-        }
+        $this->currency = $currency;
 
         return $this;
     }

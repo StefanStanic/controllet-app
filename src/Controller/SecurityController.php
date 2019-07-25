@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Account;
+use App\Entity\ActivationKeys;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Service\SecurityService;
@@ -63,6 +64,7 @@ class SecurityController extends AbstractController
 
         $user = new User();
         $account = new Account();
+        $activationKeys = new ActivationKeys();
 
         $form = $this->createForm(UserType::class, $user);
 
@@ -81,7 +83,6 @@ class SecurityController extends AbstractController
             $user->setUpdatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $date));
 
             //setting activation key
-            $user->setActKey(sha1(uniqid()));
             $user->setActive(0);
 
             //set initial role
@@ -89,6 +90,10 @@ class SecurityController extends AbstractController
 
             $this->em->persist($user);
             $this->em->flush();
+
+            //set activation key
+            $activationKeys->setHash(sha1(uniqid()));
+            $activationKeys->setUser($user);
 
             //setup default account
             $account

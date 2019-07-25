@@ -24,24 +24,20 @@ class Category
     private $category_name;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $active;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="category")
      */
     private $transactions;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Budget", mappedBy="category", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\SubCategory", mappedBy="category")
      */
-    private $budgets;
+    private $subCategory;
+
 
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
-        $this->budgets = new ArrayCollection();
+        $this->subCategory = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,30 +101,30 @@ class Category
     }
 
     /**
-     * @return Collection|Budget[]
+     * @return Collection|SubCategory[]
      */
-    public function getBudgets(): Collection
+    public function getSubCategory(): Collection
     {
-        return $this->budgets;
+        return $this->subCategory;
     }
 
-    public function addBudget(Budget $budget): self
+    public function addSubCategory(SubCategory $subCategory): self
     {
-        if (!$this->budgets->contains($budget)) {
-            $this->budgets[] = $budget;
-            $budget->setCategory($this);
+        if (!$this->subCategory->contains($subCategory)) {
+            $this->subCategory[] = $subCategory;
+            $subCategory->setCategory($this);
         }
 
         return $this;
     }
 
-    public function removeBudget(Budget $budget): self
+    public function removeSubCategory(SubCategory $subCategory): self
     {
-        if ($this->budgets->contains($budget)) {
-            $this->budgets->removeElement($budget);
+        if ($this->subCategory->contains($subCategory)) {
+            $this->subCategory->removeElement($subCategory);
             // set the owning side to null (unless already changed)
-            if ($budget->getCategory() === $this) {
-                $budget->setCategory(null);
+            if ($subCategory->getCategory() === $this) {
+                $subCategory->setCategory(null);
             }
         }
 

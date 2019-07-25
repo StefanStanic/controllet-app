@@ -49,6 +49,11 @@ class Transaction
     private $category;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SubCategory", inversedBy="transactions")
+     */
+    private $subCategory;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Account", inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -174,6 +179,18 @@ class Transaction
     public function setTransactionType(?TransactionType $transaction_type): self
     {
         $this->transaction_type = $transaction_type;
+
+        return $this;
+    }
+
+    public function getSubCategory(): ?SubCategory
+    {
+        return $this->subCategory;
+    }
+
+    public function setSubCategory(?SubCategory $subCategory): self
+    {
+        $this->subCategory = $subCategory;
 
         return $this;
     }
