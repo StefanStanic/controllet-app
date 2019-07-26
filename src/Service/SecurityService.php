@@ -3,6 +3,7 @@
 namespace App\Service;
 
 
+use App\Entity\ActivationKeys;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,15 +21,16 @@ class SecurityService
     public function activation(string $email, string $act_key)
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
+        $activation_key = $this->em->getRepository(ActivationKeys::class)->find($user);
 
-        if (!$user) {
+        if (!$activation_key) {
             $response = new Response();
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
 
             return $response;
         } else {
 
-            if ($user->getActKey() != $act_key) {
+            if ($activation_key->getHash() != $act_key) {
                 $response = new Response();
 
                 $response->setStatusCode(Response::HTTP_FORBIDDEN);
