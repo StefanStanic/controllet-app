@@ -14,11 +14,12 @@
                 </div>
                 <div class="card-body">
                     <form name="user" id="addAccount_form" method="post">
-                        {{ form_row(form.account_name, {'attr': {'placeholder': 'Account Name', 'class': 'form-control-lg'}}) }}
-                        {{ form_row(form.account_type, {'attr': {'placeholder': 'Account Type', 'class': 'form-control-lg'}}) }}
-                        {{ form_row(form.account_balance, {'attr': {'placeholder': 'Account Balance', 'class': 'form-control-lg'}}) }}
+                        {{ form_row(form.account_name, {'attr': {'placeholder': 'Account Name', 'class': 'form-control'}}) }}
+                        {{ form_row(form.account_type, {'attr': {'placeholder': 'Account Type', 'class': 'form-control'}}) }}
+                        {{ form_row(form.currency, {'attr': {'placeholder': 'Account Type', 'class': 'form-control'}}) }}
+                        {{ form_row(form.account_balance, {'attr': {'placeholder': 'Account Balance', 'class': 'form-control'}}) }}
                         {{ form_row(form._token) }}
-                        <p align="center"><button class="btn btn-lg" type="submit" id="button_addAccount">Add</button></p>
+                        <p align="center"><button class="btn btn-lg btn-default" type="submit" id="button_addAccount">Add</button></p>
                     </form>
                 </div>
             </div>

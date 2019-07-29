@@ -22,15 +22,24 @@ class AccountType extends AbstractType
             ->add('account_type', ChoiceType::class,
                 array(
                     'choices' => [
-                        'cash' => true,
-                        'bank' => true,
-                        'paypal' => true,
-                        'checks' => true
+                        'CASH' => 'CASH',
+                        'BANK' => 'BANK',
+                        'PAYPAL' => 'PAYPAL',
+                        'CHECKS' => 'CHECKS'
                     ],
                     'label' => false
                 ))
             ->add('account_balance', IntegerType::class,
                 array(
+                    'label' => false
+                ))
+            ->add('currency', ChoiceType::class,
+                array(
+                    'choices' => [
+                        'USD' => 'USD',
+                        'EUR' => 'EUR',
+                        'RSD' => 'RSD'
+                    ],
                     'label' => false
                 ))
         ;

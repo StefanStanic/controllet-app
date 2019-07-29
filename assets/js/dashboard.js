@@ -20,19 +20,9 @@ require('../css/dashboard.css');
 // balance_chart.render();
 // expense_chart.render();
 
-
-initialize_charts_by_filters(1);
-initialize_charts_by_filters(2);
-
-
-//initialize date-pickers
-var options={
-    format: 'dd-mm-yyyy',
-    todayHighlight: true,
-    autoclose: true,
-};
-$("#date_from").datepicker(options);
-$("#date_to").datepicker(options);
+initilize_spending_trend();
+initilize_income();
+initilize_expenses();
 
 //on delete
 $(".delete_account").on('click', function (e) {
@@ -114,22 +104,6 @@ $(".update_account").on('click', function (e) {
     })
 });
 
-$("#account_type_filter").on('change', function (e) {
-    apply_filters();
-});
-
-$("#category_filter").on('change', function (e) {
-    apply_filters();
-});
-
-$("#date_from").on('change', function (e) {
-    apply_filters();
-});
-
-$("#date_to").on('change', function (e) {
-    apply_filters();
-});
-
 $(".edit_transaction").on('click', function (e) {
     e.preventDefault();
 
@@ -205,62 +179,148 @@ $('#addTransaction').on('hidden.bs.modal', function () {
     location.reload();
 });
 
-function apply_filters() {
-    var user_id = $("#user_id").val();
-    var category_id = $("#category_filter").val();
-    var account_id = $("#account_type_filter").val();
-    var start_date = $("#date_from").val();
-    var end_date = $("#date_to").val();
-
-    $.post('/filterTransactions', {'user_id': user_id, 'account_id': account_id , 'category_id': category_id,  'date_from': start_date, 'date_to': end_date}, function (data) {
-        if(data.html === ''){
-            $('.transaction_list').html('No transactions based on current filter.');
-        }else{
-            $('.transaction_list').html(data.html);
+function initilize_spending_trend(){
+    var options = {
+        chart: {
+            height: 350,
+            type: "line",
+            stacked: false
+        },
+        dataLabels: {
+            enabled: false
+        },
+        colors: ["#FF1654", "#247BA0"],
+        series: [
+            {
+                name: "Series A",
+                data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
+            },
+            {
+                name: "Series B",
+                data: [20, 29, 37, 36, 44, 45, 50, 58]
+            }
+        ],
+        stroke: {
+            width: [4, 4]
+        },
+        plotOptions: {
+            bar: {
+                columnWidth: "20%"
+            }
+        },
+        xaxis: {
+            categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]
+        },
+        yaxis: [
+            {
+                axisTicks: {
+                    show: true
+                },
+                axisBorder: {
+                    show: true,
+                    color: "#FF1654"
+                },
+                labels: {
+                    style: {
+                        color: "#FF1654"
+                    }
+                },
+                title: {
+                    text: "Series A"
+                }
+            },
+            {
+                opposite: true,
+                axisTicks: {
+                    show: true
+                },
+                axisBorder: {
+                    show: true,
+                    color: "#247BA0"
+                },
+                labels: {
+                    style: {
+                        color: "#247BA0"
+                    }
+                },
+                title: {
+                    text: "Series B"
+                }
+            }
+        ],
+        tooltip: {
+            shared: false,
+            intersect: true,
+            x: {
+                show: false
+            }
+        },
+        legend: {
+            horizontalAlign: "left",
+            offsetX: 40
         }
-    }, 'json');
+    };
+
+    var chart = new ApexCharts(document.querySelector("#spending_trend"), options);
+
+    chart.render();
 }
 
-function initialize_charts_by_filters(data_type = ''){
 
-    if(data_type === ''){
-        return false;
+function initilize_income(){
+    var options = {
+        chart: {
+            width: 380,
+            type: 'pie',
+        },
+        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+        series: [44, 55, 13, 43, 22],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
     }
 
-    var user_id = $("#user_id").val();
-    var category_id = $("#category_filter").val();
-    var account_id = $("#account_type_filter").val();
-    var start_date = $("#date_from").val();
-    var end_date = $("#date_to").val();
+    var chart = new ApexCharts(
+        document.querySelector("#chart2"),
+        options
+    );
 
-    $.post('/getChartDataByFiltersAndType', {'data_type': data_type, 'user_id': user_id, 'account_id': account_id , 'category_id': category_id, 'date_from': start_date, 'date_to': end_date}, function (data) {
-        //data
-        var chart_data = [];
-        var chart_series = [];
+    chart.render();
+}
 
-        $.each(data.data, function (key, value) {
-            chart_data.push(value.total_daily_expense);
-            chart_series.push(value.transaction_day);
-        });
-
-        //options
-        var options = {
-            chart: {
-                type: 'line'
-            },
-            series: [{
-                name: (data_type == 1)? 'Expenses': 'Income',
-                data: chart_data
-            }],
-            xaxis: {
-                categories: chart_series
+function initilize_expenses(){
+    var options = {
+        chart: {
+            width: 380,
+            type: 'pie',
+        },
+        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+        series: [44, 55, 13, 43, 22],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
             }
-        };
+        }]
+    }
 
-        // var balance_chart = new ApexCharts(document.querySelector("#balance_change"), options);
-        var chart = new ApexCharts(document.querySelector((data_type == 1)? "#expense_change" : "#income_change"), options);
+    var chart = new ApexCharts(
+        document.querySelector("#chart3"),
+        options
+    );
 
-        // balance_chart.render();
-        chart.render();
-    }, 'json');
+    chart.render();
 }
