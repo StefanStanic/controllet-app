@@ -4,3 +4,6 @@ const $ = require('jquery');
 global.$ = global.jQuery = $;
 require('bootstrap/dist/js/bootstrap');
 require('bootstrap/dist/css/bootstrap.css');
+
+require('mdbootstrap/css/mdb.css')
+require('mdbootstrap/js/mdb')

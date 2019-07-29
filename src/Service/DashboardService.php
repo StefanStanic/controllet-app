@@ -28,18 +28,14 @@ class DashboardService
 
     public function get_active_categories()
     {
-        $categories = $this->em->getRepository(Category::class)->findBy(
-            ['active' => 1]
-        );
+        $categories = $this->em->getRepository(Category::class)->findAll();
 
         return $categories;
     }
 
     public function get_active_transaction_types()
     {
-        $transaction_types = $this->em->getRepository(TransactionType::class)->findBy(
-            ['active' => 1]
-        );
+        $transaction_types = $this->em->getRepository(TransactionType::class)->findAll();
 
         return $transaction_types;
     }
