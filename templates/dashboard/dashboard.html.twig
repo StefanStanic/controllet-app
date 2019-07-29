@@ -10,22 +10,35 @@
         <div class="row">
 
                 {% for account in accounts %}
-                    <!--Panel-->
-                    <div class="col-md-2">
-                        <div class="card card-body" style="padding-bottom: 10px; padding-top: 10px; margin-bottom: 10px;">
-                            <h6 class="card-title">{{ account.accountName }}</h6>
-                            <p class="card-text">{{ account.accountBalance }} {{ account.currency }}</p>
-                        </div>
-                    </div>
-                    {% if loop.last %}
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-primary">
-                                <a href="{{ path('app_dashboard_addaccount', {'user_id' : app.user.id }) }}" style="text-decoration: none; color: white;" >+ Add Account</a>
-                            </button>
+                    {% if(account.active == 1) %}
+                        <!--Panel-->
+                        <div class="col-md-4">
+                            <div class="card card-body" style="padding-bottom: 10px; padding-top: 10px; margin-bottom: 10px;">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h6 class="card-title" id="accountName_{{ account.id }}">{{ account.accountName }}</h6>
+                                        <p class="card-text" id="accountBalance_{{ account.id }}">{{ account.accountBalance }} {{ account.currency }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-warning update_account button_color" data-target="#addAccount" data-user_id_update="{{ app.user.id }}" value="{{ account.id }}" data-toggle="modal">
+                                            <i class="fas fa-pencil-alt fa-xs"></i>
+                                        </button>
+
+                                        <button class="btn btn-danger delete_account button_color" data-user_id_delete="{{ app.user.id }}" value="{{ account.id }}">
+                                            <i class="fas fa-trash-alt fa-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     {% endif %}
                 {% endfor %}
-
+            <div class="col-md-3">
+                <button type="button" class="btn btn-primary">
+                    <a href="{{ path('app_dashboard_addaccount', {'user_id' : app.user.id }) }}" style="text-decoration: none; color: white;" >+ Add Account</a>
+                </button>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -68,52 +81,6 @@
             </div>
         </div>
     </div>
-
-
-
-<!-- Central Modal Small -->
-    <div class="modal fade" id="updateAccount" tabindex="-1" role="dialog" aria-labelledby="updateAccount" aria-hidden="true">
-
-        <!-- Change class .modal-sm to change the size of the modal -->
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title w-100" id="myModalLabel">Update Account</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="addAccountForm" name="account" method="post" action="">
-                        <div class="form-group">
-
-                            <label for="accountName">Account Name</label>
-                            <input class="form-control" id="accountName" name="accountName" type="text">
-                            <br>
-
-                            <label for="accountBalance">Account Balance</label>
-                            <input class="form-control" id="accountBalance" name="accountBalance" type="number">
-                            <br>
-
-                        </div>
-                        <input type="hidden" id="user_id" name="user_id" value="{{ app.user.id }}">
-                        <input type="hidden" id="account_id" name="account_id" value="">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="updateAccountModal">Update wallet</button>
-                        <br>
-                        <br>
-                        <p align="center" id="successUpdate" style="display: none; color:green;">Successfully updated your account</p>
-                        <p align="center" id="failUpdate" style="display: none;color:red;">There's been an issue, try again later</p>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary btn-sm">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-<!-- Central Modal Small -->
 
 <!-- New Account Modal -->
 <div class="modal fade" id="addAccount" tabindex="-1" role="dialog" aria-labelledby="addAccount" aria-hidden="true">
