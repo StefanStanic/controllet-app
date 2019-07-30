@@ -133,9 +133,9 @@ class TransactionRepository extends ServiceEntityRepository
             ->groupBy('transaction_day');
 
         if($data_type = 1){
-            $db->select('SUM(transaction.transaction_amount) as total_daily_expense, MONTH(transaction.transaction_time) as transaction_month, DAY(transaction.transaction_time) as transaction_day');
+            $db->select("SUM(transaction.transaction_amount) as total_daily_expense, YEAR(transaction.transaction_time) as transaction_year, DATE_FORMAT(transaction.transaction_time, '%m') as transaction_month, DATE_FORMAT(transaction.transaction_time, '%d') as transaction_day");
         }else{
-            $db->select('SUM(transaction.transaction_amount) as total_daily_income, MONTH(transaction.transaction_time) as transaction_month, DAY(transaction.transaction_time) as transaction_day');
+            $db->select("SUM(transaction.transaction_amount) as total_daily_income, YEAR(transaction.transaction_time) as transaction_year, DATE_FORMAT(transaction.transaction_time, '%m') as transaction_month, DATE_FORMAT(transaction.transaction_time, '%d') as transaction_day");
         }
 
 //        if($account_id != 0){
