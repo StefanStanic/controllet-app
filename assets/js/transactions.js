@@ -18,6 +18,7 @@ $("#addTransactionForm").on('submit', function (e) {
     var transaction_account_type = $("#transactionAccountType").val();
     var transaction_type = $("#transactionType").val();
     var transaction_category = $("#transactionCategory").val();
+    var transaction_subcategory = $("#transactionSubcategory").val();
     var transaction_amount = $("#transactionAmount").val();
     var transaction_note = $("#transactionNote").val();
 
@@ -31,6 +32,7 @@ $("#addTransactionForm").on('submit', function (e) {
             transactionAccountType: transaction_account_type,
             transactionType: transaction_type,
             transactionCategory: transaction_category,
+            transactionSubCategory: transaction_subcategory,
             transactionAmount: transaction_amount,
             transactionNote: transaction_note
         },

@@ -6,6 +6,7 @@ namespace App\Service;
 use App\Entity\Account;
 use App\Entity\Budget;
 use App\Entity\Category;
+use App\Entity\SubCategory;
 use App\Entity\Transaction;
 use App\Entity\TransactionType;
 use App\Entity\User;
@@ -47,9 +48,9 @@ class DashboardService
     }
 
 
-    public function get_chart_data_by_filters_and_type($data_type, $account_id, $category_id, $user_id, $start_date, $end_date)
+    public function get_chart_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date)
     {
-        $chart_data = $this->em->getRepository(Transaction::class)->get_chart_data_by_filters_and_type($data_type, $account_id, $category_id, $user_id, $start_date, $end_date);
+        $chart_data = $this->em->getRepository(Transaction::class)->get_chart_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date);
 
         if($chart_data){
             return $chart_data;
@@ -74,6 +75,17 @@ class DashboardService
     {
         $budgets = $this->em->getRepository(Budget::class)->get_budgets_by_user_id($user_id);
         return $budgets;
+    }
+
+    public function get_subcategories($category_id)
+    {
+        $category = $this->em->getRepository(Category::class)->find($category_id);
+
+        $subcategories = $this->em->getRepository(SubCategory::class)->findBy(
+            ['category' => $category]
+        );
+
+        return $subcategories;
     }
 
     public function update_account($account_name, $account_balance, $account_id, $user_id)
@@ -139,28 +151,36 @@ class DashboardService
         }
     }
 
-    public function add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_amount, $transaction_note)
+    public function add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_subcategory, $transaction_amount, $transaction_note)
     {
         $user = $this->em->getRepository(User::class)->find($user_id);
         $account = $this->em->getRepository(Account::class)->find($transaction_account_type);
         $transaction_t = $this->em->getRepository(TransactionType::class)->find($transaction_type);
         $category = $this->em->getRepository(Category::class)->find($transaction_category);
+        $subcategory = $this->em->getRepository(SubCategory::class)->find($transaction_subcategory);
 
         $transaction = new Transaction();
         $date = date('Y-m-d H:i:s');
 
-        //check if enough money to make the transaction
-        if($account->getAccountBalance() >= $transaction_amount){
-            //update account balance
-            $account->setAccountBalance( $account->getAccountBalance() - $transaction_amount);
-        }else {
-            return false;
+
+        //transaction type logic
+        if($transaction_t->getTransactionType() == 'Income'){
+            $account->setAccountBalance( $account->getAccountBalance() + $transaction_amount);
+        } else {
+            //check if enough money to make the transaction
+            if($account->getAccountBalance() >= $transaction_amount){
+                //update account balance
+                $account->setAccountBalance( $account->getAccountBalance() - $transaction_amount);
+            }else {
+                return false;
+            }
         }
 
         //create a transaction
         $transaction
             ->setUser($user)
             ->setCategory($category)
+            ->setSubCategory($subcategory)
             ->setAccount($account)
             ->setTransactionName($transaction_name)
             ->setTransactionAmount($transaction_amount)

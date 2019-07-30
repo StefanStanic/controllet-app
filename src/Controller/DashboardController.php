@@ -315,12 +315,13 @@ class DashboardController extends AbstractController
         $transaction_account_type = $request->get('transactionAccountType');
         $transaction_type = $request->get('transactionType');
         $transaction_category = $request->get('transactionCategory');
+        $transaction_subcategory = $request->get('transactionSubCategory');
         $transaction_amount = $request->get('transactionAmount');
         $transaction_note = $request->get('transactionNote');
 
 
         if(empty($user_id) || empty($transaction_name) || empty($transaction_account_type) || empty($transaction_type) ||
-           empty($transaction_category) || empty($transaction_amount))
+           empty($transaction_category) || empty($transaction_amount) || empty($transaction_subcategory))
         {
             $response = new Response(json_encode(
                 array(
@@ -332,7 +333,7 @@ class DashboardController extends AbstractController
         }
 
 
-        $transaction = $this->dashboard_service->add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_amount, $transaction_note);
+        $transaction = $this->dashboard_service->add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_subcategory, $transaction_amount, $transaction_note);
 
         if($transaction){
             $response = new Response(json_encode(
@@ -482,18 +483,17 @@ class DashboardController extends AbstractController
      */
     public function get_chart_data_by_filters_and_type(Request $request)
     {
+
         $data_type = $request->get('data_type');
-        $account_id = $request->get('account_id');
-        $category_id = $request->get('category_id');
         $user_id = $request->get('user_id');
         $start_date = $request->get('date_from');
         $end_date = $request->get('date_to');
 
-        if(empty($data_type) || empty($user_id)){
+        if(empty($start_date) || empty($end_date)){
             return false;
         }
 
-        $result = $this->dashboard_service->get_chart_data_by_filters_and_type($data_type, $account_id, $category_id, $user_id, $start_date, $end_date);
+        $result = $this->dashboard_service->get_chart_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date);
 
         $response = new Response(json_encode(
             array(
@@ -505,4 +505,33 @@ class DashboardController extends AbstractController
         return $response;
 
     }
+
+    /**
+     * @Route("/subCategories", methods={"POST"})
+     */
+    public function getSubCategories(Request $request)
+    {
+        $category_id = $request->get('category_id');
+
+        $result = $this->dashboard_service->get_subcategories($category_id);
+
+        $html = $this->render(
+            'components/subcategory.html.twig',
+            [
+                'subcategories' => $result
+            ]
+        )->getContent();
+
+        $response = new Response(json_encode(
+            array(
+                'status' => 1,
+                'html' => $html
+            )
+        ), Response::HTTP_OK);
+
+        return $response;
+
+    }
+
+
 }

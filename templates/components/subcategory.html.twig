@@ -1,0 +1,5 @@
+{% block body %}
+    {% for subcategory in subcategories %}
+        <option value="{{ subcategory.id }}">{{ subcategory.subCategoryName }}</option>
+    {% endfor %}
+{% endblock %}

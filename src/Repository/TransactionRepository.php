@@ -120,7 +120,7 @@ class TransactionRepository extends ServiceEntityRepository
             ->execute();
     }
 
-    public function get_chart_data_by_filters_and_type($data_type, $account_id, $category_id, $user_id, $start_date, $end_date)
+    public function get_chart_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date)
     {
         $db = $this->createQueryBuilder('transaction')
             ->innerJoin('transaction.transaction_type', 'tt')
@@ -138,19 +138,19 @@ class TransactionRepository extends ServiceEntityRepository
             $db->select('SUM(transaction.transaction_amount) as total_daily_income, MONTH(transaction.transaction_time) as transaction_month, DAY(transaction.transaction_time) as transaction_day');
         }
 
-        if($account_id != 0){
-            $db
-                ->innerJoin('transaction.account', 'ta')
-                ->andWhere('ta.id = :account_id')
-                ->setParameter('account_id', $account_id);
-        }
-
-        if($category_id !=0){
-            $db
-                ->innerJoin('transaction.category', 'tc')
-                ->andWhere('tc.id = :category_id')
-                ->setParameter('category_id', $category_id);
-        }
+//        if($account_id != 0){
+//            $db
+//                ->innerJoin('transaction.account', 'ta')
+//                ->andWhere('ta.id = :account_id')
+//                ->setParameter('account_id', $account_id);
+//        }
+//
+//        if($category_id !=0){
+//            $db
+//                ->innerJoin('transaction.category', 'tc')
+//                ->andWhere('tc.id = :category_id')
+//                ->setParameter('category_id', $category_id);
+//        }
 
         if(!empty($start_date)){
             //convert date to understandable format
@@ -161,6 +161,7 @@ class TransactionRepository extends ServiceEntityRepository
                 ->andWhere('transaction.transaction_time >= :datefrom')
                 ->setParameter('datefrom', $start_date);
         }
+
         if(!empty($end_date)){
             //convert date to understandable format
             $end_date = \DateTime::createFromFormat("d-m-Y", $end_date);
@@ -175,33 +176,4 @@ class TransactionRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
-
-    // /**
-    //  * @return Transaction[] Returns an array of Transaction objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Transaction
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -1,28 +1,12 @@
 import ApexCharts from 'apexcharts'
 require('../css/dashboard.css');
 
-// var options = {
-//     chart: {
-//         type: 'line'
-//     },
-//     series: [{
-//         name: 'sales',
-//         data: [30,40,35,50,49,60,70,91,125]
-//     }],
-//     xaxis: {
-//         categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
-//     }
-// }
-//
-// var balance_chart = new ApexCharts(document.querySelector("#balance_change"), options);
-// var expense_chart = new ApexCharts(document.querySelector("#expense_change"), options);
-//
-// balance_chart.render();
-// expense_chart.render();
-
+initializeDatePickers();
 initilize_spending_trend();
 initilize_income();
 initilize_expenses();
+
+
 
 //on delete
 $(".delete_account").on('click', function (e) {
@@ -179,7 +163,56 @@ $('#addTransaction').on('hidden.bs.modal', function () {
     location.reload();
 });
 
+$("#transactionCategory").on('change', function () {
+    var category_id = $("#transactionCategory").val();
+
+    $.ajax({
+        type:"POST",
+        url: "/subCategories",
+        dataType: 'json',
+        data: {
+            category_id: category_id
+        },
+        success: function (data, textStatus, xhr) {
+            console.log(data.html);
+            $("#transactionSubcategory").html(data.html);
+        }
+    });
+});
+
+function initializeDatePickers() {
+    var from = new Date();
+    var to = new Date();
+
+    //set default to next month
+    to.setMonth(to.getMonth() + 1);
+
+    $('#dateFrom').datepicker({
+        format: 'dd-mm-yyyy',
+        // startDate: today,
+        // endDate: today,
+        todayHighlight: true,
+        autoclose: true
+    }).datepicker('setDate', from);
+
+    $('#dateTo').datepicker({
+        format: 'dd-mm-yyyy',
+        // startDate: end,
+        // endDate: end,
+        todayHighlight: true,
+        autoclose: true
+    }).datepicker('setDate', to);
+}
+
+
 function initilize_spending_trend(){
+
+    var from = $("#dateFrom").val();
+    var to = $("#dateTo").val();
+    var user_id = $("#user_id").val();
+
+    // var expenses = get_chart_data(from, to, user_id, 1);
+
     var options = {
         chart: {
             height: 350,
@@ -192,11 +225,11 @@ function initilize_spending_trend(){
         colors: ["#FF1654", "#247BA0"],
         series: [
             {
-                name: "Series A",
+                name: "Expenses",
                 data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
             },
             {
-                name: "Series B",
+                name: "Income",
                 data: [20, 29, 37, 36, 44, 45, 50, 58]
             }
         ],
@@ -323,4 +356,26 @@ function initilize_expenses(){
     );
 
     chart.render();
+}
+
+function get_chart_data(date_from, date_to, user_id, data_type) {
+    //get data from the api
+    $.ajax({
+        type:"POST",
+        url: "/getChartDataByFiltersAndType",
+        data: {
+            user_id : user_id,
+            data_type: data_type,
+            date_from: date_from,
+            date_to: date_to
+        },
+        success: function (data, textStatus, xhr) {
+            if(xhr.status == 200)
+            {
+                location.reload();
+            }
+
+        }
+
+    });
 }

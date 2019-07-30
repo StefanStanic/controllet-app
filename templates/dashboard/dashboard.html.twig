@@ -38,6 +38,8 @@
                 <button type="button" class="btn btn-primary">
                     <a href="{{ path('app_dashboard_addaccount', {'user_id' : app.user.id }) }}" style="text-decoration: none; color: white;" >+ Add Account</a>
                 </button>
+
+                <button type="button" class="btn btn-warning" data-target="#addTransaction" data-toggle="modal">+ Add Transaction</button>
             </div>
         </div>
         <div class="row">
@@ -46,6 +48,17 @@
             </div>
         </div>
         <div class="row" style="padding-top: 50px;">
+
+            <div class="col-md-6" style="margin-bottom: 10px;">
+                <span>Date From</span>
+                <input class="form-control" id="dateFrom" name="dateFrom" type="text" placeholder="23-03-2019">
+            </div>
+
+            <div class="col-md-6" style="margin-bottom: 10px;">
+                <span>Date To</span>
+                <input class="form-control" id="dateTo" name="dateTo" type="text" placeholder="23-03-2019">
+            </div>
+
             <div class="col-md-12" style="margin-bottom: 20px;">
                 <!--Panel-->
                 <div class="card card-body" style="margin-right: 10px;">
@@ -114,6 +127,80 @@
                     <p align="center" id="successUpdate" style="display: none; color:green;">Successfully updated your account</p>
                     <p align="center" id="failUpdate" style="display: none;color:red;">There's been an issue, try again later</p>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- New Transaction Modal -->
+    <div class="modal fade" id="addTransaction" tabindex="-1" role="dialog" aria-labelledby="addTransaction" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Transaction</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addTransactionForm" name="addTransaction" method="post">
+                        <div class="form-group">
+
+                            <label for="transactionName">Transaction Name</label>
+                            <input class="form-control" id="transactionName" name="transactionName" type="text" required>
+                            <br>
+
+                            <label for="transactionAccountType">Pick Account Type</label>
+                            <select class="form-control" id="transactionAccountType" name="transactionAccountType" required>
+                                {% for account in accounts %}
+                                    {% if(account.active == 1) %}
+                                        <option value="{{ account.id }}">{{ account.accountName }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <br>
+
+                            <label for="transactionType">Pick a Transaction Type</label>
+                            <select class="form-control" id="transactionType" name="transactionType" required>
+                                {% for type in transaction_types %}
+                                    <option value="{{ type.id }}">{{ type.transactionType }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+
+                            <label for="transactionCategory">Pick a Category</label>
+                            <select class="form-control" id="transactionCategory" name="transactionCategory" required>
+                                {% for category in categories %}
+                                     <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+
+                            <label for="transactionSubcategory">Pick a SubCategory</label>
+                            <select class="form-control" id="transactionSubcategory" name="transactionSubcategory" required>
+                            </select>
+                            <br>
+
+                            <label for="transactionAmount">Transaction Amount</label>
+                            <input class="form-control" id="transactionAmount" name="transactionAmount" type="number" required>
+                            <br>
+
+                            <label for="transactionNote">Transaction Note</label>
+                            <input class="form-control" id="transactionNote" name="transactionNote" type="text">
+                            <br>
+
+
+
+                        </div>
+                        <input type="hidden" id="user_id" name="user_id" value="{{ app.user.id }}">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="updateAccountModal">Add Transaction</button>
+                        <br>
+                        <br>
+                        <p align="center" id="successAddTransaction" style="display: none; color:green;">Successfully added your transaction.</p>
+                        <p align="center" id="errorAddTransaction" style="display: none;color:red;"></p>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
