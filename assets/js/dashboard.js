@@ -189,16 +189,12 @@ function initializeDatePickers() {
 
     $('#dateFrom').datepicker({
         format: 'dd-mm-yyyy',
-        // startDate: today,
-        // endDate: today,
         todayHighlight: true,
         autoclose: true
     }).datepicker('setDate', from);
 
     $('#dateTo').datepicker({
         format: 'dd-mm-yyyy',
-        // startDate: end,
-        // endDate: end,
         todayHighlight: true,
         autoclose: true
     }).datepicker('setDate', to);
@@ -216,7 +212,6 @@ function initilize_spending_trend(){
 
     var chartSeriesExpences = [];
     var chartSeriesIncome = [];
-
     var chart_categories = [];
 
     $.each(expenses.data, function (key, value) {
@@ -235,11 +230,6 @@ function initilize_spending_trend(){
     chart_categories.sort(function (a, b) {
         return new Date(a) - new Date(b)
     });
-
-    // console.log(chartSeriesExpences);
-    // console.log(chartSeriesIncome);
-    // console.log(chart_categories);
-
 
     var options = {
         chart: {
@@ -344,9 +334,6 @@ function initilize_income(){
         pieSeries.push(parseInt(value.category_amount));
     });
 
-    console.log(pieLabels);
-    console.log(pieSeries);
-
     var options = {
         chart: {
             width: 380,
@@ -384,13 +371,10 @@ function initilize_expenses(){
     var pieLabels = [];
     var pieSeries = [];
 
-
-
     $.each(income.data, function (key, value) {
         pieLabels.push(value.category_name);
         pieSeries.push(parseInt(value.category_amount));
     });
-
 
     var options = {
         chart: {
