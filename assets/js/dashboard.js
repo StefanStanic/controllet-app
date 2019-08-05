@@ -138,7 +138,7 @@ $(".edit_transaction").on('click', function (e) {
 });
 
 $(".delete_transaction").on('click', function (e) {
-   e.preventDefault();
+    e.preventDefault();
 
     var transaction_id = $(this).data('id');
 
@@ -211,7 +211,35 @@ function initilize_spending_trend(){
     var to = $("#dateTo").val();
     var user_id = $("#user_id").val();
 
-    // var expenses = get_chart_data(from, to, user_id, 1);
+    var expenses = JSON.parse(get_chart_data(from, to, user_id, 1));
+    var income = JSON.parse(get_chart_data(from, to, user_id, 2));
+
+    var chartSeriesExpences = [];
+    var chartSeriesIncome = [];
+
+    var chart_categories = [];
+
+    $.each(expenses.data, function (key, value) {
+        chartSeriesExpences.push(value.total_daily_expense);
+        chart_categories.push(value.transaction_year + '-' + value.transaction_month)
+    });
+
+    $.each(income.data, function (key, value) {
+        chartSeriesIncome.push(value.total_daily_expense);
+        chart_categories.push(value.transaction_year + '-'+ value.transaction_month)
+    });
+
+    chart_categories = Array.from(new Set(chart_categories));
+
+    //sort dates
+    chart_categories.sort(function (a, b) {
+        return new Date(a) - new Date(b)
+    });
+
+    // console.log(chartSeriesExpences);
+    // console.log(chartSeriesIncome);
+    // console.log(chart_categories);
+
 
     var options = {
         chart: {
@@ -226,11 +254,11 @@ function initilize_spending_trend(){
         series: [
             {
                 name: "Expenses",
-                data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
+                data: chartSeriesExpences
             },
             {
                 name: "Income",
-                data: [20, 29, 37, 36, 44, 45, 50, 58]
+                data: chartSeriesIncome
             }
         ],
         stroke: {
@@ -242,7 +270,7 @@ function initilize_spending_trend(){
             }
         },
         xaxis: {
-            categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]
+            categories: chart_categories
         },
         yaxis: [
             {
@@ -259,7 +287,7 @@ function initilize_spending_trend(){
                     }
                 },
                 title: {
-                    text: "Series A"
+                    text: "Expenses"
                 }
             },
             {
@@ -277,7 +305,7 @@ function initilize_spending_trend(){
                     }
                 },
                 title: {
-                    text: "Series B"
+                    text: "Income"
                 }
             }
         ],
@@ -301,13 +329,31 @@ function initilize_spending_trend(){
 
 
 function initilize_income(){
+    var from = $("#dateFrom").val();
+    var to = $("#dateTo").val();
+    var user_id = $("#user_id").val();
+
+    var income = JSON.parse(get_pie_data(from, to, user_id, 2));
+    var pieLabels = [];
+    var pieSeries = [];
+
+
+
+    $.each(income.data, function (key, value) {
+        pieLabels.push(value.category_name);
+        pieSeries.push(parseInt(value.category_amount));
+    });
+
+    console.log(pieLabels);
+    console.log(pieSeries);
+
     var options = {
         chart: {
             width: 380,
             type: 'pie',
         },
-        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-        series: [44, 55, 13, 43, 22],
+        labels: pieLabels,
+        series: pieSeries,
         responsive: [{
             breakpoint: 480,
             options: {
@@ -330,13 +376,29 @@ function initilize_income(){
 }
 
 function initilize_expenses(){
+    var from = $("#dateFrom").val();
+    var to = $("#dateTo").val();
+    var user_id = $("#user_id").val();
+
+    var income = JSON.parse(get_pie_data(from, to, user_id, 1));
+    var pieLabels = [];
+    var pieSeries = [];
+
+
+
+    $.each(income.data, function (key, value) {
+        pieLabels.push(value.category_name);
+        pieSeries.push(parseInt(value.category_amount));
+    });
+
+
     var options = {
         chart: {
             width: 380,
             type: 'pie',
         },
-        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-        series: [44, 55, 13, 43, 22],
+        labels: pieLabels,
+        series: pieSeries,
         responsive: [{
             breakpoint: 480,
             options: {
@@ -348,7 +410,7 @@ function initilize_expenses(){
                 }
             }
         }]
-    }
+    };
 
     var chart = new ApexCharts(
         document.querySelector("#chart3"),
@@ -360,9 +422,11 @@ function initilize_expenses(){
 
 function get_chart_data(date_from, date_to, user_id, data_type) {
     //get data from the api
+    var return_data ='';
     $.ajax({
         type:"POST",
         url: "/getChartDataByFiltersAndType",
+        async: false,
         data: {
             user_id : user_id,
             data_type: data_type,
@@ -372,10 +436,38 @@ function get_chart_data(date_from, date_to, user_id, data_type) {
         success: function (data, textStatus, xhr) {
             if(xhr.status == 200)
             {
-                location.reload();
+                return_data = data;
             }
 
         }
 
     });
+
+    return return_data;
+}
+
+function get_pie_data(date_from, date_to, user_id, data_type) {
+    //get data from the api
+    var return_data ='';
+    $.ajax({
+        type:"POST",
+        url: "/getPieDataByFiltersAndType",
+        async: false,
+        data: {
+            user_id : user_id,
+            data_type: data_type,
+            date_from: date_from,
+            date_to: date_to
+        },
+        success: function (data, textStatus, xhr) {
+            if(xhr.status == 200)
+            {
+                return_data = data;
+            }
+
+        }
+
+    });
+
+    return return_data;
 }

@@ -176,4 +176,44 @@ class TransactionRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
+
+    public function get_pie_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date)
+    {
+        $db = $this->createQueryBuilder('transaction')
+            ->innerJoin('transaction.category', 'cc')
+            ->innerJoin('transaction.subCategory', 'sc')
+            ->innerJoin('transaction.transaction_type', 'tt')
+            ->where('transaction.user = :user_id')
+            ->setParameter('user_id', $user_id)
+            ->andWhere('transaction.active = 1')
+            ->andWhere('tt.id = :data_type')
+            ->setParameter('data_type', $data_type)
+            ->groupBy('sc.subCategoryName');
+
+            $db->select("sc.subCategoryName as category_name, SUM(transaction.transaction_amount) as category_amount");
+
+        if(!empty($start_date)){
+            //convert date to understandable format
+            $start_date = \DateTime::createFromFormat("d-m-Y", $start_date);
+            $start_date = $start_date->format('Y-m-d').' 00:00:00';
+
+            $db
+                ->andWhere('transaction.transaction_time >= :datefrom')
+                ->setParameter('datefrom', $start_date);
+        }
+
+        if(!empty($end_date)){
+            //convert date to understandable format
+            $end_date = \DateTime::createFromFormat("d-m-Y", $end_date);
+            $end_date = $end_date->format('Y-m-d'). ' 23:59:59';
+
+            $db
+                ->andWhere('transaction.transaction_time <= :dateto')
+                ->setParameter('dateto', $end_date);
+        }
+
+        return $db
+            ->getQuery()
+            ->execute();
+    }
 }

@@ -59,6 +59,17 @@ class DashboardService
         return false;
     }
 
+    public function get_pie_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date)
+    {
+        $chart_data = $this->em->getRepository(Transaction::class)->get_pie_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date);
+
+        if($chart_data){
+            return $chart_data;
+        }
+
+        return false;
+    }
+
     public function get_total_expenses_by_filters($user_id, $account_id, $category_id)
     {
         $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_filters($user_id, $account_id, $category_id);

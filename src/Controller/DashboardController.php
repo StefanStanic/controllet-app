@@ -507,6 +507,35 @@ class DashboardController extends AbstractController
     }
 
     /**
+     * @Route("/getPieDataByFiltersAndType", methods={"POST"})
+     * @param Request $request
+     * @return bool|Response
+     */
+    public function get_pie_data_by_filters_and_type(Request $request)
+    {
+        $data_type = $request->get('data_type');
+        $user_id = $request->get('user_id');
+        $start_date = $request->get('date_from');
+        $end_date = $request->get('date_to');
+
+        if(empty($start_date) || empty($end_date)){
+            return false;
+        }
+
+        $result = $this->dashboard_service->get_pie_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date);
+
+        $response = new Response(json_encode(
+            array(
+                'status' => 1,
+                'data' => $result
+            )
+        ), Response::HTTP_OK);
+
+        return $response;
+
+    }
+
+    /**
      * @Route("/subCategories", methods={"POST"})
      */
     public function getSubCategories(Request $request)
