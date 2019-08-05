@@ -6,7 +6,13 @@ initilize_spending_trend();
 initilize_income();
 initilize_expenses();
 
+$("#dateFrom, #dateTo").on('blur', function (e) {
+    e.preventDefault();
 
+    initilize_spending_trend();
+    initilize_income();
+    initilize_expenses();
+});
 
 //on delete
 $(".delete_account").on('click', function (e) {
