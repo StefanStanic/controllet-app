@@ -94,76 +94,6 @@ $(".update_account").on('click', function (e) {
     })
 });
 
-$(".edit_transaction").on('click', function (e) {
-    e.preventDefault();
-
-    var transaction_id = $(this).data('id');
-
-    //enable fields for edit
-    $(".transaction_category_"+transaction_id).prop('disabled', false);
-    $(".transaction_note_"+transaction_id).prop('disabled', false);
-    $(".transaction_amount_"+transaction_id).prop('disabled', false);
-    $(".update_transaction_"+transaction_id).show();
-
-    //add update event listener for transaction button
-    $(".update_transaction_"+transaction_id).on('click', function (e) {
-        e.preventDefault();
-        var transaction_category = $(".transaction_category_"+transaction_id).val();
-        var transaction_note = $(".transaction_note_"+transaction_id).val();
-        var transaction_amount = $(".transaction_amount_"+transaction_id).val();
-
-
-        var confirm_dialog = confirm("Are you sure you want to update this transaction?");
-
-        //location to post to
-        if(confirm_dialog === true){
-            $.ajax({
-                type:"POST",
-                url: "/updateTransaction",
-                data: {
-                    transaction_id: transaction_id,
-                    transaction_category: transaction_category,
-                    transaction_note : transaction_note,
-                    transaction_amount : transaction_amount
-                },
-                success: function (data, textStatus, xhr) {
-                    if(xhr.status == 200)
-                    {
-                        $("#transaction_response_"+transaction_id).html("Transaction successfully updated.");
-                        $(".update_transaction_"+transaction_id).hide();
-                    }
-                    else
-                    {
-                        $("#transaction_response_"+transaction_id).html("All transaction fields need to be filled.");
-                    }
-                }
-            });
-        }
-    });
-
-});
-
-$(".delete_transaction").on('click', function (e) {
-    e.preventDefault();
-
-    var transaction_id = $(this).data('id');
-
-    var confirm_dialog = confirm("Are you sure you want to update this transaction?");
-
-    //location to post to
-    if(confirm_dialog === true){
-        $.ajax({
-            type:"POST",
-            url: "/deleteTransaction",
-            data: {
-                transaction_id: transaction_id,
-            },
-            success: function (data, textStatus, xhr) {
-            }
-        });
-    }
-});
-
 
 $('#addTransaction').on('hidden.bs.modal', function () {
     location.reload();
@@ -180,7 +110,6 @@ $("#transactionCategory").on('change', function () {
             category_id: category_id
         },
         success: function (data, textStatus, xhr) {
-            console.log(data.html);
             $("#transactionSubcategory").html(data.html);
         }
     });

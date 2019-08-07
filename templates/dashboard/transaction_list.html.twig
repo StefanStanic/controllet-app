@@ -5,6 +5,7 @@
     <tr>
         <th style="width: 20%;">Time</th>
         <th style="width: 20%;">Category</th>
+        <th style="width: 20%;">Sub Category</th>
         <th style="width: 35%;">Note</th>
         <th style="width: 10%;">Amount</th>
         <th style="width: 10%;">Edit</th>
@@ -14,20 +15,36 @@
     <tbody>
 {% for transaction in transactions %}
     <tr>
-        <td><b>{{ transaction.transactionTime | date("F jS, Y")}}</b></td>
         <td>
-            <select class="form-control transaction_category_{{ transaction.id }}" id="transaction_category" disabled>
+            <b>{{ transaction.transactionTime | date("F jS, Y")}}</b>
+        </td>
+
+        <td>
+            <select class="form-control transaction_category_{{ transaction.id }} transaction_category" id="transaction_category" data-id="{{ transaction.id }}" disabled>
             {% for category in categories %}
-            {% if(category.active == 1) %}
-            {% if(transaction.category.id == category.id) %}
-            <option value="{{ category.id }}" selected="selected">{{ category.categoryName }}</option>
-            {% else %}
-            <option value="{{ category.id }}">{{ category.categoryName }}</option>
-            {% endif %}
-            {% endif %}
+                {% if(transaction.category.id == category.id) %}
+                    <option value="{{ category.id }}" selected="selected">{{ category.categoryName }}</option>
+                {% else %}
+                    <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                {% endif %}
             {% endfor %}
             </select>
         </td>
+
+        <td>
+            <select class="form-control transaction_subcategory_{{ transaction.id }}" id="transaction_subcategory" disabled>
+                {% for subcategory in subcategories %}
+                    {% if(transaction.category.id == subcategory.category.id) %}
+                        {% if(transaction.subcategory.id == subcategory.id) %}
+                            <option value="{{ subcategory.id }}" selected="selected">{{ subcategory.subCategoryName }}</option>
+                        {% else %}
+                            <option value="{{ subcategory.id }}">{{ subcategory.subCategoryName }}</option>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </td>
+
         <td>
             <input type="text" class="form-control transaction_note_{{ transaction.id }}" value="{{ transaction.note }}" disabled>
         </td>

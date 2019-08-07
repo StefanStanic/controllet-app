@@ -4,3 +4,17 @@
     {{ parent() }}
     {{ encore_entry_link_tags('transactions') }}
 {% endblock %}
+
+{% block body %}
+    <br>
+    <div class="container rounded transaction_list shadow">
+        {{ include('dashboard/transaction_list.html.twig', {'transactions': transactions, 'categories': categories}) }}
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('transactions') }}
+{% endblock %}

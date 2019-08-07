@@ -34,6 +34,13 @@ class DashboardService
         return $categories;
     }
 
+    public function get_active_subcategories()
+    {
+        $subcategory= $this->em->getRepository(SubCategory::class)->findAll();
+
+        return $subcategory;
+    }
+
     public function get_active_transaction_types()
     {
         $transaction_types = $this->em->getRepository(TransactionType::class)->findAll();
@@ -207,13 +214,15 @@ class DashboardService
 
     }
 
-    public function update_transaction($transaction_id, $transaction_category, $transaction_note, $transaction_amount)
+    public function update_transaction($transaction_id, $transaction_category, $transaction_subcategory,  $transaction_note, $transaction_amount)
     {
         $transaction = $this->em->getRepository(Transaction::class)->find($transaction_id);
         $category = $this->em->getRepository(Category::class)->find($transaction_category);
+        $subcategory = $this->em->getRepository(SubCategory::class)->find($transaction_subcategory);
 
         if($transaction){
             $transaction
+                ->setSubCategory($subcategory)
                 ->setCategory($category)
                 ->setNote($transaction_note)
                 ->setTransactionAmount($transaction_amount);

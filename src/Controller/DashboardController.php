@@ -60,6 +60,32 @@ class DashboardController extends AbstractController
     }
 
     /**
+     * @Route("/transactions", name="app_transactions")
+     */
+    public function transactions()
+    {
+        $user = $this->getUser();
+
+        $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
+        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0, 'DESC', '', '');
+        $data['categories'] = $this->dashboard_service->get_active_categories();
+        $data['subcategories'] = $this->dashboard_service->get_active_subcategories();
+        $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
+
+        return $this->render(
+            'dashboard/transactions.html.twig',
+            array(
+                'accounts' => $data['accounts'],
+                'categories' => $data['categories'],
+                'subcategories' => $data['subcategories'],
+                'transactions' => $data['transactions'],
+                'transaction_types' => $data['transaction_types']
+            )
+        );
+    }
+
+
+    /**
      * @Route("/profile", name="app_profile")
      */
     public function profile()
@@ -292,16 +318,16 @@ class DashboardController extends AbstractController
             return $response;
         }
     }
-
-    /**
-     * @Route("/transactions/{account_id}", name="app_transactions")
-     */
-    public function transactions($account_id = false)
-    {
-        return $this->render(
-            'dashboard/transactions.html.twig'
-        );
-    }
+//
+//    /**
+//     * @Route("/transactions/{account_id}", name="app_transactions")
+//     */
+//    public function transactions($account_id = false)
+//    {
+//        return $this->render(
+//            'dashboard/transactions.html.twig'
+//        );
+//    }
 
     /**
      * @Route("/addTransaction", name="app_addTransaction", methods={"POST"})
@@ -367,10 +393,11 @@ class DashboardController extends AbstractController
         //get input data
         $transaction_id = $request->get('transaction_id');
         $transaction_category = $request->get('transaction_category');
+        $transaction_subcategory = $request->get('transaction_subcategory');
         $transaction_note = $request->get('transaction_note');
         $transaction_amount = $request->get('transaction_amount');
 
-        if(empty($transaction_id) || empty($transaction_category) || empty($transaction_note) || empty($transaction_amount)){
+        if(empty($transaction_id) || empty($transaction_category) || empty($transaction_note) || empty($transaction_amount) || empty($transaction_subcategory)){
             $response = new Response(json_encode(
                 array(
                     'status' => 0,
@@ -380,7 +407,7 @@ class DashboardController extends AbstractController
             return $response;
         }
 
-        $result = $this->dashboard_service->update_transaction($transaction_id, $transaction_category, $transaction_note, $transaction_amount);
+        $result = $this->dashboard_service->update_transaction($transaction_id, $transaction_category, $transaction_subcategory,  $transaction_note, $transaction_amount);
 
         if($result){
             $response = new Response();
