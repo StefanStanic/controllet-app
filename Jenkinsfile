@@ -18,7 +18,7 @@ pipeline {
         stage ('Deployment to production ') {
             steps {
                 sh "ssh stefke@206.189.53.20 rm -rf /var/www/controllet/*"
-                sh "scp -r . stefke@206.189.53.20:/var/www/controllet/"
+                sh "scp -r * stefke@206.189.53.20:/var/www/controllet/"
             }
         }
     }
