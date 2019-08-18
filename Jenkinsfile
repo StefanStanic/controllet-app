@@ -4,10 +4,15 @@ pipeline {
     stages {
         stage ('Composer install phase') {
             steps {
-                sh "ls -la"
+                sh "composer install"
             }
         }
 
+        stage ('SSH and move project to live') {
+            steps {
+                sh "ls -lah"
+            }
+        }
     }
 
 }
