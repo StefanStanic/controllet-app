@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     stages {
-        stage ('Checkout phase') {
+        stage ('Composer install phase') {
             steps {
-                sh "rm -rf controllet-app"
+                sh "ls -la"
             }
         }
 
