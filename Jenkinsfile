@@ -19,7 +19,7 @@ pipeline {
             steps {
                 sh "rm -rf node_modules vendor var node_modules"
                 sh "ssh stefke@206.189.53.20 rm -rf /var/www/controllet/*"
-                sh "scp -r * stefke@206.189.53.20:/var/www/controllet/"
+                sh "rsync -avzuh -e ssh . stefke@206.189.53.20:/var/www/controllet/"
             }
         }
 
