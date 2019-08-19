@@ -7,6 +7,46 @@
 
 {% block body %}
     <br>
+
+
+    <div class="container" style="margin-bottom: 15px;">
+        <div class="row">
+            <div class="col-lg-3">
+                <label for="transactionAccountTypeFilter">Pick Account Type</label>
+                <select class="form-control" id="transactionAccountTypeFilter" name="transactionAccountTypeFilter" required>
+                    {% for account in accounts %}
+                        {% if(account.active == 1) %}
+                            <option value="{{ account.id }}">{{ account.accountName }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label for="transactionCategoryFilter">Pick a Category</label>
+                <select class="form-control" id="transactionCategoryFilter" name="transactionCategoryFilter" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-3">
+                <label for="transactionSubcategoryFilter">Pick a SubCategory</label>
+                <select class="form-control" id="transactionSubcategoryFilter" name="transactionSubcategoryFilter" required>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label for="dateFromFilter">Date From</label>
+                <input class="form-control" id="dateFromFilter" name="dateFromFilter" type="text" placeholder="23-03-2019">
+            </div>
+            <div class="col-lg-2">
+                <label for="dateToFilter">Date To</label>
+                <input class="form-control" id="dateToFilter" name="dateToFilter" type="text" placeholder="23-03-2019">
+            </div>
+            <input type="hidden" id="user_id" name="user_id" value="{{ app.user.id }}">
+        </div>
+    </div>
+
     <div class="container rounded transaction_list shadow">
         {{ include('dashboard/transaction_list.html.twig', {'transactions': transactions, 'categories': categories}) }}
     </div>

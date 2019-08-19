@@ -36,7 +36,7 @@ class DashboardController extends AbstractController
         $user = $this->getUser();
 
         $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
-        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0, 'DESC', '', '');
+        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0, 0,  'DESC', '', '');
         $data['categories'] = $this->dashboard_service->get_active_categories();
         $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
 
@@ -67,7 +67,7 @@ class DashboardController extends AbstractController
         $user = $this->getUser();
 
         $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
-        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0, 'DESC', '', '');
+        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0, 0, 'DESC', '', '');
         $data['categories'] = $this->dashboard_service->get_active_categories();
         $data['subcategories'] = $this->dashboard_service->get_active_subcategories();
         $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
@@ -468,6 +468,7 @@ class DashboardController extends AbstractController
     {
         $account_id = $request->get('account_id');
         $category_id = $request->get('category_id');
+        $subcategory_id = $request->get('subcategory_id');
         $user_id = $request->get('user_id');
         $start_date = $request->get('date_from');
         $end_date = $request->get('date_to');
@@ -482,14 +483,21 @@ class DashboardController extends AbstractController
             return $response;
         }
 
-        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user_id, $account_id, $category_id, '', $start_date, $end_date);
+        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user_id, $account_id, $category_id, $subcategory_id,  '', $start_date, $end_date);
         $data['categories'] = $this->dashboard_service->get_active_categories();
+        $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user_id);
+        $data['subcategories'] = $this->dashboard_service->get_active_subcategories();
+        $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
+
 
         $transactions = $this->render(
             'dashboard/transaction_list.html.twig',
             [
                 'transactions' => $data['transactions'],
-                'categories' => $data['categories']
+                'categories' => $data['categories'],
+                'subcategories' => $data['subcategories'],
+                'accounts' => $data['accounts'],
+                'transaction_types' => $data['transaction_types']
             ]
         )->getContent();
 

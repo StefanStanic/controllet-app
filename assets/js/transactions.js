@@ -1,11 +1,15 @@
 require('../css/transactions.css');
 
 $(document).ready(function() {
+    initializeDatePickers();
+    initializeSubCategory();
+
     $('#transaction_table').DataTable({
         sorting: false,
         searching: false,
         paging: true
     });
+
 } );
 
 
@@ -149,3 +153,77 @@ $(".transaction_category").on('change', function () {
     });
 });
 
+function initializeDatePickers() {
+
+    $('#dateFromFilter').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: true,
+        autoclose: true
+    });
+
+    $('#dateToFilter').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: true,
+        autoclose: true
+    });
+}
+
+function initializeSubCategory(){
+    var category_id = $("#transactionCategoryFilter").val();
+
+    $.ajax({
+        type:"POST",
+        url: "/subCategories",
+        dataType: 'json',
+        data: {
+            category_id: category_id
+        },
+        success: function (data, textStatus, xhr) {
+            $("#transactionSubcategoryFilter").html(data.html);
+        }
+    });
+}
+
+$("#transactionCategoryFilter").on('change', function () {
+    var category_id = $("#transactionCategoryFilter").val();
+
+    $.ajax({
+        type:"POST",
+        url: "/subCategories",
+        dataType: 'json',
+        data: {
+            category_id: category_id
+        },
+        success: function (data, textStatus, xhr) {
+            $("#transactionSubcategoryFilter").html(data.html);
+        }
+    });
+});
+
+$("#transactionAccountTypeFilter, #transactionCategoryFilter, #transactionSubcategoryFilter, #dateFromFilter, #dateToFilter"). on('change', function () {
+
+    var user_id = $("#user_id").val();
+    var accountType = $("#transactionAccountTypeFilter").val();
+    var category = $("#transactionCategoryFilter").val();
+    var subcategory = $("#transactionSubcategoryFilter").val();
+    var dateFrom = $("#dateFromFilter").val();
+    var dateTo = $("#dateToFilter").val();
+
+    $.ajax({
+        type:"POST",
+        url: "/filterTransactions",
+        dataType: 'json',
+        data: {
+            account_id: accountType,
+            category_id: category,
+            user_id: user_id,
+            subcategory_id: subcategory,
+            date_from: dateFrom,
+            date_to: dateTo
+        },
+        success: function (data, textStatus, xhr) {
+            $(".transaction_list").html(data.html);
+        }
+    });
+
+});

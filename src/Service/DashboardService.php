@@ -48,9 +48,9 @@ class DashboardService
         return $transaction_types;
     }
 
-    public function get_transaction_by_filters($user_id, $account_id, $category_id, $sort = "DESC", $start_date, $end_date)
+    public function get_transaction_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort = "DESC", $start_date, $end_date)
     {
-        $transactions = $this->em->getRepository(Transaction::class)->get_transaction_by_filters($user_id, $account_id, $category_id, $sort, $start_date, $end_date);
+        $transactions = $this->em->getRepository(Transaction::class)->get_transaction_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort, $start_date, $end_date);
         return $transactions;
     }
 

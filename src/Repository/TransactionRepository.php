@@ -19,7 +19,7 @@ class TransactionRepository extends ServiceEntityRepository
         parent::__construct($registry, Transaction::class);
     }
 
-    public function get_transaction_by_filters($user_id, $account_id, $category_id, $sort = 'DESC', $start_date, $end_date)
+    public function get_transaction_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort = 'DESC', $start_date, $end_date)
     {
 
         $db = $this->createQueryBuilder('transaction')
@@ -39,6 +39,12 @@ class TransactionRepository extends ServiceEntityRepository
                 ->innerJoin('transaction.category', 'tc')
                 ->andWhere('tc.id = :category_id')
                 ->setParameter('category_id', $category_id);
+        }
+        if($category_id !=0){
+            $db
+                ->innerJoin('transaction.subCategory', 'ts')
+                ->andWhere('ts.id = :subcategory_id')
+                ->setParameter('subcategory_id', $subcategory_id);
         }
         if(!empty($start_date)){
             //convert date to understandable format
