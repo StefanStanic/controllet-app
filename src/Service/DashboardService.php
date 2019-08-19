@@ -136,36 +136,57 @@ class DashboardService
         }
     }
 
-
-    public function add_budget($user_id, $category_id, $account_id, $budget_amount)
+    public function delete_budget($budget_id)
     {
-        $date = date('Y-m-d');
+        $budget = $this->em->getRepository(Budget::class)->find($budget_id);
 
-        $budget = new Budget();
-        $user = $this->em->getRepository(User::class)->find($user_id);
-        $account = $this->em->getRepository(Account::class)->find($account_id);
-        $category = $this->em->getRepository(Category::class)->find($category_id);
-        $current_budget_amount = $this->em->getRepository(Budget::class)->get_total_budget_for_current_month($date, $user_id, $account_id);
-        $does_budget_with_category_exists = $this->em->getRepository(Budget::class)->get_budget_by_category_and_date($date, $user, $account_id, $category_id);
+        if ($budget) {
 
-        //check if budget passes the total account balance
-        if($budget_amount <= ($account->getAccountBalance() - $current_budget_amount[0]['total_budget']) && empty($does_budget_with_category_exists)){
-            $budget
-                ->setCategory($category)
-                ->setAccount($account)
-                ->setBudgetAmount($budget_amount)
-                ->setOriginalBudgetAmount($budget_amount)
-                ->setBudgetDate(\DateTime::createFromFormat('Y-m-d', $date))
-                ->setActive(1);
-            ;
-
-            $this->em->persist($budget);
+            //set wallet to active 0 for later restoration capabilities
+            $budget->setActive(0);
             $this->em->flush();
 
-            return $user_id;
+            return $budget_id;
+        }
+    }
 
-        }else{
-            return false;
+
+    public function add_budget($user_id, $category_id, $account_id, $budget_amount, $budget_name)
+    {
+        $budget = new Budget();
+        $account = $this->em->getRepository(Account::class)->find($account_id);
+        $category = $this->em->getRepository(Category::class)->find($category_id);
+
+        $budget
+            ->setCategory($category)
+            ->setAccount($account)
+            ->setBudgetAmount($budget_amount)
+            ->setName($budget_name)
+            ->setActive(1);
+        ;
+
+        $this->em->persist($budget);
+        $this->em->flush();
+
+        return $budget;
+    }
+
+    public function update_budget($budget_id, $account_id, $category_id, $budgetName, $budgetAmount)
+    {
+        $account = $this->em->getRepository(Account::class)->find($account_id);
+        $category = $this->em->getRepository(Category::class)->find($category_id);
+        $budget = $this->em->getRepository(Budget::class)->find($budget_id);
+
+        if($budget){
+            $budget
+                ->setName($budgetName)
+                ->setAccount($account)
+                ->setBudgetAmount($budgetAmount)
+                ->setCategory($category);
+
+            $this->em->flush();
+
+            return $budget_id;
         }
     }
 

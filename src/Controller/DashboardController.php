@@ -126,8 +126,9 @@ class DashboardController extends AbstractController
         $category_id = $request->get('category');
         $account_id = $request->get('account_type');
         $budget_amount = $request->get('budget_amount');
+        $budget_name = $request->get('budget_name');
 
-        if(empty($user_id) || empty($category_id) || empty($account_id) || empty($budget_amount))
+        if(empty($user_id) || empty($category_id) || empty($account_id) || empty($budget_amount) || empty($budget_name))
         {
             $response = new Response(json_encode(
                 array(
@@ -138,7 +139,7 @@ class DashboardController extends AbstractController
             return $response;
         }
 
-        $budget = $this->dashboard_service->add_budget($user_id, $category_id, $account_id, $budget_amount);
+        $budget = $this->dashboard_service->add_budget($user_id, $category_id, $account_id, $budget_amount, $budget_name);
 
         if($budget){
             $response = new Response(json_encode(
@@ -150,6 +151,55 @@ class DashboardController extends AbstractController
 
             return $response;
         }else {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Something went wrong, try again later.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
+
+    }
+
+
+    /**
+     * @Route("/updateBudget", name="app_update_budget", methods={"POST"})
+     */
+    public function updateBudget(Request $request)
+    {
+        $account = $request->get('accountType');
+        $category = $request->get('category');
+        $budgetName = $request->get('budgetName');
+        $budgetAmount = $request->get('budgetAmount');
+        $budget_id = $request->get('budget_id');
+
+
+        if(empty($account) || empty($category) || empty($budgetName) || empty($budgetAmount)){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Please make sure to fill all the required fields.'
+                )
+            ), Response::HTTP_OK);
+            return $response;
+        }
+
+        $budget = $this->dashboard_service->update_budget($budget_id, $account, $category, $budgetName, $budgetAmount);
+
+
+        if($budget){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 1,
+                    'text' => 'Budget successfully added.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
+        else {
             $response = new Response(json_encode(
                 array(
                     'status' => 0,
@@ -303,6 +353,32 @@ class DashboardController extends AbstractController
         $account_id = $request->get('account_id');
 
         $result = $this->dashboard_service->delete_account($account_id);
+
+        if($result){
+            $response = new Response();
+            $response->setStatusCode(200);
+
+            return $response;
+        }
+        else
+        {
+            $response = new Response();
+            $response->setStatusCode(400);
+
+            return $response;
+        }
+    }
+
+    /**
+     * @Route("/deleteBudget", name="delete_account", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteBudget(Request $request)
+    {
+        $budget_id = $request->get('budget_id');
+
+        $result = $this->dashboard_service->delete_budget($budget_id);
 
         if($result){
             $response = new Response();

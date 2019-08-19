@@ -7,36 +7,46 @@
 
 {% block body %}
     <div class="container w-75">
-        <div class="row">
-            <div class="col-sm-9">
+        <div class="row" style="margin-top: 25px;">
+            <div class="col-sm-12">
                 <h2 align="left">Budgets</h2>
-            </div>
-            <div class="col-sm-2 text-left">
-                <button type="button" class="btn btn-primary align-right" data-target="#addBudget" data-toggle="modal">Add Budget</button>
             </div>
         </div>
         <br>
+
         <div class="row">
+
             {% for budget in budgets %}
                 {% if(budget.active == 1) %}
-                    <div class="col-3 custom-card">
-                        <a href="" class="custom-card">
-                            <div class="card text-center shadow" style="padding: 0; margin: 0;">
-                                <div class="card-body budget_card">
-                                    <h5 align="left">{{ budget.category.categoryName }}</h5>
-                                    <p class="budget_card_span">{{ budget.account.accountName }}</p>
-                                    <p class="budget_card_span"><b>{{ budget.budgetAmount | number_format(2, '.', ',')}}</b> $ left out of {{ budget.originalBudgetAmount }} $</p>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-valuenow="{{ budget.originalBudgetAmount - budget.budgetAmount }}" aria-valuemin="0" aria-valuemax="{{ budget.originalBudgetAmount }}" style="width: {{ (budget.budgetAmount/budget.originalBudgetAmount)*100 }}%"></div>
-                                    </div>
-                                    <br>
-                                    <p class="budget_card_span">{{ budget.budgetDate | date("F Y") }}</p>
+                    <!--Panel-->
+                    <div class="col-md-4">
+                        <div class="card card-body" style="padding-bottom: 10px; padding-top: 10px; margin-bottom: 10px;">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h6 class="card-title" id="budgetName_{{ budget.id }}">{{ budget.name }}</h6>
+                                    <p class="card-text" id="budgetAmount_{{ budget.id }}">{{ budget.budgetAmount }} {{ budget.account.currency }}</p>
+                                    <p class="card-text" >{{ budget.account.accountName }}</p>
                                 </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-warning update_budget button_color" data-target="#updateBudget" data-toggle="modal" value="{{ budget.id }}">
+                                        <i class="fas fa-pencil-alt fa-xs"></i>
+                                    </button>
+
+                                    <button class="btn btn-danger delete_budget button_color" value="{{ budget.id }}">
+                                        <i class="fas fa-trash-alt fa-xs"></i>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="budgetCategory_{{ budget.id }}" value="{{ budget.category.id }}">
+                                <input type="hidden" id="budgetAccountType_{{ budget.id }}" value="{{ budget.account.id }}">
                             </div>
-                        </a>
+
+                        </div>
                     </div>
                 {% endif %}
             {% endfor %}
+            <div class="col-md-3">
+                <button type="button" class="btn btn-primary" data-target="#addBudget" data-toggle="modal">Add Budget</button>
+            </div>
         </div>
 
         <!-- New Budget Modal -->
@@ -53,6 +63,11 @@
                         <form id="addBudgetForm" name="budget" method="post" action="">
                             <div class="form-group">
 
+                                <label for="budget_name">Budget Name</label>
+                                <input class="form-control" id="budget_name" name="budget_name" type="text">
+                                <br>
+
+
                                 <label for="account_type">Pick Account Type</label>
                                 <select class="form-control" id="account_type" name="account_type" required>
                                     {% for account in accounts %}
@@ -66,9 +81,7 @@
                                 <label for="category">Pick a Category</label>
                                 <select class="form-control" id="category" name="category" required>
                                     {% for category in categories %}
-                                        {% if(category.active == 1) %}
-                                            <option value="{{ category.id }}">{{ category.categoryName }}</option>
-                                        {% endif %}
+                                        <option value="{{ category.id }}">{{ category.categoryName }}</option>
                                     {% endfor %}
                                 </select>
                                 <br>
@@ -85,6 +98,62 @@
                             <br>
                             <p align="center" id="successAddBudget" style="display: none; color:green;">Successfully created your budget</p>
                             <p align="center" id="failAddBudget" style="display: none;color:red;">There's been an issue, try again later</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Update Budget Modal -->
+        <div class="modal fade" id="updateBudget" tabindex="-1" role="dialog" aria-labelledby="updateBudget" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="update_budgetTitle">Update Budget</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="updateBudgetForm" name="budget" method="post" action="">
+                            <div class="form-group">
+
+                                <label for="update_budget_name">Budget Name</label>
+                                <input class="form-control" id="update_budget_name" name="update_budget_name" type="text">
+                                <br>
+
+
+                                <label for="update_account_type">Account Type</label>
+                                <select class="form-control" id="update_account_type" name="update_account_type" required>
+                                    {% for account in accounts %}
+                                        {% if(account.active == 1) %}
+                                            <option value="{{ account.id }}">{{ account.accountName }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <br>
+
+                                <label for="update_category">Category</label>
+                                <select class="form-control" id="update_category" name="update_category" required>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+
+                                <label for="update_budget_amount">Budget Amount</label>
+                                <input class="form-control" id="update_budget_amount" name="update_budget_amount" type="number">
+                                <br>
+
+                            </div>
+                            <input type="hidden" id="user_id" name="user_id" value="{{ app.user.id }}">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="updateBudgetButton">Update Budget</button>
+                            <br>
+                            <br>
+                            <p align="center" id="successUpdateBudget" style="display: none; color:green;">Successfully updated your budget</p>
+                            <p align="center" id="failUpdateBudget" style="display: none;color:red;">There's been an issue, try again later</p>
                         </form>
                     </div>
                 </div>
