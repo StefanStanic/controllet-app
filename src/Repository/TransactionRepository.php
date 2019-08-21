@@ -19,6 +19,24 @@ class TransactionRepository extends ServiceEntityRepository
         parent::__construct($registry, Transaction::class);
     }
 
+
+    public function get_total_expenses_by_year_month_account($year, $month, $account)
+    {
+        $db = $this->createQueryBuilder('transaction')
+            ->select('COALESCE(SUM(transaction.transaction_amount), 0) as total_expenses')
+            ->where('transaction.account = :account')
+            ->setParameter('account', $account)
+            ->andWhere('YEAR(transaction.transaction_time) = :year')
+            ->setParameter('year', $year)
+            ->andWhere('MONTH(transaction.transaction_time) = :month')
+            ->setParameter('month', $month)
+            ->andWhere('transaction.active = 1');
+
+        return $db
+            ->getQuery()
+            ->execute();
+    }
+
     public function get_transaction_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort = 'DESC', $start_date, $end_date)
     {
 

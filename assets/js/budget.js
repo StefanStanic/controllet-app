@@ -1,5 +1,10 @@
 require('../css/budget.css');
 
+$( document ).ready(function() {
+    populateBudgetProgressBars();
+});
+
+
 $("#addBudgetForm").on('submit', function (e) {
     e.preventDefault();
 
@@ -117,3 +122,29 @@ $(".delete_budget").on('click', function (e) {
 $('#addBudget').on('hidden.bs.modal', function () {
     location.reload();
 });
+
+function populateBudgetProgressBars(){
+    $.each($(".account_id"), function () {
+        var account_id = $(this).val();
+
+        //ajax for each budget
+        $.post('/getExpenseByAccountTotal', {'account_id': account_id}, function (data) {
+            if(parseInt(data.status) === 1)
+            {
+                var total_expense = parseInt(data.data[0].total_expenses);
+                var total_allowed = parseInt($("#budget_amount_"+account_id).val());
+
+                //calculate percentage
+                var percentage = Math.max(Math.round(100 - (total_expense/total_allowed)*100), 0);
+
+                //populate data
+                $("#budget_from_"+account_id).html(total_expense);
+                $("#budget_to_"+account_id).html(total_allowed);
+
+                if(percentage != 0){
+                    $("#budget_progress_"+account_id).css('width', percentage+'%')
+                }
+            }
+        }, 'json');
+    });
+}

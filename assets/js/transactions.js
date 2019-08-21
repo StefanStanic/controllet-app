@@ -131,6 +131,7 @@ $(".delete_transaction").on('click', function (e) {
                 transaction_id: transaction_id,
             },
             success: function (data, textStatus, xhr) {
+                location.reload();
             }
         });
     }

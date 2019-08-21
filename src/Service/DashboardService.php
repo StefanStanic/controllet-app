@@ -275,4 +275,10 @@ class DashboardService
 
         return false;
     }
+
+    public function getTotalExpensesByYearMonthAccount($year, $month, $account)
+    {
+        $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_year_month_account($year, $month, $account);
+        return $total_expenses;
+    }
 }

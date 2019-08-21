@@ -673,5 +673,36 @@ class DashboardController extends AbstractController
 
     }
 
+    /**
+     * @Route("/getExpenseByAccountTotal", name="app_expense_total", methods={"POST"})
+     */
+    public function getExpenseByAccountTotal(Request $request)
+    {
+        $year = $request->get('year');
+        $month = $request->get('month');
+        $account_id = $request->get('account_id');
+
+        if(empty($account_id)){
+            return false;
+        }
+
+        if(empty($year) || empty($month)){
+            $year = date('Y');
+            $month = date('m');
+        }
+
+        $result = $this->dashboard_service->getTotalExpensesByYearMonthAccount($year, $month, $account_id);
+
+        $response = new Response(json_encode(
+            array(
+                'status' => 1,
+                'data' => $result
+            )
+        ), Response::HTTP_OK);
+
+        return $response;
+
+    }
+
 
 }

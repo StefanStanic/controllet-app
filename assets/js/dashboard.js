@@ -2,14 +2,14 @@ import ApexCharts from 'apexcharts'
 require('../css/dashboard.css');
 
 initializeDatePickers();
-initilize_spending_trend();
+// initilize_spending_trend();
 initilize_income();
 initilize_expenses();
 
 $("#dateFrom, #dateTo").on('blur', function (e) {
     e.preventDefault();
 
-    initilize_spending_trend();
+    // initilize_spending_trend(true);
     initilize_income();
     initilize_expenses();
 });
@@ -136,7 +136,7 @@ function initializeDatePickers() {
 }
 
 
-function initilize_spending_trend(){
+function initilize_spending_trend(redraw = false){
 
     var from = $("#dateFrom").val();
     var to = $("#dateTo").val();
@@ -249,7 +249,12 @@ function initilize_spending_trend(){
 
     var chart = new ApexCharts(document.querySelector("#spending_trend"), options);
 
-    chart.render();
+    if(redraw == true){
+        console.log('hi');
+        chart.updateOptions(options);
+    } else {
+        chart.render();
+    }
 }
 
 
@@ -294,7 +299,9 @@ function initilize_income(){
         options
     );
 
-    chart.render();
+    if(income.data != false){
+        chart.render();
+    }
 }
 
 function initilize_expenses(){
