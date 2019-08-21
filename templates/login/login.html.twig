@@ -36,6 +36,11 @@
                             </div>
 
                         <p align="center"><button class="btn btn-lg" type="submit" id="login_register">Login</button></p>
+                        <p align="center">Don't have an account ? <a href="{{ path('app_register') }}">Register here</a></p>
+
+                        {% if(activated == 'true') %}
+                        <p align="center" style="color:green;">Successfully confirmed your account. You may now login</p>
+                        {% endif %}
 
                         </p>
                     </form>

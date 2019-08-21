@@ -20,12 +20,14 @@ class SecurityController extends AbstractController
     private $em;
     private $passwordEncoder;
     private $securityService;
+    private $swift_mailer;
 
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, SecurityService $securityService)
+    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, SecurityService $securityService, \Swift_Mailer $mailer)
     {
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
         $this->securityService = $securityService;
+        $this->swift_mailer = $mailer;
     }
 
     /**
@@ -33,8 +35,11 @@ class SecurityController extends AbstractController
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
+
+        $activated = $request->get('activated');
+
         if(!empty($this->getUser())){
             if($this->getUser()->getId()){
                 return $this->redirectToRoute('app_dashboard');
@@ -46,7 +51,7 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('login/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('login/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'activated' => $activated]);
     }
 
     /**
@@ -98,6 +103,26 @@ class SecurityController extends AbstractController
             $this->em->persist($activationKeys);
             $this->em->flush();
 
+            //base url path
+            $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() ;
+
+            //send email confirmation
+            $message = (new \Swift_Message('Confirm your registration on Controllet'))
+                ->setFrom('no-reply@controllet.com')
+                ->setTo('vts.stefan.stanic@gmail.com')
+                ->setBody(
+                    $this->renderView(
+                        'email/confirm_account.html.twig',
+                        [
+                            'email' => $user->getEmail(),
+                            'activation_link' => $baseurl  . '/activation/' . $user->getEmail() . '/' . $activationKeys->getHash()
+                        ]
+                    ),
+                    'text/html'
+                );
+
+            $this->swift_mailer->send($message);
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -122,7 +147,8 @@ class SecurityController extends AbstractController
 
         if($this->securityService->activation($email, $act_key)->getStatusCode() == 200)
         {
-            return $this->redirectToRoute('app_login');
+            $redirect = $this->generateUrl('app_login', ['activated' => 'true']);
+            return $this->redirect($redirect);
         };
     }
 
