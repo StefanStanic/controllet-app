@@ -123,6 +123,9 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "rlanvin/php-rrule": {
+        "version": "v2.1.0"
+    },
     "swiftmailer/swiftmailer": {
         "version": "v6.2.1"
     },

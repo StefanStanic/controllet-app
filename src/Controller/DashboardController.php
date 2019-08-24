@@ -744,8 +744,9 @@ class DashboardController extends AbstractController
         $category = $request->get('category');
         $subcategory = $request->get('subcategory');
         $account = $request->get('account');
+        $recurring_bill = $request->get('recurring_bill');
 
-        if(empty($name) || empty($amount) || empty($note) || empty($date_due) || empty($category) || empty($subcategory) || empty($account)){
+        if(empty($name) || empty($amount) || empty($note) || empty($date_due) || empty($category) || empty($subcategory) || empty($account) || !in_array($recurring_bill, array(0,1))){
             $response = new Response(json_encode(
                 array(
                     'status' => 0,
@@ -755,7 +756,7 @@ class DashboardController extends AbstractController
             return $response;
         }
 
-        $bill = $this->dashboard_service->add_bill($name, $amount, $note, $date_due, $category, $subcategory, $account);
+        $bill = $this->dashboard_service->add_bill($name, $amount, $note, $date_due, $category, $subcategory, $account, $recurring_bill);
 
         if($bill){
             $response = new Response(json_encode(

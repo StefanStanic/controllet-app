@@ -26,6 +26,7 @@ $("#addBillForm").on('submit', function (e) {
     var bill_amount = $("#billAmount").val();
     var bill_note = $("#billNote").val();
     var bill_duedate = $("#billDueDate").val();
+    var recurring_bill = $('#recurring_bill').is(':checked')? 1 : 0;
 
     $.ajax({
         type:"POST",
@@ -38,7 +39,8 @@ $("#addBillForm").on('submit', function (e) {
             date_due: bill_duedate,
             category: bill_category,
             subcategory: bill_subcategory,
-            account: bill_account_type
+            account: bill_account_type,
+            recurring_bill: recurring_bill
         },
         success: function (data, textStatus, xhr) {
             if(xhr.status === 200 && data.status === 1) {

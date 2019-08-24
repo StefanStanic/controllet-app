@@ -12,6 +12,7 @@ use App\Entity\Transaction;
 use App\Entity\TransactionType;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use RRule\RRule;
 
 class DashboardService
 {
@@ -191,7 +192,7 @@ class DashboardService
         }
     }
 
-    public function add_bill($name, $amount, $note, $date_due, $category, $subcategory, $account)
+    public function add_bill($name, $amount, $note, $date_due, $category, $subcategory, $account, $recurring_bill)
     {
         $bill = new Bills();
         $category = $this->em->getRepository(Category::class)->find($category);
@@ -199,6 +200,37 @@ class DashboardService
         $account = $this->em->getRepository(Account::class)->find($account);
         $date = date('Y-m-d H:i:s');
         $date_due = date('Y-m-d', strtotime($date_due));
+
+        if($recurring_bill == 1){
+            $rrule = new RRule([
+                'FREQ' => 'MONTHLY',
+                'INTERVAL' => 1,
+                'DTSTART' => $date_due,
+                'COUNT' => 24
+            ]);
+
+            foreach ( $rrule as $occurrence ) {
+                $recurring_date = $occurrence->format('Y-m-d');
+
+                $bill = new Bills();
+                $bill
+                    ->setName($name)
+                    ->setAmount($amount)
+                    ->setNote($note)
+                    ->setDateDue(\DateTime::createFromFormat('Y-m-d', $recurring_date))
+                    ->setCategory($category)
+                    ->setSubcategory($subcategory)
+                    ->setAccount($account)
+                    ->setActive(1)
+                    ->setDateAdded(\DateTime::createFromFormat('Y-m-d H:i:s', $date))
+                    ->setDateUpdated(\DateTime::createFromFormat('Y-m-d H:i:s', $date));
+
+                $this->em->persist($bill);
+            }
+
+            $this->em->flush();
+            return $bill;
+        }
 
         $bill
             ->setName($name)

@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "beberlei/DoctrineExtensions": "^1.2",
+        "rlanvin/php-rrule": "^2.1",
         "symfony/asset": "4.2.*",
         "symfony/console": "4.2.*",
         "symfony/debug-pack": "^1.0",
