@@ -127,6 +127,7 @@ $(".delete_bill").on('click', function (e) {
     e.preventDefault();
 
     var bill_id = $(this).data('id');
+    var bill_group_id = $(this).data('group_id');
 
     var confirm_dialog = confirm("Are you sure you want to update this bill?");
 
@@ -137,6 +138,7 @@ $(".delete_bill").on('click', function (e) {
             url: "/deleteBill",
             data: {
                 bill_id: bill_id,
+                bill_group_id: bill_group_id
             },
             success: function (data, textStatus, xhr) {
                 location.reload();

@@ -201,6 +201,9 @@ class DashboardService
         $date = date('Y-m-d H:i:s');
         $date_due = date('Y-m-d', strtotime($date_due));
 
+        //generate group tag for recurring deletion feature
+        $group_tag = uniqid();
+
         if($recurring_bill == 1){
             $rrule = new RRule([
                 'FREQ' => 'MONTHLY',
@@ -222,6 +225,7 @@ class DashboardService
                     ->setSubcategory($subcategory)
                     ->setAccount($account)
                     ->setActive(1)
+                    ->setGroupTag($group_tag)
                     ->setDateAdded(\DateTime::createFromFormat('Y-m-d H:i:s', $date))
                     ->setDateUpdated(\DateTime::createFromFormat('Y-m-d H:i:s', $date));
 
@@ -240,6 +244,7 @@ class DashboardService
             ->setCategory($category)
             ->setSubcategory($subcategory)
             ->setAccount($account)
+            ->setGroupTag($group_tag)
             ->setActive(1)
             ->setDateAdded(\DateTime::createFromFormat('Y-m-d H:i:s', $date))
             ->setDateUpdated(\DateTime::createFromFormat('Y-m-d H:i:s', $date));
@@ -250,18 +255,22 @@ class DashboardService
         return $bill;
     }
 
-    public function delete_bill($bill_id)
+    public function delete_bill($bill_id, $bill_group_id)
     {
-        $bill = $this->em->getRepository(Bills::class)->find($bill_id);
-
-        if ($bill) {
-
+        $bills = $this->em->getRepository(Bills::class)->findBy(
+            [
+//                'id' => $bill_id,
+                'group_tag' => $bill_group_id
+            ]
+        );
+        foreach ($bills as $bill) {
             //set bill to active 0 for later restoration capabilities
             $bill->setActive(0);
-            $this->em->flush();
-
-            return $bill_id;
+            $this->em->persist($bill);
         }
+        $this->em->flush();
+
+        return $bill_id;
     }
 
     public function update_bill($bill_id, $bill_name, $bill_category,  $bill_subcategory, $bill_account, $bill_note, $bill_amount)

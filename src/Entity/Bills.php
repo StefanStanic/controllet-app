@@ -66,6 +66,11 @@ class Bills
      */
     private $date_due;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $group_tag;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -187,6 +192,18 @@ class Bills
     public function setDateDue(\DateTimeInterface $date_due): self
     {
         $this->date_due = $date_due;
+
+        return $this;
+    }
+
+    public function getGroupTag(): ?string
+    {
+        return $this->group_tag;
+    }
+
+    public function setGroupTag(string $group_tag): self
+    {
+        $this->group_tag = $group_tag;
 
         return $this;
     }

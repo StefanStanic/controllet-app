@@ -789,8 +789,9 @@ class DashboardController extends AbstractController
     public function deleteBill(Request $request)
     {
         $bill_id = $request->get('bill_id');
+        $bill_group_id = $request->get('bill_group_id');
 
-        $result = $this->dashboard_service->delete_bill($bill_id);
+        $result = $this->dashboard_service->delete_bill($bill_id, $bill_group_id);
 
         if ($result) {
             $response = new Response();
