@@ -1,0 +1,91 @@
+{% block body %}
+    <div class="table-responsive" style="">
+    <table id="bills_table" class="table" style="width:100%!important;">
+    <thead>
+    <tr>
+        <th style="width: 20%;">Name</th>
+        <th style="width: 20%;">Category</th>
+        <th style="width: 25%;">Subcategory</th>
+        <th style="width: 10%;">Account</th>
+        <th style="width: 10%;">Amount</th>
+        <th style="width: 10%;">Note</th>
+        <th style="width: 5%">Date Due</th>
+    </tr>
+    </thead>
+    <tbody>
+{% for bill in bills %}
+    <tr>
+        <td>
+            <input type="text" class="form-control bill_name_{{ bill.id }}" value="{{ bill.name }}" disabled>
+        </td>
+
+        <td>
+            <select class="form-control bill_category_{{ bill.id }} bill_category" id="bill_category" data-id="{{ bill.id }}" disabled>
+            {% for category in categories %}
+                {% if(bill.category.id == category.id) %}
+                    <option value="{{ category.id }}" selected="selected">{{ category.categoryName }}</option>
+                {% else %}
+                    <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                {% endif %}
+            {% endfor %}
+            </select>
+        </td>
+
+        <td>
+            <select class="form-control bill_subcategory_{{ bill.id }}" id="bill_subcategory" disabled>
+                {% for subcategory in subcategories %}
+                    {% if(bill.category.id == subcategory.category.id) %}
+                        {% if(bill.subcategory.id == subcategory.id) %}
+                            <option value="{{ subcategory.id }}" selected="selected">{{ subcategory.subCategoryName }}</option>
+                        {% else %}
+                            <option value="{{ subcategory.id }}">{{ subcategory.subCategoryName }}</option>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </td>
+
+        <td>
+            <select class="form-control bill_account_{{ bill.id }}" id="bill_account" disabled>
+                {% for account in accounts %}
+                    {% if(bill.account.id == account.id) %}
+                        <option value="{{ account.id }}" selected="selected">{{ account.accountName }}</option>
+                    {% else %}
+                        <option value="{{ account.id }}">{{ account.accountName }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </td>
+
+        <td>
+            <input type="number" class="form-control bill_amount_{{ bill.id }}" value="{{ bill.amount }}" disabled>
+        </td>
+
+        <td>
+            <input type="text" class="form-control bill_note_{{ bill.id }}" value="{{ bill.note }}" disabled>
+        </td>
+        <td>
+            <b>{{ bill.dateDue | date("F jS, Y")}}</b>
+        </td>
+
+        <td>
+            <button class="btn btn-primary update_bill_{{ bill.id }}" data-id="{{ bill.id }}" style="display: none">
+            <i class="fas fa-check"></i>
+            </button>
+
+            <button class="btn btn-warning edit_bill" data-id="{{ bill.id }}">
+            <i class="fas fa-pencil-alt fa-xs"></i>
+            </button>
+        </td>
+        <td>
+            <button class="btn btn-danger delete_bill" data-id="{{ bill.id }}">
+            <i class="fas fa-trash-alt fa-xs"></i>
+            </button>
+        </td>
+        <span id="bill_response_{{ bill.id }}"></span>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+    </div>
+{% endblock %}

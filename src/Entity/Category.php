@@ -38,12 +38,18 @@ class Category
      */
     private $budgets;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Bills", mappedBy="category")
+     */
+    private $bills;
+
 
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
         $this->subCategory = new ArrayCollection();
         $this->budgets = new ArrayCollection();
+        $this->bills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,6 +168,37 @@ class Category
             // set the owning side to null (unless already changed)
             if ($budget->getCategory() === $this) {
                 $budget->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Bills[]
+     */
+    public function getBills(): Collection
+    {
+        return $this->bills;
+    }
+
+    public function addBill(Bills $bill): self
+    {
+        if (!$this->bills->contains($bill)) {
+            $this->bills[] = $bill;
+            $bill->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBill(Bills $bill): self
+    {
+        if ($this->bills->contains($bill)) {
+            $this->bills->removeElement($bill);
+            // set the owning side to null (unless already changed)
+            if ($bill->getCategory() === $this) {
+                $bill->setCategory(null);
             }
         }
 

@@ -64,12 +64,18 @@ class Account
      */
     private $budgets;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Bills", mappedBy="account")
+     */
+    private $bills;
+
 
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
         $this->budget = new ArrayCollection();
         $this->budgets = new ArrayCollection();
+        $this->bills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -217,6 +223,37 @@ class Account
             // set the owning side to null (unless already changed)
             if ($budget->getAccount() === $this) {
                 $budget->setAccount(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Bills[]
+     */
+    public function getBills(): Collection
+    {
+        return $this->bills;
+    }
+
+    public function addBill(Bills $bill): self
+    {
+        if (!$this->bills->contains($bill)) {
+            $this->bills[] = $bill;
+            $bill->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBill(Bills $bill): self
+    {
+        if ($this->bills->contains($bill)) {
+            $this->bills->removeElement($bill);
+            // set the owning side to null (unless already changed)
+            if ($bill->getAccount() === $this) {
+                $bill->setAccount(null);
             }
         }
 

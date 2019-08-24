@@ -33,9 +33,15 @@ class SubCategory
      */
     private $transactions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Bills", mappedBy="subcategory")
+     */
+    private $bills;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
+        $this->bills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,6 +98,37 @@ class SubCategory
             // set the owning side to null (unless already changed)
             if ($transaction->getSubCategory() === $this) {
                 $transaction->setSubCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Bills[]
+     */
+    public function getBills(): Collection
+    {
+        return $this->bills;
+    }
+
+    public function addBill(Bills $bill): self
+    {
+        if (!$this->bills->contains($bill)) {
+            $this->bills[] = $bill;
+            $bill->setSubcategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBill(Bills $bill): self
+    {
+        if ($this->bills->contains($bill)) {
+            $this->bills->removeElement($bill);
+            // set the owning side to null (unless already changed)
+            if ($bill->getSubcategory() === $this) {
+                $bill->setSubcategory(null);
             }
         }
 

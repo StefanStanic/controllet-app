@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('bills') }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container" style="margin-top: 20px;">
+        <div class="row">
+            <div class="offset-md-10 col-md-2">
+                <button type="button" class="btn btn-warning" data-target="#addBill" data-toggle="modal">+ Add Bill</button>
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <label for="billAccountTypeFilter">Pick Account Type</label>
+                <select class="form-control" id="billAccountTypeFilter" name="billAccountTypeFilter" required>
+                    {% for account in accounts %}
+                        {% if(account.active == 1) %}
+                            <option value="{{ account.id }}">{{ account.accountName }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label for="billCategoryFilter">Pick a Category</label>
+                <select class="form-control" id="billCategoryFilter" name="billCategoryFilter" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-3">
+                <label for="transactionSubcategoryFilter">Pick a SubCategory</label>
+                <select class="form-control" id="billSubcategoryFilter" name="billSubcategoryFilter" required>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <label for="dueDateFromFilter">Date From</label>
+                <input class="form-control" id="dueDateFromFilter" name="dueDateFromFilter" type="text" placeholder="23-03-2019">
+            </div>
+
+            <div class="col-lg-2">
+                <label for="dueDateToFilter">Date From</label>
+                <input class="form-control" id="dueDateToFilter" name="dueDateToFilter" type="text" placeholder="23-03-2019">
+            </div>
+            <input type="hidden" id="user_id" name="user_id" value="{{ app.user.id }}">
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container rounded bills_list shadow">
+        {{ include('bills/bills_list.html.twig', {'bills': bills, 'categories': categories}) }}
+    </div>
+
+
+    <!-- New Bill Modal -->
+    <div class="modal fade" id="addBill" tabindex="-1" role="dialog" aria-labelledby="addBill" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Bill</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBillForm" name="addBill" method="post">
+                        <div class="form-group">
+
+                            <label for="transactionName">Bill Name</label>
+                            <input class="form-control" id="billName" name="billName" type="text" required>
+                            <br>
+
+                            <label for="billAccountType">Pick Account</label>
+                            <select class="form-control" id="billAccountType" name="billAccountType" required>
+                                {% for account in accounts %}
+                                    {% if(account.active == 1) %}
+                                        <option value="{{ account.id }}">{{ account.accountName }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <br>
+
+                            <label for="billCategory">Pick a Category</label>
+                            <select class="form-control" id="billCategory" name="billCategory" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+
+                            <label for="billSubcategory">Pick a SubCategory</label>
+                            <select class="form-control" id="billSubcategory" name="billSubcategory" required>
+                            </select>
+                            <br>
+
+                            <label for="billAmount">Bill Amount</label>
+                            <input class="form-control" id="billAmount" name="billAmount" type="number" required>
+                            <br>
+
+                            <label for="billNote">Transaction Note</label>
+                            <input class="form-control" id="billNote" name="billNote" type="text">
+                            <br>
+
+                            <label for="billDueDate">Date From</label>
+                            <input class="form-control" id="billDueDate" name="billDueDate" type="text" placeholder="23-03-2019">
+
+
+
+                        </div>
+                        <input type="hidden" id="user_id" name="user_id" value="{{ app.user.id }}">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="updateAccountModal">Add Bill</button>
+                        <br>
+                        <br>
+                        <p align="center" id="successAddBill" style="display: none; color:green;">Successfully added your bill.</p>
+                        <p align="center" id="errorAddBill" style="display: none;color:red;"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('bills') }}
+{% endblock %}

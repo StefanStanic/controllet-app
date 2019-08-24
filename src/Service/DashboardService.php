@@ -4,6 +4,7 @@ namespace App\Service;
 
 
 use App\Entity\Account;
+use App\Entity\Bills;
 use App\Entity\Budget;
 use App\Entity\Category;
 use App\Entity\SubCategory;
@@ -188,6 +189,75 @@ class DashboardService
 
             return $budget_id;
         }
+    }
+
+    public function add_bill($name, $amount, $note, $date_due, $category, $subcategory, $account)
+    {
+        $bill = new Bills();
+        $category = $this->em->getRepository(Category::class)->find($category);
+        $subcategory = $this->em->getRepository(SubCategory::class)->find($subcategory);
+        $account = $this->em->getRepository(Account::class)->find($account);
+        $date = date('Y-m-d H:i:s');
+        $date_due = date('Y-m-d', strtotime($date_due));
+
+        $bill
+            ->setName($name)
+            ->setAmount($amount)
+            ->setNote($note)
+            ->setDateDue(\DateTime::createFromFormat('Y-m-d', $date_due))
+            ->setCategory($category)
+            ->setSubcategory($subcategory)
+            ->setAccount($account)
+            ->setActive(1)
+            ->setDateAdded(\DateTime::createFromFormat('Y-m-d H:i:s', $date))
+            ->setDateUpdated(\DateTime::createFromFormat('Y-m-d H:i:s', $date));
+
+        $this->em->persist($bill);
+        $this->em->flush();
+
+        return $bill;
+    }
+
+    public function delete_bill($bill_id)
+    {
+        $bill = $this->em->getRepository(Bills::class)->find($bill_id);
+
+        if ($bill) {
+
+            //set bill to active 0 for later restoration capabilities
+            $bill->setActive(0);
+            $this->em->flush();
+
+            return $bill_id;
+        }
+    }
+
+    public function update_bill($bill_id, $bill_name, $bill_category,  $bill_subcategory, $bill_account, $bill_note, $bill_amount)
+    {
+        $bill = $this->em->getRepository(Bills::class)->find($bill_id);
+        $account = $this->em->getRepository(Account::class)->find($bill_account);
+        $category = $this->em->getRepository(Category::class)->find($bill_category);
+        $subcategory = $this->em->getRepository(SubCategory::class)->find($bill_subcategory);
+
+        if($bill){
+            $bill
+                ->setName($bill_name)
+                ->setAccount($account)
+                ->setSubCategory($subcategory)
+                ->setCategory($category)
+                ->setNote($bill_note)
+                ->setAmount($bill_amount);
+
+            $this->em->flush();
+            return $bill_id;
+        }
+    }
+
+
+    public function get_bills_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort = "DESC", $date_from, $date_to)
+    {
+        $bills = $this->em->getRepository(Bills::class)->get_bills_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort, $date_from, $date_to);
+        return $bills;
     }
 
     public function add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_subcategory, $transaction_amount, $transaction_note)

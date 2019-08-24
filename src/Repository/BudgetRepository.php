@@ -23,7 +23,6 @@ class BudgetRepository extends ServiceEntityRepository
     public function get_budgets_by_user_id($user_id)
     {
         $db = $this->createQueryBuilder('budget')
-            ->select('budget')
             ->select('budget, ac')
             ->innerJoin('budget.account', 'ac')
             ->where('ac.user = :user_id')

@@ -704,5 +704,198 @@ class DashboardController extends AbstractController
 
     }
 
+    /**
+     * @Route("/bills")
+     */
+    public function bills()
+    {
+        $user = $this->getUser();
+
+        $data['bills'] = $this->dashboard_service->get_bills_by_filters($user->getId(), 0, 0, 0,  'DESC', '', '');
+        $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
+        $data['categories'] = $this->dashboard_service->get_active_categories();
+        $data['subcategories'] = $this->dashboard_service->get_active_subcategories();
+
+        return $this->render(
+            'bills/bills.html.twig',
+            array(
+                'bills' => $data['bills'],
+                'accounts' => $data['accounts'],
+                'categories' => $data['categories'],
+                'subcategories' => $data['subcategories']
+            )
+        );
+
+
+    }
+
+
+    /**
+     * @Route("/addBill", name="app_add_bill", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function addBill(Request $request)
+    {
+        $name = $request->get('name');
+        $amount = $request->get('amount');
+        $note = $request->get('note');
+        $date_due = $request->get('date_due');
+        $category = $request->get('category');
+        $subcategory = $request->get('subcategory');
+        $account = $request->get('account');
+
+        if(empty($name) || empty($amount) || empty($note) || empty($date_due) || empty($category) || empty($subcategory) || empty($account)){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Missing parameters'
+                )
+            ), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $response;
+        }
+
+        $bill = $this->dashboard_service->add_bill($name, $amount, $note, $date_due, $category, $subcategory, $account);
+
+        if($bill){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 1,
+                    'text' => 'Bill successfully added.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }else {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Something went wrong, try again later.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
+
+    }
+
+
+    /**
+     * @Route("/deleteBill", name="delete_bill", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteBill(Request $request)
+    {
+        $bill_id = $request->get('bill_id');
+
+        $result = $this->dashboard_service->delete_bill($bill_id);
+
+        if ($result) {
+            $response = new Response();
+            $response->setStatusCode(200);
+
+            return $response;
+        } else {
+            $response = new Response();
+            $response->setStatusCode(400);
+
+            return $response;
+        }
+    }
+
+
+    /**
+     * @Route("/updateBill", name="update_account", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function update_bill(Request $request)
+    {
+        //get input data
+        $bill_id = $request->get('id');
+        $bill_name = $request->get('name');
+        $bill_category = $request->get('category');
+        $bill_subcategory = $request->get('subcategory');
+        $bill_account = $request->get('account');
+        $bill_note = $request->get('note');
+        $bill_amount = $request->get('amount');
+
+        if(empty($bill_id) || empty($bill_name) || empty($bill_category) || empty($bill_subcategory) || empty($bill_account) || empty($bill_note) || empty($bill_amount)){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Missing parameters'
+                )
+            ), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $response;
+        }
+
+        $result = $this->dashboard_service->update_bill($bill_id, $bill_name, $bill_category,  $bill_subcategory, $bill_account, $bill_note, $bill_amount);
+
+        if($result){
+            $response = new Response();
+            $response->setStatusCode(200);
+
+            return $response;
+        }
+        else
+        {
+            $response = new Response();
+            $response->setStatusCode(400);
+
+            return $response;
+        }
+    }
+
+    /**
+     * @Route("/filterBills", methods={"POST"})
+     */
+    public function get_bills_by_filters(Request $request)
+    {
+        $account_id = $request->get('account_id');
+        $category_id = $request->get('category_id');
+        $subcategory_id = $request->get('subcategory_id');
+        $user_id = $request->get('user_id');
+        $start_date = $request->get('date_from');
+        $end_date = $request->get('date_to');
+
+        if((empty($account_id) && $account_id !=0) || (empty($category_id) && $category_id !=0) || empty($user_id)){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Missing parameters'
+                )
+            ), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $response;
+        }
+
+        $data['bills'] = $this->dashboard_service->get_bills_by_filters($user_id, $account_id, $category_id, $subcategory_id,  '', $start_date, $end_date);
+        $data['categories'] = $this->dashboard_service->get_active_categories();
+        $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user_id);
+        $data['subcategories'] = $this->dashboard_service->get_active_subcategories();
+        $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
+
+
+        $transactions = $this->render(
+            'bills/bills_list.html.twig',
+            [
+                'bills' => $data['bills'],
+                'categories' => $data['categories'],
+                'subcategories' => $data['subcategories'],
+                'accounts' => $data['accounts'],
+                'transaction_types' => $data['transaction_types']
+            ]
+        )->getContent();
+
+        $response = new Response(json_encode(
+            array(
+                'status' => 1,
+                'html' => $transactions
+            )
+        ), Response::HTTP_OK);
+
+        return $response;
+    }
 
 }

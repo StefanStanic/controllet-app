@@ -12,6 +12,7 @@ Encore
     .addEntry('transactions', './assets/js/transactions.js')
     .addEntry('profile', './assets/js/profile.js')
     .addEntry('budget', './assets/js/budget.js')
+    .addEntry('bills', './assets/js/bills.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
     .copyFiles({
