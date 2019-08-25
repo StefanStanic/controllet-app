@@ -18,6 +18,11 @@ class ResolveRecurringBillsCommand extends Command
     protected static $defaultName = 'app:resolve-recurring-bills';
     private $em;
 
+    /**
+     * ResolveRecurringBillsCommand constructor.
+     * @param string|null $name
+     * @param EntityManagerInterface $entityManager
+     */
     public function __construct(string $name = null, EntityManagerInterface $entityManager)
     {
         parent::__construct($name);
@@ -31,6 +36,11 @@ class ResolveRecurringBillsCommand extends Command
         ;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln([

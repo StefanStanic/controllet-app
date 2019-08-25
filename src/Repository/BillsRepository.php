@@ -19,6 +19,16 @@ class BillsRepository extends ServiceEntityRepository
         parent::__construct($registry, Bills::class);
     }
 
+    /**
+     * @param $user_id
+     * @param $account_id
+     * @param $category_id
+     * @param $subcategory_id
+     * @param string $sort
+     * @param $start_date
+     * @param $end_date
+     * @return mixed
+     */
     public function get_bills_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort = 'DESC', $start_date, $end_date)
     {
 

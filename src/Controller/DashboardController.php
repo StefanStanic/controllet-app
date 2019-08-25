@@ -20,6 +20,12 @@ class DashboardController extends AbstractController
     private $dashboard_service;
     private $user_service;
 
+    /**
+     * DashboardController constructor.
+     * @param EntityManagerInterface $em
+     * @param DashboardService $dashboardService
+     * @param UserService $userService
+     */
     public function __construct(EntityManagerInterface $em, DashboardService $dashboardService, UserService $userService)
     {
         $this->em = $em;
@@ -119,6 +125,8 @@ class DashboardController extends AbstractController
 
     /**
      * @Route("/addBudget", name="app_add_budget", methods={"POST"})
+     * @param Request $request
+     * @return Response
      */
     public function add_budget(Request $request)
     {
@@ -166,6 +174,8 @@ class DashboardController extends AbstractController
 
     /**
      * @Route("/updateBudget", name="app_update_budget", methods={"POST"})
+     * @param Request $request
+     * @return Response
      */
     public function updateBudget(Request $request)
     {
@@ -394,16 +404,6 @@ class DashboardController extends AbstractController
             return $response;
         }
     }
-//
-//    /**
-//     * @Route("/transactions/{account_id}", name="app_transactions")
-//     */
-//    public function transactions($account_id = false)
-//    {
-//        return $this->render(
-//            'dashboard/transactions.html.twig'
-//        );
-//    }
 
     /**
      * @Route("/addTransaction", name="app_addTransaction", methods={"POST"})
@@ -648,6 +648,8 @@ class DashboardController extends AbstractController
 
     /**
      * @Route("/subCategories", methods={"POST"})
+     * @param Request $request
+     * @return Response
      */
     public function getSubCategories(Request $request)
     {
@@ -675,6 +677,8 @@ class DashboardController extends AbstractController
 
     /**
      * @Route("/getExpenseByAccountTotal", name="app_expense_total", methods={"POST"})
+     * @param Request $request
+     * @return bool|Response
      */
     public function getExpenseByAccountTotal(Request $request)
     {

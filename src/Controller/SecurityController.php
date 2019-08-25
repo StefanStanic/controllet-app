@@ -8,7 +8,9 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Service\SecurityService;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,7 +59,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/registration", name="app_register")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      */
     public function register(Request $request)
     {
@@ -136,7 +138,7 @@ class SecurityController extends AbstractController
      * @Route("/activation/{email}/{act_key}")
      * @param $email
      * @param $act_key
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function activation($email, $act_key)
     {
@@ -154,10 +156,10 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/logout", name="app_logout")
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function logout()
     {
-        throw new \RuntimeException('This should never be called directly.');
+        throw new RuntimeException('This should never be called directly.');
     }
 }

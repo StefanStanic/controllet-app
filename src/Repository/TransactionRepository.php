@@ -20,6 +20,12 @@ class TransactionRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * @param $year
+     * @param $month
+     * @param $account
+     * @return mixed
+     */
     public function get_total_expenses_by_year_month_account($year, $month, $account)
     {
         $db = $this->createQueryBuilder('transaction')
@@ -37,6 +43,16 @@ class TransactionRepository extends ServiceEntityRepository
             ->execute();
     }
 
+    /**
+     * @param $user_id
+     * @param $account_id
+     * @param $category_id
+     * @param $subcategory_id
+     * @param string $sort
+     * @param $start_date
+     * @param $end_date
+     * @return mixed
+     */
     public function get_transaction_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort = 'DESC', $start_date, $end_date)
     {
 
@@ -88,6 +104,12 @@ class TransactionRepository extends ServiceEntityRepository
             ->execute();
     }
 
+    /**
+     * @param $user_id
+     * @param $account_id
+     * @param $category_id
+     * @return mixed
+     */
     public function get_total_expenses_by_filters($user_id, $account_id, $category_id)
     {
         $db = $this->createQueryBuilder('transaction')
@@ -116,6 +138,12 @@ class TransactionRepository extends ServiceEntityRepository
             ->execute();
     }
 
+    /**
+     * @param $user_id
+     * @param $account_id
+     * @param $category_id
+     * @return mixed
+     */
     public function get_total_income_by_filters($user_id, $account_id, $category_id)
     {
         $db = $this->createQueryBuilder('transaction')
@@ -144,6 +172,13 @@ class TransactionRepository extends ServiceEntityRepository
             ->execute();
     }
 
+    /**
+     * @param $user_id
+     * @param $data_type
+     * @param $start_date
+     * @param $end_date
+     * @return mixed
+     */
     public function get_chart_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date)
     {
         $db = $this->createQueryBuilder('transaction')
@@ -161,20 +196,6 @@ class TransactionRepository extends ServiceEntityRepository
         }else{
             $db->select("SUM(transaction.transaction_amount) as total_daily_income, YEAR(transaction.transaction_time) as transaction_year, DATE_FORMAT(transaction.transaction_time, '%m') as transaction_month, DATE_FORMAT(transaction.transaction_time, '%d') as transaction_day");
         }
-
-//        if($account_id != 0){
-//            $db
-//                ->innerJoin('transaction.account', 'ta')
-//                ->andWhere('ta.id = :account_id')
-//                ->setParameter('account_id', $account_id);
-//        }
-//
-//        if($category_id !=0){
-//            $db
-//                ->innerJoin('transaction.category', 'tc')
-//                ->andWhere('tc.id = :category_id')
-//                ->setParameter('category_id', $category_id);
-//        }
 
         if(!empty($start_date)){
             //convert date to understandable format
@@ -201,6 +222,13 @@ class TransactionRepository extends ServiceEntityRepository
             ->execute();
     }
 
+    /**
+     * @param $user_id
+     * @param $data_type
+     * @param $start_date
+     * @param $end_date
+     * @return mixed
+     */
     public function get_pie_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date)
     {
         $db = $this->createQueryBuilder('transaction')

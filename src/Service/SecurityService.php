@@ -18,6 +18,11 @@ class SecurityService
     }
 
 
+    /**
+     * @param string $email
+     * @param string $act_key
+     * @return Response
+     */
     public function activation(string $email, string $act_key)
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);

@@ -15,6 +15,16 @@ class UserService
         $this->em = $em;
     }
 
+    /**
+     * @param $user_id
+     * @param $first_name
+     * @param $last_name
+     * @param $date_of_birth
+     * @param $company
+     * @param $city
+     * @param $country
+     * @return bool
+     */
     public function update_profile_by_user_id($user_id, $first_name, $last_name, $date_of_birth, $company, $city, $country)
     {
         $user = $this->em->getRepository(User::class)->find($user_id);

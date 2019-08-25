@@ -20,6 +20,10 @@ class BudgetRepository extends ServiceEntityRepository
         parent::__construct($registry, Budget::class);
     }
 
+    /**
+     * @param $user_id
+     * @return ArrayCollection
+     */
     public function get_budgets_by_user_id($user_id)
     {
         $db = $this->createQueryBuilder('budget')
@@ -34,33 +38,4 @@ class BudgetRepository extends ServiceEntityRepository
             ->getResult();
         return new ArrayCollection($result);
     }
-
-    // /**
-    //  * @return Budget[] Returns an array of Budget objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Budget
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

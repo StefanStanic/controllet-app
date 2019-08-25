@@ -11,6 +11,8 @@ use App\Entity\SubCategory;
 use App\Entity\Transaction;
 use App\Entity\TransactionType;
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use RRule\RRule;
 
@@ -23,12 +25,19 @@ class DashboardService
         $this->em = $em;
     }
 
+    /**
+     * @param $user_id
+     * @return Account[]|Collection
+     */
     public function get_active_wallets_by_user_id($user_id)
     {
         $user = $this->em->getRepository(User::class)->find($user_id);
         return $user->getAccount();
     }
 
+    /**
+     * @return Category[]|object[]
+     */
     public function get_active_categories()
     {
         $categories = $this->em->getRepository(Category::class)->findAll();
@@ -36,6 +45,9 @@ class DashboardService
         return $categories;
     }
 
+    /**
+     * @return SubCategory[]|object[]
+     */
     public function get_active_subcategories()
     {
         $subcategory= $this->em->getRepository(SubCategory::class)->findAll();
@@ -43,6 +55,9 @@ class DashboardService
         return $subcategory;
     }
 
+    /**
+     * @return TransactionType[]|object[]
+     */
     public function get_active_transaction_types()
     {
         $transaction_types = $this->em->getRepository(TransactionType::class)->findAll();
@@ -50,6 +65,16 @@ class DashboardService
         return $transaction_types;
     }
 
+    /**
+     * @param $user_id
+     * @param $account_id
+     * @param $category_id
+     * @param $subcategory_id
+     * @param string $sort
+     * @param $start_date
+     * @param $end_date
+     * @return mixed
+     */
     public function get_transaction_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort = "DESC", $start_date, $end_date)
     {
         $transactions = $this->em->getRepository(Transaction::class)->get_transaction_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort, $start_date, $end_date);
@@ -57,6 +82,13 @@ class DashboardService
     }
 
 
+    /**
+     * @param $user_id
+     * @param $data_type
+     * @param $start_date
+     * @param $end_date
+     * @return bool|mixed
+     */
     public function get_chart_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date)
     {
         $chart_data = $this->em->getRepository(Transaction::class)->get_chart_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date);
@@ -68,6 +100,13 @@ class DashboardService
         return false;
     }
 
+    /**
+     * @param $user_id
+     * @param $data_type
+     * @param $start_date
+     * @param $end_date
+     * @return bool|mixed
+     */
     public function get_pie_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date)
     {
         $chart_data = $this->em->getRepository(Transaction::class)->get_pie_data_by_filters_and_type($user_id, $data_type, $start_date, $end_date);
@@ -79,24 +118,44 @@ class DashboardService
         return false;
     }
 
+    /**
+     * @param $user_id
+     * @param $account_id
+     * @param $category_id
+     * @return mixed
+     */
     public function get_total_expenses_by_filters($user_id, $account_id, $category_id)
     {
         $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_filters($user_id, $account_id, $category_id);
         return $total_expenses;
     }
 
+    /**
+     * @param $user_id
+     * @param $account_id
+     * @param $category_id
+     * @return mixed
+     */
     public function get_total_income_by_filters($user_id, $account_id, $category_id)
     {
         $total_income = $this->em->getRepository(Transaction::class)->get_total_income_by_filters($user_id, $account_id, $category_id);
         return $total_income;
     }
 
+    /**
+     * @param $user_id
+     * @return ArrayCollection
+     */
     public function get_active_budgets_by_user_id($user_id)
     {
         $budgets = $this->em->getRepository(Budget::class)->get_budgets_by_user_id($user_id);
         return $budgets;
     }
 
+    /**
+     * @param $category_id
+     * @return SubCategory[]|object[]
+     */
     public function get_subcategories($category_id)
     {
         $category = $this->em->getRepository(Category::class)->find($category_id);
@@ -108,6 +167,13 @@ class DashboardService
         return $subcategories;
     }
 
+    /**
+     * @param $account_name
+     * @param $account_balance
+     * @param $account_id
+     * @param $user_id
+     * @return mixed
+     */
     public function update_account($account_name, $account_balance, $account_id, $user_id)
     {
         $account = $this->em->getRepository(Account::class)->find($account_id);
@@ -124,6 +190,10 @@ class DashboardService
         }
     }
 
+    /**
+     * @param $account_id
+     * @return mixed
+     */
     public function delete_account($account_id)
     {
         $account = $this->em->getRepository(Account::class)->find($account_id);
@@ -138,6 +208,10 @@ class DashboardService
         }
     }
 
+    /**
+     * @param $budget_id
+     * @return mixed
+     */
     public function delete_budget($budget_id)
     {
         $budget = $this->em->getRepository(Budget::class)->find($budget_id);
@@ -153,6 +227,14 @@ class DashboardService
     }
 
 
+    /**
+     * @param $user_id
+     * @param $category_id
+     * @param $account_id
+     * @param $budget_amount
+     * @param $budget_name
+     * @return Budget
+     */
     public function add_budget($user_id, $category_id, $account_id, $budget_amount, $budget_name)
     {
         $budget = new Budget();
@@ -173,6 +255,14 @@ class DashboardService
         return $budget;
     }
 
+    /**
+     * @param $budget_id
+     * @param $account_id
+     * @param $category_id
+     * @param $budgetName
+     * @param $budgetAmount
+     * @return mixed
+     */
     public function update_budget($budget_id, $account_id, $category_id, $budgetName, $budgetAmount)
     {
         $account = $this->em->getRepository(Account::class)->find($account_id);
@@ -192,6 +282,17 @@ class DashboardService
         }
     }
 
+    /**
+     * @param $name
+     * @param $amount
+     * @param $note
+     * @param $date_due
+     * @param $category
+     * @param $subcategory
+     * @param $account
+     * @param $recurring_bill
+     * @return Bills
+     */
     public function add_bill($name, $amount, $note, $date_due, $category, $subcategory, $account, $recurring_bill)
     {
         $bill = new Bills();
@@ -255,11 +356,15 @@ class DashboardService
         return $bill;
     }
 
+    /**
+     * @param $bill_id
+     * @param $bill_group_id
+     * @return mixed
+     */
     public function delete_bill($bill_id, $bill_group_id)
     {
         $bills = $this->em->getRepository(Bills::class)->findBy(
             [
-//                'id' => $bill_id,
                 'group_tag' => $bill_group_id
             ]
         );
@@ -273,7 +378,17 @@ class DashboardService
         return $bill_id;
     }
 
-    public function update_bill($bill_id, $bill_name, $bill_category,  $bill_subcategory, $bill_account, $bill_note, $bill_amount)
+    /**
+     * @param $bill_id
+     * @param $bill_name
+     * @param $bill_category
+     * @param $bill_subcategory
+     * @param $bill_account
+     * @param $bill_note
+     * @param $bill_amount
+     * @return mixed
+     */
+    public function update_bill($bill_id, $bill_name, $bill_category, $bill_subcategory, $bill_account, $bill_note, $bill_amount)
     {
         $bill = $this->em->getRepository(Bills::class)->find($bill_id);
         $account = $this->em->getRepository(Account::class)->find($bill_account);
@@ -295,12 +410,33 @@ class DashboardService
     }
 
 
+    /**
+     * @param $user_id
+     * @param $account_id
+     * @param $category_id
+     * @param $subcategory_id
+     * @param string $sort
+     * @param $date_from
+     * @param $date_to
+     * @return mixed
+     */
     public function get_bills_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort = "DESC", $date_from, $date_to)
     {
         $bills = $this->em->getRepository(Bills::class)->get_bills_by_filters($user_id, $account_id, $category_id, $subcategory_id, $sort, $date_from, $date_to);
         return $bills;
     }
 
+    /**
+     * @param $user_id
+     * @param $transaction_name
+     * @param $transaction_account_type
+     * @param $transaction_type
+     * @param $transaction_category
+     * @param $transaction_subcategory
+     * @param $transaction_amount
+     * @param $transaction_note
+     * @return bool
+     */
     public function add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_subcategory, $transaction_amount, $transaction_note)
     {
         $user = $this->em->getRepository(User::class)->find($user_id);
@@ -346,7 +482,15 @@ class DashboardService
 
     }
 
-    public function update_transaction($transaction_id, $transaction_category, $transaction_subcategory,  $transaction_note, $transaction_amount)
+    /**
+     * @param $transaction_id
+     * @param $transaction_category
+     * @param $transaction_subcategory
+     * @param $transaction_note
+     * @param $transaction_amount
+     * @return mixed
+     */
+    public function update_transaction($transaction_id, $transaction_category, $transaction_subcategory, $transaction_note, $transaction_amount)
     {
         $transaction = $this->em->getRepository(Transaction::class)->find($transaction_id);
         $category = $this->em->getRepository(Category::class)->find($transaction_category);
@@ -364,6 +508,10 @@ class DashboardService
         }
     }
 
+    /**
+     * @param $transaction_id
+     * @return mixed
+     */
     public function delete_transaction($transaction_id)
     {
         $transaction = $this->em->getRepository(Transaction::class)->find($transaction_id);
@@ -376,6 +524,10 @@ class DashboardService
         return $transaction_id;
     }
 
+    /**
+     * @param $user_id
+     * @return bool|mixed
+     */
     public function get_total_balance($user_id)
     {
         $balance = $this->em->getRepository(Account::class)->get_total_balance($user_id);
@@ -387,6 +539,12 @@ class DashboardService
         return false;
     }
 
+    /**
+     * @param $year
+     * @param $month
+     * @param $account
+     * @return mixed
+     */
     public function getTotalExpensesByYearMonthAccount($year, $month, $account)
     {
         $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_year_month_account($year, $month, $account);
