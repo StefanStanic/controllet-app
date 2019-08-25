@@ -1,0 +1,44 @@
+<!--Navbar -->
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color">
+    <a class="navbar-brand" href="{{ path('app_dashboard') }}"><img src="{{ asset('build/logo.png') }}"   height="35" alt=""></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+            aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+        <ul class="navbar-nav mr-auto">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_dashboard') }}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_transactions') }}">Transactions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_dashboard_bills') }}">Bills</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_budget') }}">Budget</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_profile') }}">Profile</a>
+                </li>
+            {% endif %}
+        </ul>
+        <ul class="navbar-nav ml-auto nav-flex-icons">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt" style="margin-right: 5px"></i>Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_register') }}">Register</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<!--/.Navbar -->

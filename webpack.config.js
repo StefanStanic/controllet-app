@@ -13,23 +13,17 @@ Encore
     .addEntry('profile', './assets/js/profile.js')
     .addEntry('budget', './assets/js/budget.js')
     .addEntry('bills', './assets/js/bills.js')
-    //.addEntry('page1', './assets/js/page1.js')
-    //.addEntry('page2', './assets/js/page2.js')
+    .addEntry('homepage', './assets/js/homepage.js')
     .copyFiles({
         from: './assets/images'
     })
 
     .splitEntryChunks()
-
     .enableSingleRuntimeChunk()
-
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
-    // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
-
-    // uncomment if you're having problems with a jQuery plugin
     .autoProvidejQuery()
 ;
 

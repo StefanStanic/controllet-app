@@ -12,7 +12,10 @@
         {% endblock %}
     </head>
     <body>
-        {% if (app.request.pathInfo != '/registration' and app.request.pathInfo != '/login') %}
+
+        {% if(app.request.pathInfo == '/') %}
+            {{ include('components/navbar_homepage.html.twig') }}
+        {% elseif (app.request.pathInfo != '/registration' and app.request.pathInfo != '/login') %}
             {{ include('components/navbar.html.twig') }}
         {% endif %}
         {% block body %}
