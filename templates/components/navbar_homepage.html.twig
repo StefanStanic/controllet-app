@@ -1,6 +1,6 @@
 <!--Navbar -->
 <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color">
-    <a class="navbar-brand" href="{{ path('app_dashboard') }}"><img src="{{ asset('build/logo.png') }}"   height="35" alt=""></a>
+    <a class="navbar-brand" href="{{ path('app_home_page') }}"><img src="{{ asset('build/logo.png') }}"   height="35" alt=""></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
             aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -10,18 +10,6 @@
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_dashboard') }}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_transactions') }}">Transactions</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_dashboard_bills') }}">Bills</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_budget') }}">Budget</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_profile') }}">Profile</a>
                 </li>
             {% endif %}
         </ul>
