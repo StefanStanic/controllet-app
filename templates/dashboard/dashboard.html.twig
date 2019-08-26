@@ -35,9 +35,12 @@
                     {% endif %}
                 {% endfor %}
             <div class="col-md-3">
-                <button type="button" class="btn btn-primary">
-                    <a href="{{ path('app_dashboard_addaccount', {'user_id' : app.user.id }) }}" style="text-decoration: none; color: white;" >+ Add Account</a>
-                </button>
+
+                    <a href="{{ path('app_dashboard_addaccount', {'user_id' : app.user.id }) }}" style="text-decoration: none; color: white;" >
+                        <button type="button" class="btn btn-primary">
+                        + Add Account
+                        </button>
+                    </a>
 
                 <button type="button" class="btn btn-warning" data-target="#addTransaction" data-toggle="modal">+ Add Transaction</button>
             </div>

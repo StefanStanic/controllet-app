@@ -2,6 +2,7 @@ import ApexCharts from 'apexcharts'
 require('../css/dashboard.css');
 
 initializeDatePickers();
+initialize_subcategory();
 // initilize_spending_trend();
 initilize_income();
 initilize_expenses();
@@ -100,19 +101,7 @@ $('#addTransaction').on('hidden.bs.modal', function () {
 });
 
 $("#transactionCategory").on('change', function () {
-    var category_id = $("#transactionCategory").val();
-
-    $.ajax({
-        type:"POST",
-        url: "/subCategories",
-        dataType: 'json',
-        data: {
-            category_id: category_id
-        },
-        success: function (data, textStatus, xhr) {
-            $("#transactionSubcategory").html(data.html);
-        }
-    });
+    initialize_subcategory();
 });
 
 function initializeDatePickers() {
@@ -396,4 +385,20 @@ function get_pie_data(date_from, date_to, user_id, data_type) {
     });
 
     return return_data;
+}
+
+function initialize_subcategory() {
+    var category_id = $("#transactionCategory").val();
+
+    $.ajax({
+        type:"POST",
+        url: "/subCategories",
+        dataType: 'json',
+        data: {
+            category_id: category_id
+        },
+        success: function (data, textStatus, xhr) {
+            $("#transactionSubcategory").html(data.html);
+        }
+    });
 }

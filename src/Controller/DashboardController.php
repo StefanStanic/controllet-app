@@ -9,9 +9,11 @@ use App\Service\DashboardService;
 use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 
 class DashboardController extends AbstractController
 {
@@ -19,6 +21,7 @@ class DashboardController extends AbstractController
     private $em;
     private $dashboard_service;
     private $user_service;
+    private $router;
 
     /**
      * DashboardController constructor.
@@ -26,11 +29,12 @@ class DashboardController extends AbstractController
      * @param DashboardService $dashboardService
      * @param UserService $userService
      */
-    public function __construct(EntityManagerInterface $em, DashboardService $dashboardService, UserService $userService)
+    public function __construct(EntityManagerInterface $em, DashboardService $dashboardService, UserService $userService, RouterInterface $router)
     {
         $this->em = $em;
         $this->dashboard_service = $dashboardService;
         $this->user_service = $userService;
+        $this->router = $router;
     }
 
     /**
@@ -38,8 +42,11 @@ class DashboardController extends AbstractController
      */
     public function dashboard()
     {
-
         $user = $this->getUser();
+
+        if(empty($user)){
+            return $this->redirect($this->router->generate('app_dashboard'));
+        }
 
         $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
         $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0, 0,  'DESC', '', '');
