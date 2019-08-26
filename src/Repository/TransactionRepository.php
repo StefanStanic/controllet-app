@@ -24,9 +24,10 @@ class TransactionRepository extends ServiceEntityRepository
      * @param $year
      * @param $month
      * @param $account
+     * @param $category
      * @return mixed
      */
-    public function get_total_expenses_by_year_month_account($year, $month, $account)
+    public function get_total_expenses_by_year_month_account($year, $month, $account, $category)
     {
         $db = $this->createQueryBuilder('transaction')
             ->select('COALESCE(SUM(transaction.transaction_amount), 0) as total_expenses')
@@ -34,6 +35,8 @@ class TransactionRepository extends ServiceEntityRepository
             ->setParameter('account', $account)
             ->andWhere('YEAR(transaction.transaction_time) = :year')
             ->setParameter('year', $year)
+            ->andWhere('transaction.category = :category')
+            ->setParameter('category', $category)
             ->andWhere('MONTH(transaction.transaction_time) = :month')
             ->setParameter('month', $month)
             ->andWhere('transaction.active = 1');

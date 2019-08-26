@@ -39,16 +39,18 @@
                                 </div>
                                 <input type="hidden" id="budgetCategory_{{ budget.id }}" value="{{ budget.category.id }}">
                                 <input type="hidden" id="budgetAccountType_{{ budget.id }}" value="{{ budget.account.id }}">
-                                <input type="hidden" id="budget_amount_{{ budget.account.id }}" value="{{ budget.budgetAmount }}">
-                                <input type="hidden" class="account_id" value="{{ budget.account.id }}">
+                                <input type="hidden" id="budget_amount_{{ budget.id }}" value="{{ budget.budgetAmount }}">
+                                <input type="hidden" id="account_id_{{ budget.id }}" value="{{ budget.account.id }}">
+                                <input type="hidden" id="category_id_{{ budget.id }}" value="{{ budget.category.id }}">
+                                <input type="hidden" class="budget_id" value="{{ budget.id }}">
                             </div>
 
                             <br>
                             <p>
-                                <span id="budget_from_{{ budget.account.id }}"></span>/<span id="budget_to_{{ budget.account.id }}"></span><span> {{ budget.account.currency }}</span>
+                                <span id="budget_from_{{ budget.id }}"></span>/<span id="budget_to_{{ budget.id }}"></span><span> {{ budget.account.currency }}</span>
                             </p>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" id="budget_progress_{{ budget.account.id }}"></div>
+                                <div class="progress-bar" role="progressbar" id="budget_progress_{{ budget.id }}"></div>
                             </div>
 
                         </div>

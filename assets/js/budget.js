@@ -14,22 +14,18 @@ $("#addBudgetForm").on('submit', function (e) {
     var budget_amount = $("#budget_amount").val();
     var budget_name = $("#budget_name").val();
 
-    var confirm_dialog = confirm("Are you sure you want to add this budget?");
+    $.post('/addBudget', {'category': category_id, 'account_type': account_id, 'user_id': user_id, 'budget_amount' : budget_amount, 'budget_name': budget_name}, function (data) {
+        if(parseInt(data.status) === 1)
+                {
+                    $("#successAddBudget").show();
+                    $("#failAddBudget").hide();
+                } else
+                {
+                    $("#successAddBudget").hide();
+                    $("#failAddBudget").show();
+                }
+    }, 'json');
 
-    //location to post to
-    if(confirm_dialog === true){
-        $.post('/addBudget', {'category': category_id, 'account_type': account_id, 'user_id': user_id, 'budget_amount' : budget_amount, 'budget_name': budget_name}, function (data) {
-            if(parseInt(data.status) === 1)
-                    {
-                        $("#successAddBudget").show();
-                        $("#failAddBudget").hide();
-                    } else
-                    {
-                        $("#successAddBudget").hide();
-                        $("#failAddBudget").show();
-                    }
-        }, 'json');
-    }
 });
 
 
@@ -124,25 +120,27 @@ $('#addBudget').on('hidden.bs.modal', function () {
 });
 
 function populateBudgetProgressBars(){
-    $.each($(".account_id"), function () {
-        var account_id = $(this).val();
+    $.each($(".budget_id"), function () {
+        var budget_id = $(this).val();
+        var account_id = $("#account_id_"+budget_id).val();
+        var category_id = $("#category_id_"+budget_id).val();
 
         //ajax for each budget
-        $.post('/getExpenseByAccountTotal', {'account_id': account_id}, function (data) {
+        $.post('/getExpenseByAccountTotal', {'account_id': account_id, 'category_id': category_id}, function (data) {
             if(parseInt(data.status) === 1)
             {
                 var total_expense = parseInt(data.data[0].total_expenses);
-                var total_allowed = parseInt($("#budget_amount_"+account_id).val());
+                var total_allowed = parseInt($("#budget_amount_"+budget_id).val());
 
                 //calculate percentage
                 var percentage = Math.max(Math.round(100 - (total_expense/total_allowed)*100), 0);
 
                 //populate data
-                $("#budget_from_"+account_id).html(total_expense);
-                $("#budget_to_"+account_id).html(total_allowed);
+                $("#budget_from_"+budget_id).html(total_expense);
+                $("#budget_to_"+budget_id).html(total_allowed);
 
                 if(percentage != 0){
-                    $("#budget_progress_"+account_id).css('width', percentage+'%')
+                    $("#budget_progress_"+budget_id).css('width', percentage+'%')
                 }
             }
         }, 'json');

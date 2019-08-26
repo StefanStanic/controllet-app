@@ -545,9 +545,9 @@ class DashboardService
      * @param $account
      * @return mixed
      */
-    public function getTotalExpensesByYearMonthAccount($year, $month, $account)
+    public function getTotalExpensesByYearMonthAccount($year, $month, $account, $category)
     {
-        $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_year_month_account($year, $month, $account);
+        $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_year_month_account($year, $month, $account, $category);
         return $total_expenses;
     }
 }

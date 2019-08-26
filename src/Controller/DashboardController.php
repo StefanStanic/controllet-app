@@ -467,7 +467,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/updateTransaction", name="update_account", methods={"POST"})
+     * @Route("/updateTransaction", name="update_transaction", methods={"POST"})
      * @param Request $request
      * @return Response
      */
@@ -692,8 +692,9 @@ class DashboardController extends AbstractController
         $year = $request->get('year');
         $month = $request->get('month');
         $account_id = $request->get('account_id');
+        $category_id = $request->get('category_id');
 
-        if(empty($account_id)){
+        if(empty($account_id) || empty($category_id)){
             return false;
         }
 
@@ -702,7 +703,7 @@ class DashboardController extends AbstractController
             $month = date('m');
         }
 
-        $result = $this->dashboard_service->getTotalExpensesByYearMonthAccount($year, $month, $account_id);
+        $result = $this->dashboard_service->getTotalExpensesByYearMonthAccount($year, $month, $account_id, $category_id);
 
         $response = new Response(json_encode(
             array(
