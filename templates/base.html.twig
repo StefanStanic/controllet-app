@@ -2,13 +2,16 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
             <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
             <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+            <link rel="icon" href="{{ asset('build/logo.png') }}" sizes="16x16">
+            <meta name="description" content="Controllet, budgeting app that helps you control your monthly budget and keep track of your income">
+            <meta name="author" content="Controllet">
+            <title>{% if title is defined %}{{ title }} - {% endif %}Controllet</title>
         {% endblock %}
     </head>
     <body>
