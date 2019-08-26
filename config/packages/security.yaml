@@ -45,5 +45,6 @@ security:
          - { path: ^/bills, roles: ROLE_USER }
          - { path: ^/budget, roles: ROLE_USER }
          - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/admin, roles: ROLE_ADMIN }
 #         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

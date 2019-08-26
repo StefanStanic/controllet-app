@@ -1,0 +1,135 @@
+{% set title = 'Admin' %}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('admin') }}
+{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-lg-3">
+                <!-- Card -->
+                <div class="card">
+
+                    <!-- Card image -->
+                    <div class="view overlay">
+                        <img class="card-img-top" src="{{ asset('build/user.jpg') }}" alt="Card image cap">
+                    </div>
+
+                    <!-- Card content -->
+                    <div class="card-body">
+
+                        <!-- Title -->
+                        <h4 align="center" class="card-title">Amount of users online</h4>
+                        <!-- Text -->
+                        <h2 align="center">{{ user_count }} <i class="fa fa-user"></i></h2>
+                        <!-- Button -->
+                    </div>
+
+                </div>
+                <!-- Card -->
+            </div>
+
+            <div class="col-lg-3">
+                <!-- Card -->
+                <div class="card">
+
+                    <!-- Card image -->
+                    <div class="view overlay">
+                        <img class="card-img-top" src="{{ asset('build/transactions.jpg') }}" alt="Card image cap">
+                    </div>
+
+                    <!-- Card content -->
+                    <div class="card-body">
+
+                        <!-- Title -->
+                        <h4 align="center" class="card-title">Amount of transactions</h4>
+                        <!-- Text -->
+                        <h2 align="center">{{ transaction_count }} <i class="fas fa-money-check-alt"></i></h2>
+                        <!-- Button -->
+                    </div>
+
+                </div>
+                <!-- Card -->
+            </div>
+
+            <div class="col-lg-3">
+                <!-- Card -->
+                <div class="card">
+
+                    <!-- Card image -->
+                <div class="view overlay">
+                    <img class="card-img-top" src="{{ asset('build/bill.jpg') }}" alt="Card image cap">
+                </div>
+
+                <!-- Card content -->
+                <div class="card-body">
+
+                    <!-- Title -->
+                    <h4 align="center" class="card-title">Amount of bills</h4>
+                    <!-- Text -->
+                    <br>
+                    <h2 align="center">{{ bill_count }} <i class="fas fa-receipt"></i></h2>
+                    <!-- Button -->
+                </div>
+
+            </div>
+            <!-- Card -->
+        </div>
+
+        <div class="col-lg-3">
+            <!-- Card -->
+                <div class="card">
+
+                    <!-- Card image -->
+                    <div class="view overlay">
+                        <img class="card-img-top" src="{{ asset('build/account.jpg') }}" alt="Card image cap">
+                    </div>
+
+                    <!-- Card content -->
+                    <div class="card-body">
+
+                        <!-- Title -->
+                        <h4 align="center" class="card-title">Amount of accounts</h4>
+                        <!-- Text -->
+                        <h2 align="center">{{ account_count }} <i class="fas fa-hand-holding-usd"></i></h2>
+                        <!-- Button -->
+                    </div>
+
+                </div>
+                <!-- Card -->
+            </div>
+        </div>
+        <br><br>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-body" style="margin-right: 10px;">
+                    <h4 class="card-title">
+                        Total Income By Category
+                        <hr>
+                        <div id="chart2"></div>
+                    </h4>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card card-body" style="margin-right: 10px;">
+                    <h4 class="card-title">
+                        Total Expense By Category
+                        <hr>
+                        <div id="chart3"></div>
+                    </h4>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('admin') }}
+{% endblock %}

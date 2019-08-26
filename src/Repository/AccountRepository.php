@@ -36,4 +36,15 @@ class AccountRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
+
+    public function get_account_count()
+    {
+        $db = $this->createQueryBuilder('account')
+            ->select('COUNT(account) as account_count')
+            ->where('account.active = 1');
+
+        return $db
+            ->getQuery()
+            ->execute();
+    }
 }

@@ -14,6 +14,8 @@ Encore
     .addEntry('budget', './assets/js/budget.js')
     .addEntry('bills', './assets/js/bills.js')
     .addEntry('homepage', './assets/js/homepage.js')
+    .addEntry('admin', './assets/js/admin.js')
+    .addEntry('user', './assets/js/user.js')
     .copyFiles({
         from: './assets/images'
     })

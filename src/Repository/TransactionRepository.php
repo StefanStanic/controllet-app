@@ -268,4 +268,32 @@ class TransactionRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
+
+    public function get_transaction_count()
+    {
+        $db = $this->createQueryBuilder('transaction')
+            ->select('COUNT(transaction) as transaction_count')
+            ->where('transaction.active = 1');
+
+        return $db
+            ->getQuery()
+            ->execute();
+    }
+
+    public function get_total_cashflow_by_category($data_type)
+    {
+        $db = $this->createQueryBuilder('transaction')
+            ->select("sc.subCategoryName as category_name, SUM(transaction.transaction_amount) as category_amount")
+            ->innerJoin('transaction.category', 'cc')
+            ->innerJoin('transaction.subCategory', 'sc')
+            ->innerJoin('transaction.transaction_type', 'tt')
+            ->andWhere('transaction.active = 1')
+            ->andWhere('tt.id = :data_type')
+            ->setParameter('data_type', $data_type)
+            ->groupBy('sc.subCategoryName');
+
+        return $db
+            ->getQuery()
+            ->execute();
+    }
 }

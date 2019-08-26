@@ -81,4 +81,15 @@ class BillsRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
+
+    public function get_bill_count()
+    {
+        $db = $this->createQueryBuilder('bills')
+            ->select('COUNT(bills) as bill_count')
+            ->where('bills.active = 1');
+
+        return $db
+            ->getQuery()
+            ->execute();
+    }
 }
