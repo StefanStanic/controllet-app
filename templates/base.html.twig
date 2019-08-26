@@ -18,9 +18,9 @@
 
         {% if(app.request.pathInfo == '/') %}
             {{ include('components/navbar_homepage.html.twig') }}
-        {% elseif (app.request.pathInfo != '/admin' or app.request.pathInfo != '/users') %}
+        {% elseif (app.request.pathInfo == '/admin' or app.request.pathInfo == '/users') %}
             {{ include('components/navbar_admin.html.twig') }}
-        {% elseif (app.request.pathInfo != '/registration' and app.request.pathInfo != '/login') %}
+        {% elseif (app.request.pathInfo != '/registration' and app.request.pathInfo != '/login' and app.request.pathInfo != '/resetPassword') %}
             {{ include('components/navbar.html.twig') }}
         {% endif %}
         {% block body %}

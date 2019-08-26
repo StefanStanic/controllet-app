@@ -135,6 +135,37 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/resetPassword", name="app_reset_password")
+     */
+    public function reset_password()
+    {
+        return $this->render('reset_password/reset_password.html.twig');
+    }
+
+    /**
+     * @Route("/resetPasswordPost")
+     * @param Request $request
+     * @return Response
+     */
+    public function reset_password_post(Request $request)
+    {
+        $email = $request->get('email');
+
+        if(!$email){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Missing parameters'
+                )
+            ), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $response;
+        }
+
+
+
+    }
+
+    /**
      * @Route("/activation/{email}/{act_key}")
      * @param $email
      * @param $act_key

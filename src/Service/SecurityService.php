@@ -57,4 +57,9 @@ class SecurityService
             }
         }
     }
+
+    public function reset_password($email)
+    {
+//        $this->
+    }
 }
