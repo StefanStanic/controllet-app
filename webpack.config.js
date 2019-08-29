@@ -17,6 +17,7 @@ Encore
     .addEntry('admin', './assets/js/admin.js')
     .addEntry('user', './assets/js/user.js')
     .addEntry('reset_password', './assets/js/reset_password.js')
+    .addEntry('counter', './assets/js/counter.js')
     .copyFiles({
         from: './assets/images'
     })
