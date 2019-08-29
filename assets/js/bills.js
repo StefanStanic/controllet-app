@@ -44,12 +44,21 @@ $("#addBillForm").on('submit', function (e) {
         },
         success: function (data, textStatus, xhr) {
             if(xhr.status === 200 && data.status === 1) {
-                $("#errorAddBill").hide();
-                $("#successAddBill").html(data.text).show();
+                toastr.success('Successfully added your bill');
+
+                setTimeout(function() {
+                    //reset fields
+                    $("#billName").val('');
+                    $("#billAccountType").val(1);
+                    $("#billCategory").val(1);
+                    $("#billSubcategory").val(1);
+                    $("#billAmount").val('');
+                    $("#billNote").val('');
+                    $("#billDueDate").val('');
+                }, 2000);
             }
             else{
-                $("#successAddBill").hide();
-                $("#errorAddBill").html(data.text).show();
+                toastr.error('Error adding a bill. Try again later');
             }
         }
     });
@@ -100,9 +109,9 @@ $(".edit_bill").on('click', function (e) {
                 success: function (data, textStatus, xhr) {
                     if(xhr.status == 200)
                     {
-                        $("#bill_response_"+bill_id).html("Bill successfully updated.");
-                        $(".update_bill_"+bill_id).hide();
+                        toastr.success('Successfully updated your bill');
 
+                        $(".update_bill_"+bill_id).hide();
                         $(".bill_name_"+bill_id).prop('disabled', true);
                         $(".bill_account_"+bill_id).prop('disabled', true);
                         $(".bill_category_"+bill_id).prop('disabled', true);
@@ -113,7 +122,7 @@ $(".edit_bill").on('click', function (e) {
                     }
                     else
                     {
-                        $("#bill_response_"+bill_id).html("All bill fields need to be filled.");
+                        toastr.error('All fields needs to be filled');
                     }
                 }
             });
@@ -141,7 +150,12 @@ $(".delete_bill").on('click', function (e) {
                 bill_group_id: bill_group_id
             },
             success: function (data, textStatus, xhr) {
-                location.reload();
+                toastr.success('Successfully deleted your bill');
+
+                //reset form
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
             }
         });
     }

@@ -31,11 +31,9 @@ $("#updateUserInfo").on('submit', function (e) {
             'country': country,
         }, function (data) {
             if(data.status === 1){
-                $('#successUpdate').html(data.text).show();
-                $('#failUpdate').hide(data.text);
+                toastr.success('Successfully updated your profile');
             }else{
-                $('#successUpdate').hide();
-                $('#failUpdate').html(data.text).show();
+                toastr.success('Error updating your profile');
             }
     }, 'json');
 });

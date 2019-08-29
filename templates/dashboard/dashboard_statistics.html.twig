@@ -1,0 +1,39 @@
+<div class="col-md-6" style="margin-bottom: 10px;">
+    <span>Date From</span>
+    <input class="form-control" id="dateFrom" name="dateFrom" type="text" placeholder="23-03-2019">
+</div>
+
+<div class="col-md-6" style="margin-bottom: 10px;">
+    <span>Date To</span>
+    <input class="form-control" id="dateTo" name="dateTo" type="text" placeholder="23-03-2019">
+</div>
+
+<div class="col-md-6">
+    <div class="card card-body" style="margin-right: 10px;">
+        <h4 class="card-title">
+            Income
+            <hr>
+            <div id="chart2"></div>
+        </h4>
+        <p class="card-text"></p>
+    </div>
+</div>
+
+<div class="col-md-6">
+    <div class="card card-body" style="margin-right: 10px;">
+        <h4 class="card-title">
+            Expense
+            <hr>
+            <div id="chart3"></div>
+        </h4>
+        <p class="card-text"></p>
+    </div>
+</div>
+
+<script>
+    initializeDatePickers();
+    initialize_subcategory();
+    // initilize_spending_trend();
+    initilize_income();
+    initilize_expenses();
+</script>

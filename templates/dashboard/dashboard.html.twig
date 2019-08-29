@@ -8,94 +8,16 @@
 
 {% block body %}
     <div class="container" style="margin-top: 20px;">
-        <div class="row">
-
-                {% for account in accounts %}
-                    {% if(account.active == 1) %}
-                        <!--Panel-->
-                        <div class="col-md-4">
-                            <div class="card card-body" style="padding-bottom: 10px; padding-top: 10px; margin-bottom: 10px;">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <h6 class="card-title" id="accountName_{{ account.id }}">{{ account.accountName }}</h6>
-                                        <p class="card-text" id="accountBalance_{{ account.id }}">{{ account.accountBalance }} {{ account.currency }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button class="btn btn-warning update_account button_color" data-target="#addAccount" data-user_id_update="{{ app.user.id }}" value="{{ account.id }}" data-toggle="modal">
-                                            <i class="fas fa-pencil-alt fa-xs"></i>
-                                        </button>
-
-                                        <button class="btn btn-danger delete_account button_color" data-user_id_delete="{{ app.user.id }}" value="{{ account.id }}">
-                                            <i class="fas fa-trash-alt fa-xs"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            <div class="col-md-3">
-
-                    <a href="{{ path('app_dashboard_addaccount', {'user_id' : app.user.id }) }}" style="text-decoration: none; color: white;" >
-                        <button type="button" class="btn btn-primary">
-                        + Add Account
-                        </button>
-                    </a>
-
-                <button type="button" class="btn btn-warning" data-target="#addTransaction" data-toggle="modal">+ Add Transaction</button>
-            </div>
+        <div class="row" id="dashboard_accounts">
+            {{ include('dashboard/dashboard_accounts.html.twig') }}
         </div>
         <div class="row">
             <div class="col-md-12">
 
             </div>
         </div>
-        <div class="row" style="padding-top: 50px;">
-
-            <div class="col-md-6" style="margin-bottom: 10px;">
-                <span>Date From</span>
-                <input class="form-control" id="dateFrom" name="dateFrom" type="text" placeholder="23-03-2019">
-            </div>
-
-            <div class="col-md-6" style="margin-bottom: 10px;">
-                <span>Date To</span>
-                <input class="form-control" id="dateTo" name="dateTo" type="text" placeholder="23-03-2019">
-            </div>
-
-{#            <div class="col-md-12" style="margin-bottom: 20px;">#}
-{#                <!--Panel-->#}
-{#                <div class="card card-body" style="margin-right: 10px;">#}
-{#                    <h4 class="card-title">#}
-{#                        Dashboard#}
-{#                        <hr>#}
-{#                        <div id="spending_trend"></div>#}
-{#                    </h4>#}
-{#                    <p class="card-text"></p>#}
-{#                </div>#}
-{#            </div>#}
-
-            <div class="col-md-6">
-                <div class="card card-body" style="margin-right: 10px;">
-                    <h4 class="card-title">
-                        Income
-                        <hr>
-                        <div id="chart2"></div>
-                    </h4>
-                    <p class="card-text"></p>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card card-body" style="margin-right: 10px;">
-                    <h4 class="card-title">
-                        Expense
-                        <hr>
-                        <div id="chart3"></div>
-                    </h4>
-                    <p class="card-text"></p>
-                </div>
-            </div>
+        <div class="row" style="padding-top: 50px;" id="dashboard_statistics">
+            {{ include('dashboard/dashboard_statistics.html.twig') }}
         </div>
     </div>
 

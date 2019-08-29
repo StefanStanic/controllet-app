@@ -37,7 +37,12 @@ $(".delete_account").on('click', function (e) {
             success: function (data, textStatus, xhr) {
                 if(xhr.status == 200)
                 {
-                    location.reload();
+                    toastr.success('Successfully deleted your account');
+
+                    //reset form
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
                 }
 
             }
@@ -80,13 +85,16 @@ $(".update_account").on('click', function (e) {
                 success: function (data, textStatus, xhr) {
                     if(xhr.status == 200)
                     {
-                        $("#sucessUpdate").show();
-                        $("#failUpdate").hide();
+                        toastr.success('Successfully updated your account');
+
+                        //reset form
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
                     }
                     else
                     {
-                        $("#sucessUpdate").hide();
-                        $("#failUpdate").show();
+                        toastr.error('Error editing account. Try again later.')
                     }
                 }
             });

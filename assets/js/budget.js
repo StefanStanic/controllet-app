@@ -16,14 +16,20 @@ $("#addBudgetForm").on('submit', function (e) {
 
     $.post('/addBudget', {'category': category_id, 'account_type': account_id, 'user_id': user_id, 'budget_amount' : budget_amount, 'budget_name': budget_name}, function (data) {
         if(parseInt(data.status) === 1)
-                {
-                    $("#successAddBudget").show();
-                    $("#failAddBudget").hide();
-                } else
-                {
-                    $("#successAddBudget").hide();
-                    $("#failAddBudget").show();
-                }
+        {
+            toastr.success('Successfully added your budget');
+
+            setTimeout(function() {
+                //reset fields
+                $("#category").val(1);
+                $("#account_type").val(1);
+                $("#budget_amount").val('');
+                $("#budget_name").val('');
+            }, 2000);
+        } else
+        {
+            toastr.error('Error adding your budget. Try again later');
+        }
     }, 'json');
 
 });
@@ -70,13 +76,11 @@ $(".update_budget").on('click', function (e) {
                 success: function (data, textStatus, xhr) {
                     if(xhr.status == 200)
                     {
-                        $("#successUpdateBudget").show();
-                        $("#failUpdateBudget").hide();
+                        toastr.success('Successfully updated your budget');
                     }
                     else
                     {
-                        $("#successUpdateBudget").hide();
-                        $("#failUpdateBudget").show();
+                        toastr.error('Error updating your budget');
                     }
                 }
             });
@@ -106,7 +110,12 @@ $(".delete_budget").on('click', function (e) {
             success: function (data, textStatus, xhr) {
                 if(xhr.status == 200)
                 {
-                    location.reload();
+                    toastr.success('Successfully deleted your budget');
+
+                    //reset form
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
                 }
 
             }

@@ -1,0 +1,35 @@
+{% for account in accounts %}
+    {% if(account.active == 1) %}
+        <!--Panel-->
+        <div class="col-md-4">
+            <div class="card card-body" style="padding-bottom: 10px; padding-top: 10px; margin-bottom: 10px;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6 class="card-title" id="accountName_{{ account.id }}">{{ account.accountName }}</h6>
+                        <p class="card-text" id="accountBalance_{{ account.id }}">{{ account.accountBalance }} {{ account.currency }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-warning update_account button_color" data-target="#addAccount" data-user_id_update="{{ app.user.id }}" value="{{ account.id }}" data-toggle="modal">
+                            <i class="fas fa-pencil-alt fa-xs"></i>
+                        </button>
+
+                        <button class="btn btn-danger delete_account button_color" data-user_id_delete="{{ app.user.id }}" value="{{ account.id }}">
+                            <i class="fas fa-trash-alt fa-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+<div class="col-md-3">
+
+    <a href="{{ path('app_dashboard_addaccount', {'user_id' : app.user.id }) }}" style="text-decoration: none; color: white;" >
+        <button type="button" class="btn btn-primary">
+            + Add Account
+        </button>
+    </a>
+
+    <button type="button" class="btn btn-warning" data-target="#addTransaction" data-toggle="modal">+ Add Transaction</button>
+</div>

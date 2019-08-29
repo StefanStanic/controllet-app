@@ -38,6 +38,39 @@ class DashboardController extends AbstractController
     }
 
     /**
+     * @param $templatePath
+     * @return Response
+     * @Route("/reRender", name="app_rerender", methods={"POST"})
+     */
+    public function refreshPartOfPageByTemplate(Request $request)
+    {
+        $user = $this->getUser();
+
+        $templatePath = $request->get('path');
+
+        $data['accounts'] = $this->dashboard_service->get_active_wallets_by_user_id($user->getId());
+        $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0, 0,  'DESC', '', '');
+        $data['categories'] = $this->dashboard_service->get_active_categories();
+        $data['subcategories'] = $this->dashboard_service->get_active_subcategories();
+        $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
+        $data['budgets'] = $this->dashboard_service->get_active_budgets_by_user_id($user->getId());
+        $data['bills'] = $this->dashboard_service->get_bills_by_filters($user->getId(), 0, 0, 0,  'DESC', '', '');
+
+        return $this->render(
+            $templatePath,
+            array(
+                'accounts' => $data['accounts'],
+                'categories' => $data['categories'],
+                'subcategories' => $data['subcategories'],
+                'transactions' => $data['transactions'],
+                'transaction_types' => $data['transaction_types'],
+                'budgets' => $data['budgets'],
+                'bills' => $data['bills'],
+            )
+        );
+    }
+
+    /**
      * @Route("/dashboard", name="app_dashboard")
      */
     public function dashboard()

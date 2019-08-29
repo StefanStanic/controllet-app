@@ -42,12 +42,20 @@ $("#addTransactionForm").on('submit', function (e) {
         },
         success: function (data, textStatus, xhr) {
             if(xhr.status === 200 && data.status === 1) {
-                $("#errorAddTransaction").hide();
-                $("#successAddTransaction").html(data.text).show();
+                toastr.success('Successfully added a transaction');
+
+                //reset form
+                setTimeout(function() {
+                    $("#transactionName").val('');
+                    $("#transactionType").val(1);
+                    $("#transactionCategory").val(1);
+                    $("#transactionSubcategory").val(1);
+                    $("#transactionAmount").val('');
+                    $("#transactionNote").val('');
+                }, 2000);
             }
             else{
-                $("#successAddTransaction").hide();
-                $("#errorAddTransaction").html(data.text).show();
+                toastr.error('Error adding a transaction. Try Again later')
             }
         }
     });
@@ -95,9 +103,9 @@ $(".edit_transaction").on('click', function (e) {
                 success: function (data, textStatus, xhr) {
                     if(xhr.status == 200)
                     {
-                        $("#transaction_response_"+transaction_id).html("Transaction successfully updated.");
-                        $(".update_transaction_"+transaction_id).hide();
+                        toastr.success('Successfully updated your transaction');
 
+                        $(".update_transaction_"+transaction_id).hide();
                         $(".transaction_category_"+transaction_id).prop('disabled', true);
                         $(".transaction_subcategory_"+transaction_id).prop('disabled', true);
                         $(".transaction_note_"+transaction_id).prop('disabled', true);
@@ -131,7 +139,12 @@ $(".delete_transaction").on('click', function (e) {
                 transaction_id: transaction_id,
             },
             success: function (data, textStatus, xhr) {
-                location.reload();
+                toastr.success('Successfully deleted your transaction');
+
+                //reset form
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
             }
         });
     }
