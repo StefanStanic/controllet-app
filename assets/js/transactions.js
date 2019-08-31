@@ -25,6 +25,7 @@ $("#addTransactionForm").on('submit', function (e) {
     var transaction_subcategory = $("#transactionSubcategory").val();
     var transaction_amount = $("#transactionAmount").val();
     var transaction_note = $("#transactionNote").val();
+    var transaction_currency = $("#transactionCurrency").val();
 
     $.ajax({
         type:"POST",
@@ -38,7 +39,8 @@ $("#addTransactionForm").on('submit', function (e) {
             transactionCategory: transaction_category,
             transactionSubCategory: transaction_subcategory,
             transactionAmount: transaction_amount,
-            transactionNote: transaction_note
+            transactionNote: transaction_note,
+            transaction_currency: transaction_currency
         },
         success: function (data, textStatus, xhr) {
             if(xhr.status === 200 && data.status === 1) {
@@ -52,6 +54,7 @@ $("#addTransactionForm").on('submit', function (e) {
                     $("#transactionSubcategory").val(1);
                     $("#transactionAmount").val('');
                     $("#transactionNote").val('');
+                    $("#transactionCurrency").val(1);
                 }, 2000);
             }
             else{

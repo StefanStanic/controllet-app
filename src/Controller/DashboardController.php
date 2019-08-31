@@ -8,6 +8,7 @@ use App\Form\AccountType;
 use App\Service\DashboardService;
 use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +23,7 @@ class DashboardController extends AbstractController
     private $dashboard_service;
     private $user_service;
     private $router;
+    private $guzzle;
 
     /**
      * DashboardController constructor.
@@ -35,6 +37,7 @@ class DashboardController extends AbstractController
         $this->dashboard_service = $dashboardService;
         $this->user_service = $userService;
         $this->router = $router;
+        $this->guzzle = new Client();
     }
 
     /**
@@ -85,6 +88,7 @@ class DashboardController extends AbstractController
         $data['transactions'] = $this->dashboard_service->get_transaction_by_filters($user->getId(), 0, 0, 0,  'DESC', '', '');
         $data['categories'] = $this->dashboard_service->get_active_categories();
         $data['transaction_types'] = $this->dashboard_service->get_active_transaction_types();
+        $data['currencies'] = $this->dashboard_service->get_all_currencies();
 
         //basic input calculation data
         $data['total_balance'] = $this->dashboard_service->get_total_balance($user->getId());
@@ -98,6 +102,7 @@ class DashboardController extends AbstractController
                 'categories' => $data['categories'],
                 'transactions' => $data['transactions'],
                 'transaction_types' => $data['transaction_types'],
+                'currencies' => $data['currencies'],
                 'total_balance' => $data['total_balance'][0]['total_balance'],
                 'total_expenses' => $data['total_expenses'][0]['total_expenses'],
                 'total_income' => $data['total_income'][0]['total_income']
@@ -316,43 +321,53 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/addAccount/{user_id}")
-     * @param $user_id
+     * @Route("/addAccount")
      * @param Request $request
      * @return Response
      */
-    public function addAccount($user_id, Request $request)
+    public function add_account(Request $request)
     {
-        $user = $this->getUser();
-        $account = new Account();
-        $form = $this->createForm(AccountType::class, $account);
+        $user_id = $request->get('user_id');
+        $account_name = $request->get('account_name');
+        $account_type = $request->get('account_type');
+        $account_currency = $request->get('account_currency');
+        $account_balance = $request->get('account_balance');
 
-        //handle form submit
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid() && $user->getId() == $user_id) {
-
-            $date = date('Y-m-d H:i:s');
-
-            //setup account
-            $account->setUser($user);
-            $account->setLastUsedDate(\DateTime::createFromFormat('Y-m-d H:i:s', $date));
-            $account->setActive(1);
-
-            $this->em->persist($account);
-            $this->em->flush();
-
-
-            return $this->redirectToRoute('app_dashboard');
+        if(empty($user_id) || empty($account_name) || empty($account_type) || empty($account_currency) ||
+            empty($account_balance))
+        {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Please make sure to fill all the required fields.'
+                )
+            ), Response::HTTP_OK);
+            return $response;
         }
 
-        return $this->render(
-            'dashboard/addAccount.html.twig',
-            array(
-                'user_id' => $user_id,
-                'form' => $form->createView()
-            )
-        );
+
+        $account = $this->dashboard_service->add_account($user_id, $account_name, $account_type, $account_currency, $account_balance);
+
+        if($account){
+            $response = new Response(json_encode(
+                array(
+                    'status' => 1,
+                    'text' => 'Account successfully added.'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
+        else {
+            $response = new Response(json_encode(
+                array(
+                    'status' => 0,
+                    'text' => 'Error adding new account'
+                )
+            ), Response::HTTP_OK);
+
+            return $response;
+        }
     }
 
     /**
@@ -420,7 +435,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/deleteBudget", name="delete_account", methods={"POST"})
+     * @Route("/deleteBudget", name="delete_budget", methods={"POST"})
      * @param Request $request
      * @return Response
      */
@@ -460,10 +475,11 @@ class DashboardController extends AbstractController
         $transaction_subcategory = $request->get('transactionSubCategory');
         $transaction_amount = $request->get('transactionAmount');
         $transaction_note = $request->get('transactionNote');
+        $transaction_currency = $request->get('transaction_currency');
 
 
         if(empty($user_id) || empty($transaction_name) || empty($transaction_account_type) || empty($transaction_type) ||
-           empty($transaction_category) || empty($transaction_amount) || empty($transaction_subcategory))
+           empty($transaction_category) || empty($transaction_amount) || empty($transaction_subcategory) || empty($transaction_currency))
         {
             $response = new Response(json_encode(
                 array(
@@ -475,7 +491,7 @@ class DashboardController extends AbstractController
         }
 
 
-        $transaction = $this->dashboard_service->add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_subcategory, $transaction_amount, $transaction_note);
+        $transaction = $this->dashboard_service->add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_subcategory, $transaction_amount, $transaction_note, $transaction_currency);
 
         if($transaction){
             $response = new Response(json_encode(
@@ -943,6 +959,30 @@ class DashboardController extends AbstractController
         ), Response::HTTP_OK);
 
         return $response;
+    }
+
+    /**
+     * @Route("/currencyConvert", name="app_currency_convert", methods={"POST"})
+     */
+    public function convert_currency(Request $request)
+    {
+        $currency_from = $request->get('currency_from');
+        $currency_to = $request->get('currency_to');
+        $amount = $request->get('amount');
+
+        $result = $this->guzzle->get('https://free.currconv.com/api/v7/convert', [
+           'query' => [
+               'q' => $currency_from . '_' . $currency_to,
+               'compact' => 'ultra',
+               'apiKey' => 'a34b33d8e8738cb32ee5'
+           ]
+        ])->getBody()->getContents();
+
+        $result = json_decode($result, true);
+
+        $value = $amount * $result[$currency_from . '_' . $currency_to];
+
+        return $value;
     }
 
 }

@@ -6,10 +6,10 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h6 class="card-title" id="accountName_{{ account.id }}">{{ account.accountName }}</h6>
-                        <p class="card-text" id="accountBalance_{{ account.id }}">{{ account.accountBalance }} {{ account.currency }}</p>
+                        <p class="card-text" id="accountBalance_{{ account.id }}">{{ account.accountBalance }} {{ account.currency.currencyLabel}}</p>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-warning update_account button_color" data-target="#addAccount" data-user_id_update="{{ app.user.id }}" value="{{ account.id }}" data-toggle="modal">
+                        <button class="btn btn-warning update_account button_color" data-target="#updateAccount" data-user_id_update="{{ app.user.id }}" value="{{ account.id }}" data-toggle="modal">
                             <i class="fas fa-pencil-alt fa-xs"></i>
                         </button>
 
@@ -24,12 +24,6 @@
     {% endif %}
 {% endfor %}
 <div class="col-md-3">
-
-    <a href="{{ path('app_dashboard_addaccount', {'user_id' : app.user.id }) }}" style="text-decoration: none; color: white;" >
-        <button type="button" class="btn btn-primary">
-            + Add Account
-        </button>
-    </a>
-
+    <button type="button" class="btn btn-primary" data-target="#addAccount" data-toggle="modal">+ Add Account</button>
     <button type="button" class="btn btn-warning" data-target="#addTransaction" data-toggle="modal">+ Add Transaction</button>
 </div>

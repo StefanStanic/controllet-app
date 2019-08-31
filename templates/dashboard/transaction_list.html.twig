@@ -50,7 +50,7 @@
             <input type="text" class="form-control transaction_note_{{ transaction.id }}" value="{{ transaction.note }}" disabled>
         </td>
         <td>
-            <input type="text" class="form-control" disabled value="{{ transaction.account.currency }}">
+            <input type="text" class="form-control" disabled value="{{ transaction.account.currency.currencyLabel }}">
         </td>
         <td>
             <input type="number" class="form-control transaction_amount_{{ transaction.id }}" value="{{ transaction.transactionAmount }}" disabled>

@@ -7,22 +7,27 @@ use App\Entity\Account;
 use App\Entity\Bills;
 use App\Entity\Budget;
 use App\Entity\Category;
+use App\Entity\Currency;
 use App\Entity\SubCategory;
 use App\Entity\Transaction;
 use App\Entity\TransactionType;
 use App\Entity\User;
+use App\Form\AccountType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\Client;
 use RRule\RRule;
 
 class DashboardService
 {
     private $em;
+    private $guzzle;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
+        $this->guzzle = new Client();
     }
 
     /**
@@ -63,6 +68,13 @@ class DashboardService
         $transaction_types = $this->em->getRepository(TransactionType::class)->findAll();
 
         return $transaction_types;
+    }
+
+    public function get_all_currencies()
+    {
+        $currencies = $this->em->getRepository(Currency::class)->findAll();
+
+        return $currencies;
     }
 
     /**
@@ -124,7 +136,7 @@ class DashboardService
      * @param $category_id
      * @return mixed
      */
-    public function get_total_expenses_by_filters($user_id, $account_id, $category_id)
+    public function get_total_expenses_by_filters($user_id, $account_id, $category_id, $default_currency = false)
     {
         $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_filters($user_id, $account_id, $category_id);
         return $total_expenses;
@@ -166,6 +178,40 @@ class DashboardService
 
         return $subcategories;
     }
+
+    /**
+     * @param $user_id
+     * @param $account_name
+     * @param $account_type
+     * @param $account_currency
+     * @param $account_balance
+     * @return bool
+     */
+    public function add_account($user_id, $account_name, $account_type, $account_currency, $account_balance)
+    {
+        $user = $this->em->getRepository(User::class)->find($user_id);
+        $account_currency = $this->em->getRepository(Currency::class)->find($account_currency);
+
+        $account = new Account();
+        $date = date('Y-m-d H:i:s');
+
+        //create a transaction
+        $account
+            ->setUser($user)
+            ->setActive(1)
+            ->setAccountBalance($account_balance)
+            ->setAccountName($account_name)
+            ->setAccountType($account_type)
+            ->setCurrency($account_currency)
+            ->setLastUsedDate(\DateTime::createFromFormat('Y-m-d H:i:s', $date));
+
+        $this->em->persist($account);
+        $this->em->flush();
+
+        return $user_id;
+
+    }
+
 
     /**
      * @param $account_name
@@ -437,17 +483,22 @@ class DashboardService
      * @param $transaction_note
      * @return bool
      */
-    public function add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_subcategory, $transaction_amount, $transaction_note)
+    public function add_transaction($user_id, $transaction_name, $transaction_account_type, $transaction_type, $transaction_category, $transaction_subcategory, $transaction_amount, $transaction_note, $transaction_currency)
     {
         $user = $this->em->getRepository(User::class)->find($user_id);
         $account = $this->em->getRepository(Account::class)->find($transaction_account_type);
         $transaction_t = $this->em->getRepository(TransactionType::class)->find($transaction_type);
         $category = $this->em->getRepository(Category::class)->find($transaction_category);
         $subcategory = $this->em->getRepository(SubCategory::class)->find($transaction_subcategory);
+        $currency = $this->em->getRepository(Currency::class)->find($transaction_currency);
 
         $transaction = new Transaction();
         $date = date('Y-m-d H:i:s');
 
+        //convert currency if needed
+        if($account->getCurrency()->getId() != $currency->getId()){
+            $transaction_amount = $this->convert_currency($currency->getCurrencyLabel(), $account->getCurrency()->getCurrencyLabel(), $transaction_amount);
+        }
 
         //transaction type logic
         if($transaction_t->getTransactionType() == 'Income'){
@@ -549,5 +600,29 @@ class DashboardService
     {
         $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_year_month_account($year, $month, $account, $category);
         return $total_expenses;
+    }
+
+    /**
+     * @param $currency_from
+     * @param $currency_to
+     * @param $amount
+     * @return float|int
+     */
+    public function convert_currency($currency_from, $currency_to, $amount)
+    {
+
+        $result = $this->guzzle->get('https://free.currconv.com/api/v7/convert', [
+            'query' => [
+                'q' => $currency_from . '_' . $currency_to,
+                'compact' => 'ultra',
+                'apiKey' => 'a34b33d8e8738cb32ee5'
+            ]
+        ])->getBody()->getContents();
+
+        $result = json_decode($result, true);
+
+        $value = $amount * $result[$currency_from . '_' . $currency_to];
+
+        return $value;
     }
 }

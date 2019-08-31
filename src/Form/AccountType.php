@@ -36,9 +36,6 @@ class AccountType extends AbstractType
             ->add('currency', ChoiceType::class,
                 array(
                     'choices' => [
-                        'USD' => 'USD',
-                        'EUR' => 'EUR',
-                        'RSD' => 'RSD'
                     ],
                     'label' => false
                 ))

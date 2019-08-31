@@ -25,7 +25,7 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <h6 class="card-title" id="budgetName_{{ budget.id }}">{{ budget.name }}</h6>
-                                    <p class="card-text" id="budgetAmount_{{ budget.id }}">{{ budget.budgetAmount }} {{ budget.account.currency }}</p>
+                                    <p class="card-text" id="budgetAmount_{{ budget.id }}">{{ budget.budgetAmount }} {{ budget.account.currency.currencyLabel }}</p>
                                     <p class="card-text" >{{ budget.account.accountName }}</p>
                                 </div>
                                 <div class="col-md-4">
@@ -47,7 +47,7 @@
 
                             <br>
                             <p>
-                                <span id="budget_from_{{ budget.id }}"></span>/<span id="budget_to_{{ budget.id }}"></span><span> {{ budget.account.currency }}</span>
+                                <span id="budget_from_{{ budget.id }}"></span>/<span id="budget_to_{{ budget.id }}"></span><span> {{ budget.account.currency.currencyLabel }}</span>
                             </p>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" id="budget_progress_{{ budget.id }}"></div>
