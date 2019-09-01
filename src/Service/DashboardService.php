@@ -136,9 +136,9 @@ class DashboardService
      * @param $category_id
      * @return mixed
      */
-    public function get_total_expenses_by_filters($user_id, $account_id, $category_id, $default_currency = false)
+    public function get_total_expenses_by_filters($user_id, $account_id, $category_id, $default_currency)
     {
-        $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_filters($user_id, $account_id, $category_id);
+        $total_expenses = $this->em->getRepository(Transaction::class)->get_total_expenses_by_filters($user_id, $account_id, $category_id, $default_currency);
         return $total_expenses;
     }
 
@@ -148,9 +148,9 @@ class DashboardService
      * @param $category_id
      * @return mixed
      */
-    public function get_total_income_by_filters($user_id, $account_id, $category_id)
+    public function get_total_income_by_filters($user_id, $account_id, $category_id, $default_currency)
     {
-        $total_income = $this->em->getRepository(Transaction::class)->get_total_income_by_filters($user_id, $account_id, $category_id);
+        $total_income = $this->em->getRepository(Transaction::class)->get_total_income_by_filters($user_id, $account_id, $category_id, $default_currency);
         return $total_income;
     }
 

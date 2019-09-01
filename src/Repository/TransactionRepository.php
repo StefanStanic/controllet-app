@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Transaction;
+use App\Service\DashboardService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -14,9 +15,12 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class TransactionRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    private $dashboardService;
+
+    public function __construct(RegistryInterface $registry, DashboardService $dashboardService)
     {
         parent::__construct($registry, Transaction::class);
+        $this->dashboardService = $dashboardService;
     }
 
 
@@ -113,11 +117,13 @@ class TransactionRepository extends ServiceEntityRepository
      * @param $category_id
      * @return mixed
      */
-    public function get_total_expenses_by_filters($user_id, $account_id, $category_id)
+    public function get_total_expenses_by_filters($user_id, $account_id, $category_id, $default_currency)
     {
         $db = $this->createQueryBuilder('transaction')
-            ->select('SUM(transaction.transaction_amount) as total_expenses')
+            ->select('transaction.transaction_amount as total_expenses, currency.currencyLabel')
             ->innerJoin('transaction.transaction_type', 'tt')
+            ->innerJoin('transaction.account', 'account')
+            ->innerJoin('account.currency', 'currency')
             ->where('transaction.user = :user_id')
             ->setParameter('user_id', $user_id)
             ->andWhere('transaction.active = 1')
@@ -136,9 +142,25 @@ class TransactionRepository extends ServiceEntityRepository
                 ->setParameter('category_id', $category_id);
         }
 
-        return $db
+        $results = $db
             ->getQuery()
             ->execute();
+
+        $total_expense = 0;
+
+        foreach($results as $transaction){
+            if($transaction['currencyLabel'] != $default_currency){
+                $total_expense+=(int)$this->dashboardService->convert_currency($transaction['currencyLabel'], $default_currency, $transaction['total_expenses']);
+            } else {
+                $total_expense+=(int)$transaction['total_expenses'];
+            }
+        }
+
+        $return = [
+            ['total_expenses' => $total_expense]
+        ];
+
+        return $return;
     }
 
     /**
@@ -147,11 +169,13 @@ class TransactionRepository extends ServiceEntityRepository
      * @param $category_id
      * @return mixed
      */
-    public function get_total_income_by_filters($user_id, $account_id, $category_id)
+    public function get_total_income_by_filters($user_id, $account_id, $category_id, $default_currency)
     {
         $db = $this->createQueryBuilder('transaction')
-            ->select('SUM(transaction.transaction_amount) as total_income')
+            ->select('transaction.transaction_amount as total_income, currency.currencyLabel')
             ->innerJoin('transaction.transaction_type', 'tt')
+            ->innerJoin('transaction.account', 'account')
+            ->innerJoin('account.currency', 'currency')
             ->where('transaction.user = :user_id')
             ->setParameter('user_id', $user_id)
             ->andWhere('transaction.active = 1')
@@ -170,9 +194,25 @@ class TransactionRepository extends ServiceEntityRepository
                 ->setParameter('category_id', $category_id);
         }
 
-        return $db
+        $results = $db
             ->getQuery()
             ->execute();
+
+        $total_income = 0;
+
+        foreach($results as $transaction){
+            if($transaction['currencyLabel'] != $default_currency){
+                $total_income+=(int)$this->dashboardService->convert_currency($transaction['currencyLabel'], $default_currency, $transaction['total_income']);
+            } else {
+                $total_income+=(int)$transaction['total_income'];
+            }
+        }
+
+        $return = [
+            ['total_income' => $total_income]
+        ];
+
+        return $return;
     }
 
     /**
